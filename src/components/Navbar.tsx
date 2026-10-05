@@ -321,17 +321,8 @@ export default function Navbar({
           </div>
         </nav>
 
-        {/* Past: API Key, Profil va Chiqish tugmalari */}
+        {/* Past: Profil va Chiqish tugmalari */}
         <div className="flex flex-col items-center gap-2.5 w-full pt-2 border-t border-slate-800/80">
-          {/* API Key */}
-          <button
-            onClick={onOpenApiKey}
-            title="Gemini API Kaliti"
-            className="w-10 h-10 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-amber-300 transition-colors flex items-center justify-center cursor-pointer"
-          >
-            <Key size={17} />
-          </button>
-
           {/* Profile Dropdown trigger */}
           <div className="relative">
             <button
@@ -498,15 +489,6 @@ export default function Navbar({
               <span>{user.tokens ?? 10}</span>
             </div>
           )}
-
-          {/* API Key */}
-          <button
-            onClick={onOpenApiKey}
-            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
-            title="API Key"
-          >
-            <Key size={14} />
-          </button>
         </div>
       </header>
 
