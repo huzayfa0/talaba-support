@@ -207,9 +207,14 @@ export default function Home() {
           id: profile.id,
           name: profile.name,
           email: profile.email,
+          phone: profile.phone,
           university: profile.university,
           faculty: profile.faculty,
           group: profile.group,
+          telegramUsername: profile.telegramUsername,
+          plan: profile.plan,
+          tokens: profile.tokens,
+          isLoggedIn: profile.isLoggedIn,
         }),
       });
       const data = await res.json();
@@ -220,10 +225,12 @@ export default function Home() {
           id: syncedUser.id,
           name: syncedUser.name || profile.name,
           email: syncedUser.email || profile.email,
+          phone: syncedUser.phone || profile.phone,
           university: syncedUser.university || profile.university,
           faculty: syncedUser.faculty || profile.faculty,
           group: syncedUser.group || profile.group,
-          plan: syncedUser.plan || 'free',
+          telegramUsername: syncedUser.telegramUsername || profile.telegramUsername,
+          plan: syncedUser.plan || profile.plan || 'free',
           tokens: syncedUser.tokens ?? profile.tokens,
           isBlocked: syncedUser.isBlocked,
         };

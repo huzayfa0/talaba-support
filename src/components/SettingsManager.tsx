@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   Key,
@@ -45,6 +45,16 @@ export default function SettingsManager({
   const [phone, setPhone] = useState(user.phone || '');
   const [telegramUsername, setTelegramUsername] = useState(user.telegramUsername || '');
 
+  // Prop orqali kelgan foydalanuvchi ma'lumotlarini inputlar bilan sinxronlash
+  useEffect(() => {
+    if (user.name) setName(user.name);
+    if (user.university) setUniversity(user.university);
+    if (user.faculty) setFaculty(user.faculty);
+    if (user.group) setGroup(user.group);
+    if (user.phone) setPhone(user.phone);
+    if (user.telegramUsername) setTelegramUsername(user.telegramUsername);
+  }, [user.name, user.university, user.faculty, user.group, user.phone, user.telegramUsername]);
+
   // API kalit holati
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
@@ -80,6 +90,8 @@ export default function SettingsManager({
         telegramUsername: telegramUsername.trim().replace(/^@/, '') || user.telegramUsername,
       };
 
+      // Darhol mahalliy xotirani yangilaymiz
+      localStorage.setItem('talaba_user_profile', JSON.stringify(updatedProfile));
       onSaveProfile(updatedProfile);
       setSaveStatus({ type: 'success', message: 'Profil ma‘lumotlari muvaffaqiyatli saqlandi!' });
       setTimeout(() => setSaveStatus(null), 3000);

@@ -43,6 +43,7 @@ import {
   FolderPlus,
   FileVideo,
   HardDrive,
+  Edit,
 } from 'lucide-react';
 import {
   AdminUserRecord,
@@ -94,6 +95,16 @@ export default function SecretAdminConsole() {
   const [newStudentPassword, setNewStudentPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [passwordUpdateMsg, setPasswordUpdateMsg] = useState<string | null>(null);
+
+  // Talaba ma'lumotlarini (OTM, fakultet, guruh, telefon, ism) tahrirlash
+  const [editingDetailsUser, setEditingDetailsUser] = useState<AdminUserRecord | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editUniversity, setEditUniversity] = useState('');
+  const [editFaculty, setEditFaculty] = useState('');
+  const [editGroup, setEditGroup] = useState('');
+  const [editPhone, setEditPhone] = useState('');
+  const [isUpdatingDetails, setIsUpdatingDetails] = useState(false);
+  const [detailsUpdateMsg, setDetailsUpdateMsg] = useState<string | null>(null);
 
   // Video Darsliklar boshqaruvi
   const [courseSubjects, setCourseSubjects] = useState<CourseSubject[]>([]);
@@ -518,6 +529,46 @@ export default function SecretAdminConsole() {
       setPasswordUpdateMsg('Server bilan bog‘lanishda xatolik');
     } finally {
       setIsUpdatingPassword(false);
+    }
+  };
+
+  // Talaba ma'lumotlarini (OTM, fakultet, guruh, telefon, ism) saqlash
+  const handleSaveStudentDetails = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingDetailsUser) return;
+    setIsUpdatingDetails(true);
+    setDetailsUpdateMsg(null);
+
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update_details',
+          userId: editingDetailsUser.id,
+          name: editName.trim(),
+          university: editUniversity.trim(),
+          faculty: editFaculty.trim(),
+          group: editGroup.trim(),
+          phone: editPhone.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setDetailsUpdateMsg('Talaba ma‘lumotlari muvaffaqiyatli yangilandi!');
+        await fetchUsers();
+        setTimeout(() => {
+          setEditingDetailsUser(null);
+          setDetailsUpdateMsg(null);
+        }, 1200);
+      } else {
+        setDetailsUpdateMsg(data.error || 'Saqlashda xatolik yuz berdi');
+      }
+    } catch {
+      setDetailsUpdateMsg('Server bilan bog‘lanishda xatolik');
+    } finally {
+      setIsUpdatingDetails(false);
     }
   };
 
@@ -1564,7 +1615,24 @@ export default function SecretAdminConsole() {
                             } ${u.isBlocked ? 'opacity-50 bg-red-950/10' : ''}`}
                           >
                             <td className="py-4 px-6">
-                              <div className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{u.name}</div>
+                              <div className="flex items-center gap-1.5">
+                                <span className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{u.name}</span>
+                                <button
+                                  onClick={() => {
+                                    setEditingDetailsUser(u);
+                                    setEditName(u.name || '');
+                                    setEditUniversity(u.university || '');
+                                    setEditFaculty(u.faculty || '');
+                                    setEditGroup(u.group || '');
+                                    setEditPhone(u.phone || '');
+                                    setDetailsUpdateMsg(null);
+                                  }}
+                                  className="p-1 rounded text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer"
+                                  title="Talaba ma‘lumotlarini (OTM, fakultet, guruh, telefon) tahrirlash"
+                                >
+                                  <Edit size={13} />
+                                </button>
+                              </div>
                               <div className="text-[11px] text-slate-400 truncate max-w-[200px]">
                                 {u.university}
                               </div>
@@ -2558,6 +2626,130 @@ export default function SecretAdminConsole() {
           </div>
         )}
       </main>
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL: TALABA MA'LUMOTLARINI TAHRIRLASH (OTM, FAKULTET, GURUH) */}
+      {/* ------------------------------------------------------------- */}
+      {editingDetailsUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-2xl animate-in zoom-in-95 my-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                  <Edit size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Talaba Ma‘lumotlarini Tahrirlash</h3>
+                  <p className="text-[11px] text-slate-400">{editingDetailsUser.name}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setEditingDetailsUser(null)}
+                className="text-slate-400 hover:text-white p-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveStudentDetails} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">
+                  F.I.SH (Ism va familiya) *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Ism familiya..."
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">
+                  OTM / Universitet *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editUniversity}
+                  onChange={(e) => setEditUniversity(e.target.value)}
+                  placeholder="Masalan: Toshkent axborot texnologiyalari universiteti"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-medium"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">
+                    Fakultet / Yo‘nalish
+                  </label>
+                  <input
+                    type="text"
+                    value={editFaculty}
+                    onChange={(e) => setEditFaculty(e.target.value)}
+                    placeholder="Fakultet..."
+                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">
+                    Akademik Guruh
+                  </label>
+                  <input
+                    type="text"
+                    value={editGroup}
+                    onChange={(e) => setEditGroup(e.target.value)}
+                    placeholder="Masalan: 304-guruh"
+                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">
+                  Telefon Raqam
+                </label>
+                <input
+                  type="text"
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  placeholder="+998 90 123 45 67"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
+                />
+              </div>
+
+              {detailsUpdateMsg && (
+                <div className={`p-3 rounded-xl border text-xs ${
+                  detailsUpdateMsg.includes('muvaffaqiyatli')
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                    : 'bg-red-500/10 border-red-500/30 text-red-400'
+                }`}>
+                  {detailsUpdateMsg}
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingDetailsUser(null)}
+                  className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-semibold cursor-pointer"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  disabled={isUpdatingDetails}
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold cursor-pointer"
+                >
+                  {isUpdatingDetails ? 'Saqlanmoqda...' : 'Ma‘lumotlarni Saqlash'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* MODAL: TALABA PAROLINI TIKLASH / YANGILASH */}

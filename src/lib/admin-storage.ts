@@ -233,8 +233,34 @@ export async function deleteAdminUser(userId: string): Promise<boolean> {
 }
 
 /**
+ * Talaba ma'lumotlarini (OTM, fakultet, guruh, telefon, ism) to'g'ridan-to'g'ri yangilash
+ */
+export async function updateStudentProfileDirect(
+  userId: string,
+  data: Partial<AdminUserRecord>
+): Promise<AdminUserRecord | null> {
+  const store = await ensureStore();
+  const user = store.users.find((u) => u.id === userId);
+  if (!user) return null;
+
+  if (typeof data.name === 'string' && data.name.trim()) user.name = data.name.trim();
+  if (typeof data.university === 'string' && data.university.trim()) user.university = data.university.trim();
+  if (typeof data.faculty === 'string' && data.faculty.trim()) user.faculty = data.faculty.trim();
+  if (typeof data.group === 'string' && data.group.trim()) user.group = data.group.trim();
+  if (typeof data.phone === 'string' && data.phone.trim()) user.phone = data.phone.trim();
+  if (typeof data.email === 'string' && data.email.trim()) user.email = data.email.trim();
+  if (typeof data.telegramUsername === 'string') user.telegramUsername = data.telegramUsername.trim().replace(/^@/, '');
+  if (typeof data.customNotes === 'string') user.customNotes = data.customNotes.trim();
+
+  user.updatedAt = new Date().toISOString();
+  await saveStore(store);
+  return user;
+}
+
+/**
  * Talaba saytni ochganda uning profilini sinxronlash
  * Agar admin unga Premium yoki Ultra bergan bo'lsa, mijoz darhol yangilanadi!
+ * Agar talaba OTM/fakultet/guruhni o'zgartirsa, admin bazasi darhol yangilanadi!
  */
 export async function syncStudentProfile(profile: UserProfile): Promise<UserProfile> {
   const store = await ensureStore();
@@ -251,23 +277,60 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
     };
   }
 
+  const cleanPhone = (p?: string) => (p || '').replace(/\D/g, '');
+  const searchPhone = cleanPhone(profile.phone);
   const searchEmail = (profile.email || '').trim().toLowerCase();
   const searchName = (profile.name || '').trim().toLowerCase();
 
   let existingUser = store.users.find(
     (u) =>
       (profile.id && u.id === profile.id) ||
+      (searchPhone && cleanPhone(u.phone) && cleanPhone(u.phone) === searchPhone) ||
       (searchEmail && u.email.toLowerCase() === searchEmail) ||
       (searchName && searchName !== 'talaba' && (u.name.toLowerCase() === searchName || u.name.toLowerCase().includes(searchName) || searchName.includes(u.name.toLowerCase())))
   );
 
   // Agar aniq topilmagan bo'lsa va nomi 'Talaba' yoki bo'sh bo'lsa,
   // admin bazasidagi Ultra VIP yoki birinchi faol foydalanuvchini ulaymiz!
-  if (!existingUser && (!searchEmail || searchName === 'talaba')) {
+  if (!existingUser && (!searchEmail && !searchPhone) && searchName === 'talaba') {
     existingUser = store.users.find((u) => u.plan === 'ultra' && !u.isBlocked) || store.users[0];
   }
 
   if (existingUser) {
+    // 1. Agar talaba OTM, fakultet, guruh, telefon, ism yoki telegramni o'zgartirgan bo'lsa,
+    // adminStore bazasini darhol yangilaymiz va saqlaymiz!
+    let hasChanges = false;
+
+    if (profile.university && profile.university.trim() && existingUser.university !== profile.university.trim()) {
+      existingUser.university = profile.university.trim();
+      hasChanges = true;
+    }
+    if (profile.faculty && profile.faculty.trim() && existingUser.faculty !== profile.faculty.trim()) {
+      existingUser.faculty = profile.faculty.trim();
+      hasChanges = true;
+    }
+    if (profile.group && profile.group.trim() && existingUser.group !== profile.group.trim()) {
+      existingUser.group = profile.group.trim();
+      hasChanges = true;
+    }
+    if (profile.phone && profile.phone.trim() && existingUser.phone !== profile.phone.trim()) {
+      existingUser.phone = profile.phone.trim();
+      hasChanges = true;
+    }
+    if (profile.name && profile.name.trim() && profile.name.trim().toLowerCase() !== 'talaba' && existingUser.name !== profile.name.trim()) {
+      existingUser.name = profile.name.trim();
+      hasChanges = true;
+    }
+    if (profile.telegramUsername && existingUser.telegramUsername !== profile.telegramUsername.trim().replace(/^@/, '')) {
+      existingUser.telegramUsername = profile.telegramUsername.trim().replace(/^@/, '');
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      existingUser.updatedAt = new Date().toISOString();
+      await saveStore(store);
+    }
+
     // Agar foydalanuvchi bloklangan bo'lsa
     if (existingUser.isBlocked) {
       return {
@@ -284,6 +347,8 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
       id: existingUser.id,
       name: existingUser.name,
       email: existingUser.email,
+      phone: existingUser.phone || profile.phone,
+      telegramUsername: existingUser.telegramUsername || profile.telegramUsername,
       university: existingUser.university || profile.university,
       faculty: existingUser.faculty || profile.faculty,
       group: existingUser.group || profile.group,
@@ -293,16 +358,18 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
     };
   }
 
-  // Agar mavjud bo'lmasa, uni avtomatik bazaga Free sifatida kiritib qo'yamiz
+  // Agar mavjud bo'lmasa, uni yangi talaba sifatida adminStore bazasiga kiritamiz
   const newUser: AdminUserRecord = {
-    id: `user-${Date.now()}`,
-    name: profile.name || 'Talaba',
-    email: searchEmail || `talaba_${Date.now()}@edu.uz`,
-    university: profile.university || "O'zbekiston Milliy Universiteti",
-    faculty: profile.faculty || 'Axborot texnologiyalari',
-    group: profile.group || '304-guruh',
+    id: profile.id || `user-${Date.now()}`,
+    name: profile.name && profile.name.toLowerCase() !== 'talaba' ? profile.name.trim() : 'Hurmatli Talaba',
+    email: searchEmail || (searchPhone ? `${searchPhone}@talaba.uz` : `talaba_${Date.now()}@edu.uz`),
+    phone: profile.phone?.trim() || '',
+    telegramUsername: profile.telegramUsername?.trim().replace(/^@/, '') || '',
+    university: profile.university?.trim() || "Toshkent axborot texnologiyalari universiteti",
+    faculty: profile.faculty?.trim() || 'Axborot texnologiyalari',
+    group: profile.group?.trim() || '304-guruh',
     plan: profile.plan || 'free',
-    tokens: profile.tokens || 10,
+    tokens: profile.tokens ?? 10,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     isBlocked: false,
@@ -314,6 +381,13 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
   return {
     ...profile,
     id: newUser.id,
+    name: newUser.name,
+    email: newUser.email,
+    phone: newUser.phone,
+    telegramUsername: newUser.telegramUsername,
+    university: newUser.university,
+    faculty: newUser.faculty,
+    group: newUser.group,
     plan: newUser.plan,
     tokens: newUser.tokens,
     isBlocked: false,

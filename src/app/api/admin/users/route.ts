@@ -5,6 +5,7 @@ import {
   updateUserPassword,
   createAdminUser,
   deleteAdminUser,
+  updateStudentProfileDirect,
 } from '@/lib/admin-storage';
 
 export async function GET() {
@@ -24,6 +25,28 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { action, userId, plan, tokens, isBlocked, notes, password } = body;
+
+    // 1. Talaba ma'lumotlarini (OTM, fakultet, guruh, telefon, ism) to'g'ridan-to'g'ri yangilash
+    if (action === 'update_details') {
+      if (!userId) {
+        return NextResponse.json(
+          { error: 'userId maydoni kiritilishi shart' },
+          { status: 400 }
+        );
+      }
+      const updatedUser = await updateStudentProfileDirect(userId, body);
+      if (!updatedUser) {
+        return NextResponse.json(
+          { error: 'Foydalanuvchi topilmadi' },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json({
+        success: true,
+        message: 'Talaba ma‘lumotlari muvaffaqiyatli yangilandi',
+        user: updatedUser,
+      });
+    }
 
     // 1. Talaba parolini yangilash / tiklash
     if (action === 'reset_password' || action === 'update_password') {
