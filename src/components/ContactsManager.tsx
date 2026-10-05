@@ -24,6 +24,8 @@ import {
   LogIn,
   RefreshCw,
   AlertTriangle,
+  ArrowLeft,
+  ChevronLeft,
 } from 'lucide-react';
 import { UserProfile, SavedContactEntry, DirectMessage } from '@/types';
 
@@ -404,8 +406,10 @@ export default function ContactsManager({ user, onOpenAuth }: ContactsManagerPro
         </div>
       )}
 
-      {/* Sarlavha & Banner */}
-      <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      {/* Sarlavha & Banner (Telefonda chat ochilganda yashiriladi) */}
+      <div className={`mb-4 sm:mb-6 flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+        selectedContact ? 'hidden lg:flex' : 'flex'
+      }`}>
         <div>
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
@@ -434,9 +438,11 @@ export default function ContactsManager({ user, onOpenAuth }: ContactsManagerPro
       </div>
 
       {/* Asosiy 2 ustunli konteyner */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-[calc(100vh-14rem)] min-h-[580px]">
-        {/* CHAP USTUN: Qidiruv va Kontaktlar ro'yxati (lg:col-span-5) */}
-        <div className="lg:col-span-5 flex flex-col bg-slate-900/70 backdrop-blur-md border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-[calc(100dvh-10rem)] sm:h-[calc(100vh-14rem)] min-h-[500px]">
+        {/* CHAP USTUN: Qidiruv va Kontaktlar ro'yxati (Telefonda chat tanlanganda yashiriladi, Noutbukda doim ko'rinadi) */}
+        <div className={`lg:col-span-5 flex-col bg-slate-900/70 backdrop-blur-md border border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-200 ${
+          selectedContact ? 'hidden lg:flex' : 'flex animate-in fade-in slide-in-from-left-4 duration-200'
+        }`}>
           {/* 1. Qidiruv paneli */}
           <div className="p-4 border-b border-slate-800/80 bg-slate-950/40">
             <form onSubmit={handleSearch} className="flex items-center gap-2">
@@ -658,8 +664,10 @@ export default function ContactsManager({ user, onOpenAuth }: ContactsManagerPro
           </div>
         </div>
 
-        {/* O'NG USTUN: Shaxsiy Chat Maydoni (lg:col-span-7) */}
-        <div className="lg:col-span-7 flex flex-col bg-slate-900/70 backdrop-blur-md border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+        {/* O'NG USTUN: Shaxsiy Chat Maydoni (Telefonda faqat kontakt tanlanganda ko'rinadi, Noutbukda doim yonida) */}
+        <div className={`lg:col-span-7 flex-col bg-slate-900/70 backdrop-blur-md border border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-200 ${
+          selectedContact ? 'flex animate-in fade-in slide-in-from-right-4 duration-200' : 'hidden lg:flex'
+        }`}>
           {!selectedContact ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-500 space-y-3">
               <div className="w-16 h-16 rounded-3xl bg-slate-800/80 flex items-center justify-center text-slate-400 mb-2">
@@ -673,9 +681,19 @@ export default function ContactsManager({ user, onOpenAuth }: ContactsManagerPro
           ) : (
             <>
               {/* Chat Sarlavhasi (Header) */}
-              <div className="p-3.5 sm:p-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+              <div className="p-3 sm:p-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between gap-2 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  {/* Telegramdagi kabi Orqaga qaytish tugmasi (faqat telefonlarda chiqadi) */}
+                  <button
+                    onClick={() => setSelectedContact(null)}
+                    className="lg:hidden p-2 -ml-1 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer shrink-0 border border-slate-700/60"
+                    title="Kontaktlarga qaytish"
+                  >
+                    <ChevronLeft size={18} />
+                    <span className="text-[11px] font-bold">Orqaga</span>
+                  </button>
+
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
                     {selectedContact.targetName.charAt(0).toUpperCase()}
                   </div>
                   <div className="min-w-0">

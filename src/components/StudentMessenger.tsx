@@ -31,6 +31,7 @@ import {
   LogOut,
   Compass,
   Check,
+  ChevronLeft,
 } from 'lucide-react';
 import { UserProfile, StudyGroup, ChatMessage } from '@/types';
 
@@ -636,9 +637,9 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
       </div>
 
       {/* Asosiy Messenger oynasi (Ekran balandligiga moslashuvchan) */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-12 h-[calc(100vh-13rem)] min-h-[500px] max-h-[820px]">
-        {/* Chap panel: Guruhlar ro'yxati */}
-        <div className="md:col-span-4 border-r border-slate-800/80 flex flex-col bg-slate-950/60">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-12 h-[calc(100dvh-10rem)] sm:h-[calc(100vh-13rem)] min-h-[500px] max-h-[820px]">
+        {/* Chap panel: Guruhlar ro'yxati (Telefonda guruh ochilganda yashiriladi) */}
+        <div className={`md:col-span-4 border-r border-slate-800/80 flex-col bg-slate-950/60 ${activeGroup ? 'hidden md:flex' : 'flex'}`}>
           <div className="p-3.5 border-b border-slate-800/80 space-y-2.5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold text-white flex items-center gap-2">
@@ -802,9 +803,9 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
           </div>
         </div>
 
-        {/* O'ng panel: Suhbat va Xabarlar */}
+        {/* O'ng panel: Suhbat va Xabarlar (Telefonda faqat guruh tanlanganda chiqadi) */}
         {!activeGroup ? (
-          <div className="md:col-span-8 flex flex-col items-center justify-center text-center p-8 bg-slate-900/40 space-y-3">
+          <div className="md:col-span-8 hidden md:flex flex-col items-center justify-center text-center p-8 bg-slate-900/40 space-y-3">
             <div className="w-16 h-16 rounded-3xl bg-slate-800/80 flex items-center justify-center text-slate-400 mb-2">
               <Users size={32} />
             </div>
@@ -824,9 +825,19 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
         ) : (
           <div className="md:col-span-8 flex flex-col bg-slate-900/40">
             {/* Guruh tepasi */}
-            <div className="p-3.5 sm:p-4 border-b border-slate-800/80 flex items-center justify-between gap-3 bg-slate-950/40">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xl shrink-0">
+            <div className="p-3.5 sm:p-4 border-b border-slate-800/80 flex items-center justify-between gap-2 sm:gap-3 bg-slate-950/40">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                {/* Orqaga tugmasi (faqat telefonlarda) */}
+                <button
+                  onClick={() => setActiveGroupId(null)}
+                  className="md:hidden p-2 -ml-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer shrink-0 border border-slate-700/60"
+                  title="Guruhlarga qaytish"
+                >
+                  <ChevronLeft size={18} />
+                  <span className="text-[11px] font-bold">Orqaga</span>
+                </button>
+
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xl shrink-0">
                   {activeGroup.avatarIcon || '📚'}
                 </div>
                 <div className="min-w-0">
