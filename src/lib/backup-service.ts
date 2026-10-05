@@ -179,6 +179,83 @@ export async function restoreBackupData(payload: any): Promise<{
   };
 }
 
+export async function resetDatabaseToClean(): Promise<{
+  success: boolean;
+  message: string;
+  backupFileName: string;
+}> {
+  await fs.mkdir(BACKUPS_DIR, { recursive: true });
+
+  // 1. Tozalashdan oldin xavfsizlik uchun to'liq avtomatik backup olamiz
+  const currentBackup = await generateBackupData();
+  const safetyFileName = `backup_before_reset_${Date.now()}.json`;
+  await fs.writeFile(
+    path.join(BACKUPS_DIR, safetyFileName),
+    JSON.stringify(currentBackup, null, 2),
+    'utf-8'
+  );
+
+  // 2. Admin ma'lumotlarini saqlab qolgan holda foydalanuvchilarni tozalaymiz
+  const adminStore = await readJsonSafe(path.join(DATA_DIR, 'admin-store.json'), {
+    adminConfig: {
+      username: 'admin',
+      passwordHash: 'talabaai_admin_2026!',
+      updatedAt: new Date().toISOString(),
+    },
+    users: [],
+  });
+
+  const cleanAdminStore = {
+    adminConfig: adminStore.adminConfig || {
+      username: 'admin',
+      passwordHash: 'talabaai_admin_2026!',
+      updatedAt: new Date().toISOString(),
+    },
+    users: [],
+  };
+
+  await fs.writeFile(
+    path.join(DATA_DIR, 'admin-store.json'),
+    JSON.stringify(cleanAdminStore, null, 2),
+    'utf-8'
+  );
+
+  // 3. Kurslar va darsliklarni tozalash
+  await fs.writeFile(
+    path.join(DATA_DIR, 'courses-store.json'),
+    JSON.stringify({ subjects: [], lessons: [] }, null, 2),
+    'utf-8'
+  );
+
+  // 4. Guruhlar va messenjer xabarlarini tozalash
+  await fs.writeFile(
+    path.join(DATA_DIR, 'messenger-store.json'),
+    JSON.stringify({ groups: [], messages: {} }, null, 2),
+    'utf-8'
+  );
+
+  // 5. Shaxsiy yozishmalarni tozalash
+  await fs.writeFile(
+    path.join(DATA_DIR, 'direct-chats-store.json'),
+    JSON.stringify({ messages: {} }, null, 2),
+    'utf-8'
+  );
+
+  // 6. OTP kodlar bazasini tozalash
+  await fs.writeFile(
+    path.join(DATA_DIR, 'otp-store.json'),
+    JSON.stringify({ pendingOtps: {}, chatPhoneMap: {}, phoneChatMap: {} }, null, 2),
+    'utf-8'
+  );
+
+  return {
+    success: true,
+    message: 'Barcha test ma‘lumotlari tozalandi! Tizim noldan toza holatda boshlandi. Xavfsizlik zaxirasi saqlab qo‘yildi.',
+    backupFileName: safetyFileName,
+  };
+}
+
+
 export async function sendBackupToTelegram(
   targetChatId?: string,
   customToken?: string

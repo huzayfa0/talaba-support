@@ -5,6 +5,7 @@ import {
   getBackupConfig,
   saveBackupConfig,
   sendBackupToTelegram,
+  resetDatabaseToClean,
 } from '@/lib/backup-service';
 
 export const dynamic = 'force-dynamic';
@@ -117,6 +118,12 @@ export async function POST(req: NextRequest) {
         config: updated,
         message: 'Zaxira va Telegram bot sozlamalari muvaffaqiyatli saqlandi!',
       });
+    }
+
+    // 4. Barcha test ma'lumotlarini tozalash (Reset to Clean)
+    if (action === 'reset_database') {
+      const result = await resetDatabaseToClean();
+      return NextResponse.json(result);
     }
 
     return NextResponse.json({ error: 'Noma‘lum amal' }, { status: 400 });

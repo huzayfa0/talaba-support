@@ -157,6 +157,8 @@ export default function SecretAdminConsole() {
   const [restorePreview, setRestorePreview] = useState<any | null>(null);
   const [backupActionMsg, setBackupActionMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isRestoreConfirmModalOpen, setIsRestoreConfirmModalOpen] = useState(false);
+  const [isResetConfirmModalOpen, setIsResetConfirmModalOpen] = useState(false);
+  const [isResettingDatabase, setIsResettingDatabase] = useState(false);
 
   // Modallar
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
@@ -1061,6 +1063,46 @@ export default function SecretAdminConsole() {
       setIsRestoringBackup(false);
     }
   };
+
+  // 6. Test ma'lumotlarni tozalash (Toza baza boshlash)
+  const handleResetDatabase = async () => {
+    setIsResettingDatabase(true);
+    setBackupActionMsg(null);
+    try {
+      const res = await fetch('/api/admin/backup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset_database' }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setBackupActionMsg({
+          type: 'success',
+          text: data.message || 'Barcha test ma‘lumotlari muvaffaqiyatli tozalandi!',
+        });
+        setIsResetConfirmModalOpen(false);
+        await Promise.all([
+          fetchUsers(),
+          fetchCoursesData(),
+          fetchSecurityData(),
+          fetchBackupData(),
+        ]);
+      } else {
+        setBackupActionMsg({
+          type: 'error',
+          text: data.error || 'Bazani tozalashda xatolik yuz berdi',
+        });
+      }
+    } catch {
+      setBackupActionMsg({
+        type: 'error',
+        text: 'Server bilan bog‘lanishda xatolik yuz berdi',
+      });
+    } finally {
+      setIsResettingDatabase(false);
+    }
+  };
+
 
   // Filtrlangan darslar
   const filteredLessons = courseLessons.filter((l) => {
@@ -2319,6 +2361,37 @@ export default function SecretAdminConsole() {
                     </div>
                   )}
                 </div>
+
+                {/* 3. Barcha Test Ma‘lumotlarini Tozalash (Toza Tizim Boshlash) */}
+                <div className={`p-6 rounded-3xl border space-y-4 shadow-xl ${
+                  isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                      <Trash2 size={20} />
+                    </div>
+                    <div>
+                      <h3 className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        3. Test Ma‘lumotlarni Tozalash (Toza Baza Boshlash)
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        Barcha sinov talabalari, test darslar va yozishmalarni tozalab, tizimni noldan toza boshlang
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-rose-300/90 leading-relaxed bg-rose-950/30 p-3.5 rounded-2xl border border-rose-800/40">
+                    ⚠️ <b>Eslatma:</b> Ushbu tugma barcha soxta / test ma‘lumotlarni o‘chirib yuboradi. Sizning <b>Admin login va parolingiz saqlanib qoladi</b>. Shuningdek, tozalashdan oldin xavfsizlik uchun tizim avtomatik zaxira nusxasini saqlab qo‘yadi.
+                  </p>
+
+                  <button
+                    onClick={() => setIsResetConfirmModalOpen(true)}
+                    className="w-full py-3 px-5 rounded-2xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Trash2 size={16} />
+                    <span>🗑️ Barcha Test Ma‘lumotlarni Tozalash (Toza Baza Boshlash)</span>
+                  </button>
+                </div>
               </div>
 
               {/* O'ng Blok: 3. Telegram Bot Orqali Avtomatik Zaxira (Avto-Bekub) */}
@@ -3321,6 +3394,63 @@ export default function SecretAdminConsole() {
                   <Check size={15} />
                 )}
                 <span>{isRestoringBackup ? 'Tiklanmoqda...' : 'Ha, Qayta Tiklansin'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL: TEST MA'LUMOTLARNI TOZALASHNI TASDIQLASH */}
+      {/* ------------------------------------------------------------- */}
+      {isResetConfirmModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-2xl animate-in zoom-in-95 my-8">
+            <div className="flex items-center gap-3 text-rose-400">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center">
+                <Trash2 size={24} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Test Ma‘lumotlarni Tozalash</h3>
+                <p className="text-xs text-rose-400/90 font-medium">Barcha test ma’lumotlari o‘chiriladi</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300 space-y-2">
+              <p>
+                Haqiqatan ham barcha sinov talabalari, test kurslar, darslar va yozishmalarni tozalamoqchimisiz?
+              </p>
+              <ul className="list-disc list-inside space-y-1 text-slate-400 pl-1 font-mono text-[11px]">
+                <li>Barcha test talaba akkauntlari o‘chiriladi</li>
+                <li>Barcha test fanlar va darslar o‘chiriladi</li>
+                <li>Guruhlar va chat xabarlari tozalanadi</li>
+                <li className="text-emerald-400 font-semibold">Admin login va parolingiz o‘zgarmay saqlanib qoladi!</li>
+              </ul>
+              <p className="text-amber-400 text-[11px] font-semibold pt-1">
+                🛡️ Xavfsizlik kafolati: Tozalashdan avval joriy bazaning to‘liq zaxira nusxasi avtomatik serverga saqlanadi.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsResetConfirmModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold cursor-pointer"
+              >
+                Bekor qilish
+              </button>
+              <button
+                type="button"
+                onClick={handleResetDatabase}
+                disabled={isResettingDatabase}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                {isResettingDatabase ? (
+                  <RefreshCw size={15} className="animate-spin" />
+                ) : (
+                  <Trash2 size={15} />
+                )}
+                <span>{isResettingDatabase ? 'Tozalanmoqda...' : 'Ha, Hammasini Tozalash'}</span>
               </button>
             </div>
           </div>

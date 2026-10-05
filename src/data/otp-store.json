@@ -1,5 +1,14 @@
 {
-  "pendingOtps": {},
+  "pendingOtps": {
+    "998940423307": {
+      "phone": "998940423307",
+      "code": "9754",
+      "expiresAt": 1791225225499,
+      "telegramUsername": "khasanov_00007",
+      "chatId": 7783667131,
+      "createdAt": "2026-10-05T18:28:45.499Z"
+    }
+  },
   "chatPhoneMap": {
     "7587746194": "998992904579",
     "7943512448": "998883931211",
