@@ -1,0 +1,42 @@
+{
+  "version": "2.0",
+  "exportedAt": "2026-10-05T20:27:08.110Z",
+  "system": "TalabaAI Ta'lim Platformasi",
+  "note": "TOZA 0-BAZA: Barcha soxta va test ma'lumotlaridan tozalangan, platformani noldan rasmiy ishga tushirish uchun tayyorlangan zaxira nusxasi.",
+  "stats": {
+    "usersCount": 0,
+    "subjectsCount": 0,
+    "lessonsCount": 0,
+    "groupsCount": 0,
+    "directChatsCount": 0
+  },
+  "stores": {
+    "adminStore": {
+      "adminConfig": {
+        "username": "admin",
+        "passwordHash": "talabaai_admin_2026!",
+        "updatedAt": "2026-10-05T20:27:08.111Z"
+      },
+      "users": []
+    },
+    "coursesStore": {
+      "subjects": [],
+      "lessons": []
+    },
+    "messengerStore": {
+      "groups": [],
+      "messages": {}
+    },
+    "directChatsStore": {
+      "messages": {}
+    },
+    "securityStore": {
+      "settings": {
+        "maxLoginAttempts": 5,
+        "lockoutDurationMinutes": 15,
+        "requireStrongPasswords": true
+      },
+      "blockedDevices": []
+    }
+  }
+}
