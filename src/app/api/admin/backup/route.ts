@@ -102,6 +102,21 @@ export async function POST(req: NextRequest) {
     // 2. Telegram botga zaxira faylini yuborish
     if (action === 'send_telegram') {
       const { chatId, botToken } = body;
+      if (!chatId) {
+        return NextResponse.json(
+          { error: 'Admin Telegram Chat ID kiritilmagan!' },
+          { status: 400 }
+        );
+      }
+      if (chatId.includes(':')) {
+        return NextResponse.json(
+          {
+            error:
+              'Xatolik: Siz Chat ID maydoniga Bot Token kiritdingiz! Chat ID faqat raqamlardan iborat bo‘ladi (masalan: 542198765). Bot tokenini yuqoridagi maydonga kiriting.',
+          },
+          { status: 400 }
+        );
+      }
       const result = await sendBackupToTelegram(chatId, botToken);
       return NextResponse.json(result);
     }

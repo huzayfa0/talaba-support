@@ -20,7 +20,7 @@ import {
   ResearchResult,
   NavTab,
 } from '@/types';
-import { GraduationCap, Heart } from 'lucide-react';
+import { GraduationCap, Heart, Search, Crown, Star, Zap, User } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>('darslar');
@@ -320,7 +320,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
-      {/* Top Navbar */}
+      {/* Top Navbar (Desktop suzuvchi dock va Mobil yuqori/pastki panellar) */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -330,8 +330,73 @@ export default function Home() {
         user={user}
       />
 
+      {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
+      <div className="hidden lg:block lg:pl-28 pr-6 pt-5 pb-3">
+        <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+          {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
+          <div>
+            <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              Assalomu alaykum, {user.isLoggedIn ? user.name.split(' ')[0] : 'Talaba'} 👋
+            </h1>
+            <p className="text-xs text-slate-400 mt-0.5">
+              TalabaAI bilan bugungi darslar va topshiriqlaringiz tayyor
+            </p>
+          </div>
+
+          {/* O'ng: Qidiruv, Tokenlar va Profil */}
+          <div className="flex items-center gap-3">
+            {/* Tezkor qidiruv */}
+            <div className="relative w-64 xl:w-80">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Darslar, mavzular yoki kontaktlar..."
+                className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
+              />
+            </div>
+
+            {/* Tokenlar ko'rsatkichi */}
+            {user.plan === 'ultra' ? (
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-md shadow-purple-500/10">
+                <Crown size={15} className="text-amber-300 fill-amber-300" />
+                <span>Ultra VIP (Cheksiz)</span>
+              </div>
+            ) : user.plan === 'premium' ? (
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10">
+                <Star size={15} className="text-amber-400 fill-amber-400" />
+                <span>Premium ({user.tokens ?? 100} token)</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
+                <Zap size={15} className="text-indigo-400 fill-indigo-400/30" />
+                <span>{user.tokens ?? 10} bepul token</span>
+              </div>
+            )}
+
+            {/* Profil / Kirish */}
+            <button
+              onClick={() => {
+                if (user.isLoggedIn) {
+                  setActiveTab('settings');
+                } else {
+                  window.location.href = '/login';
+                }
+              }}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+            >
+              <div className="w-6 h-6 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[11px]">
+                {user.isLoggedIn ? user.name.slice(0, 2).toUpperCase() : <User size={13} />}
+              </div>
+              <span className="truncate max-w-[120px]">
+                {user.isLoggedIn ? user.name : 'Kirish'}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content Area */}
-      <main className="flex-1 pb-16">
+      <main className="flex-1 lg:pl-28 lg:pr-6 pb-24 lg:pb-12">
         {activeTab === 'darslar' && (
           <VideoCoursesManager
             user={user}
@@ -415,7 +480,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500 lg:pl-28 lg:pr-6 pb-24 lg:pb-8">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-slate-400">
             <GraduationCap size={16} className="text-indigo-400" />

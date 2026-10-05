@@ -912,6 +912,14 @@ export default function SecretAdminConsole() {
       return;
     }
 
+    if (backupAdminChatId.includes(':')) {
+      setBackupActionMsg({
+        type: 'error',
+        text: 'Xatolik: Siz Chat ID maydoniga Bot Token kiritdingiz! Chat ID faqat raqamlardan iborat bo‘ladi (masalan: 542198765). Bot tokenini yuqoridagi "Telegram Bot Token" maydoniga kiriting.',
+      });
+      return;
+    }
+
     setIsSendingTelegramBackup(true);
     setBackupActionMsg(null);
 
@@ -2455,8 +2463,24 @@ export default function SecretAdminConsole() {
                       value={backupAdminChatId}
                       onChange={(e) => setBackupAdminChatId(e.target.value)}
                       placeholder="Masalan: 123456789 yoki 542198765"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
+                      className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border text-white font-mono ${
+                        backupAdminChatId.includes(':') ? 'border-rose-500 ring-2 ring-rose-500/20' : 'border-slate-800'
+                      }`}
                     />
+
+                    {backupAdminChatId.includes(':') && (
+                      <div className="mt-2 p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2.5 animate-in fade-in">
+                        <AlertTriangle size={17} className="shrink-0 text-rose-400 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-rose-200">Diqqat: Siz bu yerga Bot Token kiritdingiz!</p>
+                          <p className="text-[11px] text-rose-300/90 mt-1 leading-relaxed">
+                            Bot tokenida <code>:</code> belgisi bo‘ladi. Chat ID esa faqat <b>oddiy raqamlardan</b> iborat bo‘ladi (masalan: <b>542198765</b>).
+                            Ushbu tokenni nusxalab, yuqoridagi <b>«Telegram Bot Token»</b> maydoniga qo‘ying.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 mt-1.5 text-[11px] text-slate-400 space-y-1">
                       <p className="text-emerald-400 font-semibold">❓ Chat ID raqamingizni qanday topasiz?</p>
                       <p>

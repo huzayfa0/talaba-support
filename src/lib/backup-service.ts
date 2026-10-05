@@ -272,6 +272,13 @@ export async function sendBackupToTelegram(
     throw new Error('Admin Telegram Chat ID kiritilmagan. Iltimos, Chat ID ni kiriting.');
   }
 
+  // Agar foydalanuvchi Bot Token kiritgan bo'lsa (ichida ':' belgisi bo'ladi)
+  if (chatId.includes(':')) {
+    throw new Error(
+      'Xatolik: Siz Chat ID maydoniga Bot Token kiritdingiz! Chat ID faqat raqamlardan iborat bo‘ladi (masalan: 542198765). Bot tokenini yuqoridagi "Telegram Bot Token" maydoniga kiriting.'
+    );
+  }
+
   const backupData = await generateBackupData();
   const dateStr = new Date().toISOString().replace(/:/g, '-').slice(0, 19);
   const fileName = `talaba_backup_${dateStr}.json`;
@@ -302,12 +309,16 @@ export async function sendBackupToTelegram(
   const resData = await res.json();
 
   if (!resData.ok) {
+    let errorDetail = resData.description || 'Telegramga yuborishda xatolik';
+    if (resData.description?.includes('chat not found')) {
+      errorDetail = `Telegram API xatosi: Kiritilgan Chat ID (${chatId}) topilmadi! Iltimos, Telegramda o‘z botingizga avval biron marta /start deb yozing, yoki to‘g‘ri raqamli Chat ID kiriting (bilib olish uchun @userinfobot ga kiring).`;
+    }
     await saveBackupConfig({
       lastBackupAt: new Date().toISOString(),
       lastBackupStatus: 'error',
-      lastBackupMessage: resData.description || 'Telegramga yuborishda xatolik',
+      lastBackupMessage: errorDetail,
     });
-    throw new Error(resData.description || 'Telegram bot faylni yubora olmadi');
+    throw new Error(errorDetail);
   }
 
   await saveBackupConfig({
