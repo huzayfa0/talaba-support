@@ -1,0 +1,380 @@
+{
+  "subjects": [
+    {
+      "id": "course-web-dev",
+      "title": "Web Dasturlash (Frontend & React)",
+      "category": "IT & Dasturlash",
+      "description": "HTML, CSS, JavaScript va React orqali professional veb-saytlar va zamonaviy web-ilovalar yaratish kursi.",
+      "icon": "💻",
+      "instructorName": "Jasur Yo‘ldoshev",
+      "totalLessons": 8,
+      "freeLessonsCount": 5,
+      "createdAt": "2026-09-20T10:00:00.000Z"
+    },
+    {
+      "id": "course-python-ai",
+      "title": "Python & Sun‘iy Intellekt Asoslari",
+      "category": "Sun‘iy Intellekt",
+      "description": "Noldan Python tili, ma‘lumotlar tahlili va Gemini sun‘iy intellekt modellarini amaliyotda qo‘llash.",
+      "icon": "🐍",
+      "instructorName": "Samandar Huzayfa",
+      "totalLessons": 7,
+      "freeLessonsCount": 5,
+      "createdAt": "2026-09-21T10:00:00.000Z"
+    },
+    {
+      "id": "course-cybersec",
+      "title": "Kiberxavfsizlik & Tarmoqlar",
+      "category": "Kiberxavfsizlik",
+      "description": "Axborot xavfsizligi, tarmoq protokollari, Wireshark va xakerlik hujumlaridan himoyalanish laboratoriyasi.",
+      "icon": "🛡️",
+      "instructorName": "Sardor Abdullayev",
+      "totalLessons": 6,
+      "freeLessonsCount": 5,
+      "createdAt": "2026-09-22T10:00:00.000Z"
+    },
+    {
+      "id": "course-ielts",
+      "title": "IELTS 7.5+ & Akademik Ingliz Tili",
+      "category": "Xorijiy Tillar",
+      "description": "Xalqaro sertifikat olish uchun Listening, Reading, Writing va Speaking bo‘yicha professional darslar.",
+      "icon": "🇬🇧",
+      "instructorName": "Malika Rahimova",
+      "totalLessons": 7,
+      "freeLessonsCount": 5,
+      "createdAt": "2026-09-23T10:00:00.000Z"
+    },
+    {
+      "id": "course-1791107672131",
+      "title": "dinshunoslik",
+      "category": "Umumiy",
+      "description": "Amaliy video darslik kursi",
+      "icon": "🎓",
+      "instructorName": "Kimsanjonov Palonchibek",
+      "totalLessons": 1,
+      "freeLessonsCount": 5,
+      "createdAt": "2026-10-04T09:54:32.131Z"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "lesson-web-1",
+      "courseId": "course-web-dev",
+      "lessonNumber": 1,
+      "title": "1-Dars: Web Dasturlashga Kirish va HTML5 Semantikasi",
+      "description": "Web sahifalar qanday ishlashi, brauzer render qilish bosqichlari va zamonaviy HTML5 semantik teglari.",
+      "videoUrl": "https://www.youtube.com/embed/mU6anWqZJcc",
+      "durationMinutes": 25,
+      "isFree": true,
+      "createdAt": "2026-09-20T10:30:00.000Z"
+    },
+    {
+      "id": "lesson-web-2",
+      "courseId": "course-web-dev",
+      "lessonNumber": 2,
+      "title": "2-Dars: CSS3 Zamonaviy Usullari: Flexbox va Grid",
+      "description": "Responsiv va chiroyli tartiblar (layout) yaratishda Flexbox va CSS Grid imkoniyatlari.",
+      "videoUrl": "https://www.youtube.com/embed/1Rs2ND1ryYc",
+      "durationMinutes": 32,
+      "isFree": true,
+      "createdAt": "2026-09-20T11:00:00.000Z"
+    },
+    {
+      "id": "lesson-web-3",
+      "courseId": "course-web-dev",
+      "lessonNumber": 3,
+      "title": "3-Dars: JavaScript Asoslari: O‘zgaruvchilar va Funksiyalar",
+      "description": "ES6+ standartlari, const/let, arrow funksiyalar va massiv usullari (map, filter).",
+      "videoUrl": "https://www.youtube.com/embed/W6NZfCO5SIk",
+      "durationMinutes": 40,
+      "isFree": true,
+      "createdAt": "2026-09-20T11:30:00.000Z"
+    },
+    {
+      "id": "lesson-web-4",
+      "courseId": "course-web-dev",
+      "lessonNumber": 4,
+      "title": "4-Dars: DOM bilan ishlash va Hodisalar (Events)",
+      "description": "Foydalanuvchi harakatlarini boshqarish, dinamik HTML elementlar qo‘shish va o‘chirish.",
+      "videoUrl": "https://www.youtube.com/embed/y17RuWkWdn8",
+      "durationMinutes": 28,
+      "isFree": true,
+      "createdAt": "2026-09-20T12:00:00.000Z"
+    },
+    {
+      "id": "lesson-web-5",
+      "courseId": "course-web-dev",
+      "lessonNumber": 5,
+      "title": "5-Dars: Asinxron JavaScript: Fetch API va Server bilan Aloqa",
+      "description": "REST API dan ma‘lumotlarni yuklab olish, async/await sintaksisi va xatoliklarni qayta ishlash.",
+      "videoUrl": "https://www.youtube.com/embed/cuEtnrL9-H0",
+      "durationMinutes": 35,
+      "isFree": true,
+      "createdAt": "2026-09-20T12:30:00.000Z"
+    },
+    {
+      "id": "lesson-web-6",
+      "courseId": "course-web-dev",
+      "lessonNumber": 6,
+      "title": "6-Dars: React Asoslari: Komponentlar va JSX Muhiti",
+      "description": "React ilovalari arxitekturasi, modulli komponentlar va dinamik prop uzatish.",
+      "videoUrl": "https://www.youtube.com/embed/bMknfKXIFA8",
+      "durationMinutes": 45,
+      "isFree": false,
+      "createdAt": "2026-09-20T13:00:00.000Z"
+    },
+    {
+      "id": "lesson-web-7",
+      "courseId": "course-web-dev",
+      "lessonNumber": 7,
+      "title": "7-Dars: React State va useEffect Hooks Amaliyoti",
+      "description": "Ilova holatini boshqarish, serverdan avtomatik yangilanishlar olish va lifecycle boshqaruvi.",
+      "videoUrl": "https://www.youtube.com/embed/O6P86uwfdR0",
+      "durationMinutes": 50,
+      "isFree": false,
+      "createdAt": "2026-09-20T13:30:00.000Z"
+    },
+    {
+      "id": "lesson-web-8",
+      "courseId": "course-web-dev",
+      "lessonNumber": 8,
+      "title": "8-Dars: Yakuniy Amaliy Loyiha: Talaba Portfoliosi",
+      "description": "Talabalar uchun to‘liq tayyor, zamonaviy va jonli portfolio veb-saytini deploy qilish.",
+      "videoUrl": "https://www.youtube.com/embed/0riHps91AzE",
+      "durationMinutes": 55,
+      "isFree": false,
+      "createdAt": "2026-09-20T14:00:00.000Z"
+    },
+    {
+      "id": "lesson-py-1",
+      "courseId": "course-python-ai",
+      "lessonNumber": 1,
+      "title": "1-Dars: Python Muhitini O‘rnatish va Asosiy Sintaksis",
+      "description": "Python 3.12 ni sozlash, o‘zgaruvchilar, ma‘lumot turlari va print funksiyasi.",
+      "videoUrl": "https://www.youtube.com/embed/_uQrJ0TkZlc",
+      "durationMinutes": 26,
+      "isFree": true,
+      "createdAt": "2026-09-21T10:30:00.000Z"
+    },
+    {
+      "id": "lesson-py-2",
+      "courseId": "course-python-ai",
+      "lessonNumber": 2,
+      "title": "2-Dars: Ma‘lumotlar Tuzilmalari: List, Dict, Tuple va Set",
+      "description": "Ro‘yxatlar, lug‘atlar va ularning muhim metodlari bilan amaliy masalalar.",
+      "videoUrl": "https://www.youtube.com/embed/kqtD5dpn9C8",
+      "durationMinutes": 34,
+      "isFree": true,
+      "createdAt": "2026-09-21T11:00:00.000Z"
+    },
+    {
+      "id": "lesson-py-3",
+      "courseId": "course-python-ai",
+      "lessonNumber": 3,
+      "title": "3-Dars: Funksiyalar va Modullar bilan Ishlash",
+      "description": "DRY printsipi, lambda ifodalar va tayyor Python standart kutubxonalari.",
+      "videoUrl": "https://www.youtube.com/embed/9Os0o3wzS_I",
+      "durationMinutes": 30,
+      "isFree": true,
+      "createdAt": "2026-09-21T11:30:00.000Z"
+    },
+    {
+      "id": "lesson-py-4",
+      "courseId": "course-python-ai",
+      "lessonNumber": 4,
+      "title": "4-Dars: Fayllar bilan Ishlash va JSON Ma‘lumotlar",
+      "description": "Matnli va JSON fayllarni o‘qish, yozish va xatoliklarni try-except orqali ushlash.",
+      "videoUrl": "https://www.youtube.com/embed/U9s51K_8B1E",
+      "durationMinutes": 28,
+      "isFree": true,
+      "createdAt": "2026-09-21T12:00:00.000Z"
+    },
+    {
+      "id": "lesson-py-5",
+      "courseId": "course-python-ai",
+      "lessonNumber": 5,
+      "title": "5-Dars: Pandas va NumPy Kutubxonalari bilan Data Analysis",
+      "description": "Katta jadvallar, DataFrame ustunlari va statistik ko‘rsatkichlarni hisoblash.",
+      "videoUrl": "https://www.youtube.com/embed/vmEHCJofslg",
+      "durationMinutes": 42,
+      "isFree": true,
+      "createdAt": "2026-09-21T12:30:00.000Z"
+    },
+    {
+      "id": "lesson-py-6",
+      "courseId": "course-python-ai",
+      "lessonNumber": 6,
+      "title": "6-Dars: Mashinali O‘rganish (Machine Learning) Asoslari",
+      "description": "Klassifikatsiya, regressiya algoritmlari va modelni baholash usullari.",
+      "videoUrl": "https://www.youtube.com/embed/7eh4d6sabA0",
+      "durationMinutes": 52,
+      "isFree": false,
+      "createdAt": "2026-09-21T13:00:00.000Z"
+    },
+    {
+      "id": "lesson-py-7",
+      "courseId": "course-python-ai",
+      "lessonNumber": 7,
+      "title": "7-Dars: Google Gemini AI API orqali Aqlli Bot Yaratish",
+      "description": "Gemini 1.5 modelini Python orqali ulash va talabalar uchun avtomatlashtirilgan AI assistent yaratish.",
+      "videoUrl": "https://www.youtube.com/embed/j_8uP31u_xY",
+      "durationMinutes": 48,
+      "isFree": false,
+      "createdAt": "2026-09-21T13:30:00.000Z"
+    },
+    {
+      "id": "lesson-sec-1",
+      "courseId": "course-cybersec",
+      "lessonNumber": 1,
+      "title": "1-Dars: Kiberxavfsizlikka Kirish va Asosiy Xatarlar",
+      "description": "Zamonaviy tahdidlar, ijtimoiy injiniring va axborot himoyasi tamoyillari.",
+      "videoUrl": "https://www.youtube.com/embed/inWWhr5tnEA",
+      "durationMinutes": 24,
+      "isFree": true,
+      "createdAt": "2026-09-22T10:30:00.000Z"
+    },
+    {
+      "id": "lesson-sec-2",
+      "courseId": "course-cybersec",
+      "lessonNumber": 2,
+      "title": "2-Dars: Kompyuter Tarmoqlari va OSI Modeli",
+      "description": "7 qavatli OSI modeli, TCP/IP steklari va ma‘lumotlar paketlari harakati.",
+      "videoUrl": "https://www.youtube.com/embed/vv4y_uOneC0",
+      "durationMinutes": 33,
+      "isFree": true,
+      "createdAt": "2026-09-22T11:00:00.000Z"
+    },
+    {
+      "id": "lesson-sec-3",
+      "courseId": "course-cybersec",
+      "lessonNumber": 3,
+      "title": "3-Dars: IP Manzillash, Subnetting va Marshrutlash",
+      "description": "IPv4, IPv6, ichki va tashqi tarmoqlar, router va switch ishlashi.",
+      "videoUrl": "https://www.youtube.com/embed/s_Ntt6eTn94",
+      "durationMinutes": 36,
+      "isFree": true,
+      "createdAt": "2026-09-22T11:30:00.000Z"
+    },
+    {
+      "id": "lesson-sec-4",
+      "courseId": "course-cybersec",
+      "lessonNumber": 4,
+      "title": "4-Dars: Xavfsizlik Protokollari: SSH, HTTPS va SSL/TLS",
+      "description": "Simmetrik va asimmetrik shifrlash, sertifikatlar va xavfsiz ulanishlar.",
+      "videoUrl": "https://www.youtube.com/embed/T4Df5_cojAs",
+      "durationMinutes": 31,
+      "isFree": true,
+      "createdAt": "2026-09-22T12:00:00.000Z"
+    },
+    {
+      "id": "lesson-sec-5",
+      "courseId": "course-cybersec",
+      "lessonNumber": 5,
+      "title": "5-Dars: Tarmoq Paketlarini Tahlil Qilish: Wireshark",
+      "description": "Tarmoq trafigini tutish, shubhali ulanishlarni aniqlash va tahlil qilish.",
+      "videoUrl": "https://www.youtube.com/embed/lb1Dw0elw0Q",
+      "durationMinutes": 38,
+      "isFree": true,
+      "createdAt": "2026-09-22T12:30:00.000Z"
+    },
+    {
+      "id": "lesson-sec-6",
+      "courseId": "course-cybersec",
+      "lessonNumber": 6,
+      "title": "6-Dars: Zaifliklarni Aniqlash va Himoyalanish Amaliyoti",
+      "description": "Port scanning, penetratsion test tushunchasi va xavfsizlik devorlari (Firewall).",
+      "videoUrl": "https://www.youtube.com/embed/3Kq1MIfTWCE",
+      "durationMinutes": 50,
+      "isFree": false,
+      "createdAt": "2026-09-22T13:00:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-1",
+      "courseId": "course-ielts",
+      "lessonNumber": 1,
+      "title": "1-Dars: IELTS Imtihoni Strukturasi va Strategiyalar",
+      "description": "Imtihon qismlari, vaqtni to‘g‘ri taqsimlash va ballarni oshirish bo‘yicha ko‘rsatmalar.",
+      "videoUrl": "https://www.youtube.com/embed/8vK2bY_8wHQ",
+      "durationMinutes": 26,
+      "isFree": true,
+      "createdAt": "2026-09-23T10:30:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-2",
+      "courseId": "course-ielts",
+      "lessonNumber": 2,
+      "title": "2-Dars: Listening: Part 1 va 2 da Kalit So‘zlarni Tutish",
+      "description": "Audio tinglashda sinonimlar, chalg‘ituvchi variantlar va orfoografiya.",
+      "videoUrl": "https://www.youtube.com/embed/a7rQ8v4gQj8",
+      "durationMinutes": 30,
+      "isFree": true,
+      "createdAt": "2026-09-23T11:00:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-3",
+      "courseId": "course-ielts",
+      "lessonNumber": 3,
+      "title": "3-Dars: Reading: Skimming va Scanning Texnikasi",
+      "description": "True/False/Not Given va Heading moslashtirish savollarida 100% aniqlik.",
+      "videoUrl": "https://www.youtube.com/embed/bXv3g1q2o0c",
+      "durationMinutes": 35,
+      "isFree": true,
+      "createdAt": "2026-09-23T11:30:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-4",
+      "courseId": "course-ielts",
+      "lessonNumber": 4,
+      "title": "4-Dars: Writing Task 1: Grafik va Jadvallarni Tasvirlash",
+      "description": "Overview yozish, trendlarni taqqoslash va akademik lug‘at (vocab).",
+      "videoUrl": "https://www.youtube.com/embed/2M-J3z0P1v0",
+      "durationMinutes": 32,
+      "isFree": true,
+      "createdAt": "2026-09-23T12:00:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-5",
+      "courseId": "course-ielts",
+      "lessonNumber": 5,
+      "title": "5-Dars: Speaking Part 1: Ravon va Ishonchli Gapirish",
+      "description": "Grammatik murakkablik, talaffuz va kundalik savollarga tabiiy javob berish.",
+      "videoUrl": "https://www.youtube.com/embed/7sXk9yZ2_3c",
+      "durationMinutes": 28,
+      "isFree": true,
+      "createdAt": "2026-09-23T12:30:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-6",
+      "courseId": "course-ielts",
+      "lessonNumber": 6,
+      "title": "6-Dars: Writing Task 2: 7.5+ Ballik Esse Formulalari",
+      "description": "Agree/Disagree, Discuss both views esselarida argumentatsiya va koheziya.",
+      "videoUrl": "https://www.youtube.com/embed/1l-W8p0A2x4",
+      "durationMinutes": 48,
+      "isFree": false,
+      "createdAt": "2026-09-23T13:00:00.000Z"
+    },
+    {
+      "id": "lesson-ielts-7",
+      "courseId": "course-ielts",
+      "lessonNumber": 7,
+      "title": "7-Dars: Speaking Part 2 & 3: Idiomalar va Kengaytirilgan Fikr",
+      "description": "Cue card ustida 2 minut to‘xtovsiz gapirish va abstrakt mavzular tahlili.",
+      "videoUrl": "https://www.youtube.com/embed/8vK2bY_8wHQ",
+      "durationMinutes": 42,
+      "isFree": false,
+      "createdAt": "2026-09-23T13:30:00.000Z"
+    },
+    {
+      "id": "lesson-1791107744826-1pzb",
+      "courseId": "course-1791107672131",
+      "lessonNumber": 1,
+      "title": "1-Dars: 1-mavzu kirish qismi",
+      "description": "Amaliy video darslik va konspekt",
+      "videoUrl": "/uploads/courses/dars_1791107740409_Karib_dengizi_qaroqchilari_Qora_marvarid_tavqi_lanati_2003_HD_Daxshat_Net.mp4",
+      "durationMinutes": 30,
+      "isFree": true,
+      "createdAt": "2026-10-04T09:55:44.826Z"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "savedContacts": [
+    {
+      "ownerId": "user-1791022766637-ch7y",
+      "targetUserId": "user-1791022766637-ch7y",
+      "addedAt": "2026-10-03T10:32:54.493Z"
+    },
+    {
+      "ownerId": "user-1791098904105-90qn",
+      "targetUserId": "user-1791022766637-ch7y",
+      "addedAt": "2026-10-04T07:28:48.601Z"
+    },
+    {
+      "ownerId": "user-1791022766637-ch7y",
+      "targetUserId": "user-1791098904105-90qn",
+      "addedAt": "2026-10-04T07:29:00.285Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "dm-1791023587912-l0gqi",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "Salom",
+      "createdAt": "2026-10-03T10:33:07.913Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791023597452-ssadh",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "do'stim nima gaplar",
+      "createdAt": "2026-10-03T10:33:17.452Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791098376890-9yiwd",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPhone": "+998912174579",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "htfitydf6ttf867f",
+      "createdAt": "2026-10-04T07:19:36.890Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791098378670-erkdv",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPhone": "+998912174579",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "utfitfyi6fdiyr",
+      "createdAt": "2026-10-04T07:19:38.670Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791098940285-j163d",
+      "senderId": "user-1791098904105-90qn",
+      "senderName": "Uyg'unjon",
+      "senderPhone": "+998 940423307",
+      "senderPlan": "free",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "Assalomu alaykum",
+      "createdAt": "2026-10-04T07:29:00.285Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791098948894-oqwu1",
+      "senderId": "user-1791098904105-90qn",
+      "senderName": "Uyg'unjon",
+      "senderPhone": "+998 940423307",
+      "senderPlan": "free",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "nima gap tinchmi",
+      "createdAt": "2026-10-04T07:29:08.894Z",
+      "read": true
+    },
+    {
+      "id": "dm-1791182547880-aw6zx",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPhone": "+998912174579",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791098904105-90qn",
+      "receiverName": "Uyg'unjon",
+      "receiverPhone": "+998 940423307",
+      "text": "kjwehfiog",
+      "createdAt": "2026-10-05T06:42:27.880Z",
+      "read": false
+    },
+    {
+      "id": "dm-1791182552431-8fl2i",
+      "senderId": "user-1791022766637-ch7y",
+      "senderName": "Samandar",
+      "senderPhone": "+998912174579",
+      "senderPlan": "ultra",
+      "receiverId": "user-1791022766637-ch7y",
+      "receiverName": "Samandar",
+      "receiverPhone": "+998912174579",
+      "text": "sfigjpaetigh",
+      "createdAt": "2026-10-05T06:42:32.431Z",
+      "read": true
+    }
+  ]
+}

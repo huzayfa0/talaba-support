@@ -1,0 +1,133 @@
+{
+  "groups": [
+    {
+      "id": "group-1791097881003-i1fgr",
+      "name": "cisco CCNA",
+      "description": "Talabalar uchun o‘quv guruhi",
+      "category": "IT & Dasturlash",
+      "membersCount": 0,
+      "avatarIcon": "🇬🇧",
+      "isLive": false,
+      "memberIds": [],
+      "createdAt": "2026-10-04T07:11:21.003Z"
+    },
+    {
+      "id": "group-it-304",
+      "name": "304-guruh: Dasturiy Injiniring",
+      "description": "Kurs ishlari, dasturlash masalalari va umumiy amaliy darslar",
+      "category": "IT & Dasturlash",
+      "membersCount": 1,
+      "avatarIcon": "💻",
+      "isLive": false,
+      "memberIds": [
+        "user-1791022766637-ch7y"
+      ],
+      "createdAt": "2026-09-25T16:54:41.673Z"
+    },
+    {
+      "id": "group-cyber-sec",
+      "name": "Kiberxavfsizlik va Tarmoqlar",
+      "description": "Axborot xavfsizligi, shifrlash va xakerlikdan himoyalanish laboratoriyasi",
+      "category": "Kiberxavfsizlik",
+      "membersCount": 0,
+      "avatarIcon": "🛡️",
+      "isLive": false,
+      "memberIds": [],
+      "createdAt": "2026-09-23T16:54:41.673Z"
+    },
+    {
+      "id": "group-econ-moliya",
+      "name": "Iqtisodiyot va Moliya Klubi",
+      "description": "Referatlar, diplom oldi amaliyoti va hisob-kitoblar",
+      "category": "Iqtisodiyot",
+      "membersCount": 0,
+      "avatarIcon": "📊",
+      "isLive": false,
+      "memberIds": [],
+      "createdAt": "2026-09-24T16:54:41.673Z"
+    },
+    {
+      "id": "group-ielts-room",
+      "name": "IELTS & Ingliz tili Study Room",
+      "description": "Prezintatsiyalarni ingliz tilida tayyorlash va speaking mashg‘ulotlari",
+      "category": "Xorijiy tillar",
+      "membersCount": 0,
+      "avatarIcon": "🇬🇧",
+      "isLive": false,
+      "memberIds": [],
+      "createdAt": "2026-09-26T16:54:41.673Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-01",
+      "groupId": "group-it-304",
+      "senderId": "user-jasur-03",
+      "senderName": "Yo‘ldoshev Jasur",
+      "senderRole": "Guruh sardori",
+      "senderPlan": "ultra",
+      "text": "Salom hammaga! Bugungi amaliy mashg‘ulot bo‘yicha slaydlar tayyormi? Kimga yordam kerak bo‘lsa ekranimni share qilib ko‘rsatib berishim mumkin.",
+      "createdAt": "2026-09-28T16:09:41.673Z"
+    },
+    {
+      "id": "msg-02",
+      "groupId": "group-it-304",
+      "senderId": "user-sardor-02",
+      "senderName": "Abdullayev Sardor",
+      "senderRole": "Talaba",
+      "senderPlan": "premium",
+      "text": "Men TalabaAI da 15 slaydlik Gamma taqdimot yaratdim, juda ajoyib chiqdi! Hozir boblarini mustaqil ishga ham joylayapman.",
+      "createdAt": "2026-09-28T16:29:41.673Z"
+    },
+    {
+      "id": "msg-03",
+      "groupId": "group-it-304",
+      "senderId": "user-jasur-03",
+      "senderName": "Yo‘ldoshev Jasur",
+      "senderRole": "Guruh sardori",
+      "senderPlan": "ultra",
+      "text": "Ajoyib! Jonli darsxona tugmasini bosib ekranni ko‘rsatib beraman, hamma kirib ko‘rishi mumkin.",
+      "createdAt": "2026-09-28T16:44:41.673Z"
+    },
+    {
+      "id": "msg-04",
+      "groupId": "group-cyber-sec",
+      "senderId": "user-jasur-03",
+      "senderName": "Yo‘ldoshev Jasur",
+      "senderRole": "Moderator",
+      "senderPlan": "ultra",
+      "text": "Efir boshlandi! Hozir SSL shifrlash va sertifikatlar mavzusini o‘z ekranimda tushuntiryapman.",
+      "createdAt": "2026-09-28T16:49:41.673Z"
+    },
+    {
+      "id": "msg-1790614481901-ugxd6",
+      "groupId": "group-it-304",
+      "senderId": "user-jasur-03",
+      "senderName": "Yo‘ldoshev Jasur",
+      "senderRole": "Ultra VIP Talaba",
+      "senderPlan": "ultra",
+      "text": "Test xabar: Jonli dars xonamiz muvaffaqiyatli ishga tushdi!",
+      "createdAt": "2026-09-28T16:54:41.901Z"
+    },
+    {
+      "id": "msg-1790615472744-5bltg",
+      "groupId": "group-cyber-sec",
+      "senderId": "user-samandar-01",
+      "senderName": "Samandar Ismoilov",
+      "senderRole": "Ultra VIP Talaba",
+      "senderPlan": "ultra",
+      "text": "assalomu alaykum",
+      "createdAt": "2026-09-28T17:11:12.744Z"
+    },
+    {
+      "id": "msg-1791099870197-uhh5q",
+      "groupId": "group-it-304",
+      "senderId": "system",
+      "senderName": "Tizim bildirishnomasi",
+      "senderRole": "Tizim",
+      "senderPlan": "free",
+      "text": "🔔 Uyg'unjon (Samandar tomonidan) guruhga qo‘shildi.",
+      "createdAt": "2026-10-04T07:44:30.197Z"
+    }
+  ]
+}

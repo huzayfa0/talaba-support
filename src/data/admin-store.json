@@ -1,0 +1,96 @@
+{
+  "adminConfig": {
+    "username": "admin",
+    "passwordHash": "talabaai_admin_2026!",
+    "updatedAt": "2026-09-28T07:10:55.051Z"
+  },
+  "users": [
+    {
+      "id": "user-1791098904105-90qn",
+      "name": "Uyg'unjon",
+      "email": "998940423307@talaba.uz",
+      "phone": "+998 940423307",
+      "telegramUsername": "hasanov_00007",
+      "passwordHash": "hasanov_7",
+      "university": "O'zbekiston Milliy Universiteti",
+      "faculty": "Axborot texnologiyalari",
+      "group": "304-guruh",
+      "plan": "free",
+      "tokens": 10,
+      "createdAt": "2026-10-04T07:28:24.105Z",
+      "updatedAt": "2026-10-04T09:29:37.689Z",
+      "isBlocked": false,
+      "failedAttempts": 0,
+      "customNotes": "Telegram bot orqali ro‘yxatdan o‘tgan talaba"
+    },
+    {
+      "id": "user-1791022766637-ch7y",
+      "name": "Samandar",
+      "email": "998912174579@talaba.uz",
+      "phone": "+998912174579",
+      "telegramUsername": "huzayfa_0",
+      "passwordHash": "Samandar2004",
+      "university": "O'zbekiston Milliy Universiteti",
+      "faculty": "Axborot texnologiyalari",
+      "group": "304-guruh",
+      "plan": "ultra",
+      "tokens": 999999,
+      "createdAt": "2026-10-03T10:19:26.637Z",
+      "updatedAt": "2026-10-03T10:20:13.471Z",
+      "isBlocked": false,
+      "failedAttempts": 0,
+      "customNotes": "Telegram bot orqali ro‘yxatdan o‘tgan talaba",
+      "lastFailedAt": "2026-10-04T09:43:42.542Z"
+    },
+    {
+      "id": "user-1791022454249",
+      "name": "Samandar",
+      "email": "998912174579@talaba.uz",
+      "university": "O'zbekiston Milliy Universiteti",
+      "faculty": "Axborot texnologiyalari",
+      "group": "304-guruh",
+      "plan": "free",
+      "tokens": 10,
+      "createdAt": "2026-10-03T10:14:14.249Z",
+      "updatedAt": "2026-10-03T10:14:14.249Z",
+      "isBlocked": false
+    },
+    {
+      "id": "user-1790750055605",
+      "name": "AKSKJFDHSFKSKG",
+      "email": "998883931211@talaba.uz",
+      "university": "O'zbekiston Milliy Universiteti",
+      "faculty": "Axborot texnologiyalari",
+      "group": "304-guruh",
+      "plan": "free",
+      "tokens": 10,
+      "createdAt": "2026-09-30T06:34:15.605Z",
+      "updatedAt": "2026-09-30T06:34:15.605Z",
+      "isBlocked": false
+    }
+  ],
+  "adminSessions": [
+    {
+      "id": "sess-1791107067640-2fi9",
+      "token": "adm_token_1791107067640_YWRtaW4=",
+      "username": "admin",
+      "ip": "::1",
+      "device": "Windows PC (Chrome)",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "loginTime": "2026-10-04T09:44:27.640Z",
+      "lastActive": "2026-10-04T09:44:27.640Z",
+      "isActive": true
+    },
+    {
+      "id": "sess-1791106163447-z48c",
+      "token": "adm_token_1791106163446_YWRtaW4=",
+      "username": "admin",
+      "ip": "::1",
+      "device": "Kompyuter (Brauzer)",
+      "userAgent": "node",
+      "loginTime": "2026-10-04T09:29:23.447Z",
+      "lastActive": "2026-10-04T09:29:23.447Z",
+      "isActive": false
+    }
+  ]
+}

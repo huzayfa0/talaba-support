@@ -1,0 +1,24 @@
+{
+  "settings": {
+    "telegramBotToken": "8222935062:AAH7vuajffGpGH-I0VvNPebbF41qVeWEgZ0",
+    "telegramBotUsername": "darsliklar_ai_bot",
+    "maxFailedAttempts": 20
+  },
+  "blockedDevices": [],
+  "failedAttemptRecords": {
+    "dev_test_1": {
+      "deviceId": "dev_test_1",
+      "ip": "::1",
+      "phone": "+998901234567",
+      "count": 1,
+      "lastAttempt": "2026-09-29T14:39:19.221Z"
+    },
+    "dev_test_wrong": {
+      "deviceId": "dev_test_wrong",
+      "ip": "::1",
+      "phone": "+998901234567",
+      "count": 1,
+      "lastAttempt": "2026-09-29T14:39:19.294Z"
+    }
+  }
+}
