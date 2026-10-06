@@ -11,6 +11,7 @@ import ContactsManager from '@/components/ContactsManager';
 import DarsxonaRoom from '@/components/DarsxonaRoom';
 import SettingsManager from '@/components/SettingsManager';
 import VideoCoursesManager from '@/components/VideoCoursesManager';
+import GuestPromoBanner from '@/components/GuestPromoBanner';
 import ApiKeyModal from '@/components/ApiKeyModal';
 import AuthModal from '@/components/AuthModal';
 import {
@@ -404,34 +405,46 @@ export default function Home() {
 
       {/* Main Content Area */}
       <main className="flex-1 lg:pl-28 lg:pr-6 pb-24 lg:pb-12">
-        {activeTab === 'darslar' && (
-          <VideoCoursesManager
-            user={user}
-            onOpenAuth={() => { window.location.href = '/login'; }}
+        {/* Agar foydalanuvchi tizimga kirmagan bo'lsa va darslar, darsxona, guruhlar yoki kontaktlar bo'limida bo'lsa -> Reklama va ro'yxatdan o'tish qo'llanmasi */}
+        {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
+          <GuestPromoBanner
+            activeTab={activeTab}
+            onOpenLogin={() => {
+              window.location.href = '/login';
+            }}
           />
-        )}
+        ) : (
+          <>
+            {activeTab === 'darslar' && (
+              <VideoCoursesManager
+                user={user}
+                onOpenAuth={() => { window.location.href = '/login'; }}
+              />
+            )}
 
-        {activeTab === 'darsxona' && (
-          <DarsxonaRoom
-            user={user}
-            onOpenAuth={() => { window.location.href = '/login'; }}
-            onNavigateToGroups={() => setActiveTab('groups')}
-          />
-        )}
+            {activeTab === 'darsxona' && (
+              <DarsxonaRoom
+                user={user}
+                onOpenAuth={() => { window.location.href = '/login'; }}
+                onNavigateToGroups={() => setActiveTab('groups')}
+              />
+            )}
 
-        {(activeTab === 'groups' || activeTab === 'messenger') && (
-          <StudentMessenger
-            user={user}
-            onOpenAuth={() => setIsAuthOpen(true)}
-            onNavigateToDarsxona={() => setActiveTab('darsxona')}
-          />
-        )}
+            {(activeTab === 'groups' || activeTab === 'messenger') && (
+              <StudentMessenger
+                user={user}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onNavigateToDarsxona={() => setActiveTab('darsxona')}
+              />
+            )}
 
-        {activeTab === 'contacts' && (
-          <ContactsManager
-            user={user}
-            onOpenAuth={() => { window.location.href = '/login'; }}
-          />
+            {activeTab === 'contacts' && (
+              <ContactsManager
+                user={user}
+                onOpenAuth={() => { window.location.href = '/login'; }}
+              />
+            )}
+          </>
         )}
 
         {activeTab === 'settings' && (

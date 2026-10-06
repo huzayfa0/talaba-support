@@ -21,6 +21,7 @@ import {
   Check,
   GraduationCap,
   X,
+  Lock,
 } from 'lucide-react';
 import { UserProfile, NavTab } from '@/types';
 
@@ -173,6 +174,7 @@ export default function Navbar({
           {mainTabs.slice(0, 4).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
+            const isLocked = !user.isLoggedIn;
             return (
               <div key={tab.id} className="relative group flex items-center justify-center">
                 <button
@@ -190,20 +192,29 @@ export default function Navbar({
                   aria-label={tab.fullLabel}
                 >
                   <Icon size={22} className={tab.id === 'darsxona' && isActive ? 'animate-pulse text-white' : ''} />
-                  {tab.id === 'darsxona' && !isActive && (
+                  {tab.id === 'darsxona' && !isActive && !isLocked && (
                     <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  )}
+                  {isLocked && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400 shadow-sm" title="Kirish kerak">
+                      <Lock size={9} />
+                    </span>
                   )}
                 </button>
 
                 {/* Tooltip on hover */}
                 {hoveredDockItem === tab.id && (
-                  <div className="absolute left-16 ml-2 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+                  <div className="absolute left-16 ml-2 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100 flex items-center gap-1.5">
                     <span>{tab.fullLabel}</span>
-                    {tab.badge && (
+                    {isLocked ? (
+                      <span className="ml-1 px-1.5 py-0.5 text-[9px] rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                        <Lock size={9} /> Kirish kerak
+                      </span>
+                    ) : tab.badge ? (
                       <span className="ml-2 px-1.5 py-0.5 text-[9px] rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         {tab.badge}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                 )}
               </div>
@@ -499,6 +510,7 @@ export default function Navbar({
         {mainTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
+          const isLocked = !user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'contacts'].includes(tab.id);
           return (
             <button
               key={tab.id}
@@ -514,20 +526,25 @@ export default function Navbar({
             >
               {/* Active Squircle Pill Indicator (1-rasmdagi uslubda) */}
               <div
-                className={`w-10 h-7 rounded-xl flex items-center justify-center transition-all ${
+                className={`w-10 h-7 rounded-xl flex items-center justify-center transition-all relative ${
                   isActive
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 scale-105'
                     : 'bg-transparent'
                 }`}
               >
                 <Icon size={18} className={tab.id === 'darsxona' && isActive ? 'animate-pulse' : ''} />
+                {isLocked && !isActive && (
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400">
+                    <Lock size={8} />
+                  </span>
+                )}
               </div>
 
               <span className={`text-[10px] tracking-tight mt-0.5 ${isActive ? 'font-extrabold text-emerald-400' : 'font-medium'}`}>
                 {tab.label}
               </span>
 
-              {tab.id === 'darsxona' && !isActive && (
+              {tab.id === 'darsxona' && !isActive && !isLocked && (
                 <span className="absolute top-1.5 right-3 w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
               )}
             </button>
