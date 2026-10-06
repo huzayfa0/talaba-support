@@ -259,8 +259,10 @@ export default function LoginPage() {
       }
 
       setBotUsername(data.botUsername || 'TalabaAIBot');
-      if (data.demoCode) {
+      if (data.isSimulated && data.demoCode) {
         setDemoCodeNotice(`Tasdiqlash kodi: ${data.demoCode}`);
+      } else {
+        setDemoCodeNotice(null);
       }
 
       setSuccessMsg(data.message || 'Tasdiqlash kodi Telegramga yuborildi!');

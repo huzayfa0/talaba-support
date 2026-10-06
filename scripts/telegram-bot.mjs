@@ -64,6 +64,17 @@ async function savePendingOtp(phone, code, options = {}) {
   return record;
 }
 
+async function saveChatPhoneMapping(chatId, phone) {
+  const clean = cleanPhoneNumber(phone);
+  const store = await loadOtpStore();
+  if (!store.chatPhoneMap) store.chatPhoneMap = {};
+  if (!store.phoneChatMap) store.phoneChatMap = {};
+  store.chatPhoneMap[String(chatId)] = clean;
+  store.phoneChatMap[clean] = chatId;
+  await saveOtpStore(store);
+  return clean;
+}
+
 async function sendTelegramMessage(chatId, text, replyMarkup = null) {
   try {
     const payload = {
@@ -295,23 +306,34 @@ async function startBot() {
           if (msg.contact && msg.contact.phone_number) {
             const rawPhone = msg.contact.phone_number;
             const cleanPhone = cleanPhoneNumber(rawPhone);
-            const code = generateOtpCode();
 
-            await savePendingOtp(cleanPhone, code, {
-              chatId,
-              telegramUsername: username,
-            });
+            // Telefon raqam va Chat ID bog'lanishini saqlaymiz
+            await saveChatPhoneMapping(chatId, cleanPhone);
+            console.log(`[TELEFON ULANDI] Tel: +${cleanPhone} <-> ChatId: ${chatId}`);
 
-            console.log(`[OTP YUBORILDI] Tel: +${cleanPhone} -> Kod: ${code} (ChatId: ${chatId})`);
+            const store = await loadOtpStore();
+            const pending = store.pendingOtps ? store.pendingOtps[cleanPhone] : null;
 
-            await sendTelegramMessage(
-              chatId,
-              `🎓 <b>TalabaAI Tizimi</b>\n\n` +
-              `🔐 Sizning 4 xonali tasdiqlash kodingiz: <code>${code}</code>\n\n` +
-              `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
-              `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
-              `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
-            );
+            // Agar oldinroq aynan shu raqam uchun saytdan kod so'ralgan bo'lsa va muddati o'tmagan bo'lsa
+            if (pending && pending.code && pending.expiresAt > Date.now()) {
+              await sendTelegramMessage(
+                chatId,
+                `🎓 <b>TalabaAI Tizimi</b>\n\n` +
+                `🔐 Saytda so‘ralgan 4 xonali tasdiqlash kodingiz: <code>${pending.code}</code>\n\n` +
+                `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
+                `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
+                `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
+              );
+            } else {
+              // Foydalanuvchi faqat raqamini uladi, kod saytdan so'ralganda keladi
+              await sendTelegramMessage(
+                chatId,
+                `✅ <b>Telefon raqamingiz muvaffaqiyatli ulandi!</b>\n\n` +
+                `📱 <b>Raqamingiz:</b> <code>+${cleanPhone}</code>\n\n` +
+                `Endi saytga (<b>huzayfa0.uz</b>) o‘tib, ro‘yxatdan o‘tish yoki tizimga kirishda ushbu raqamingizni kiritib <b>«Kodni olish»</b> tugmasini bosing.\n\n` +
+                `📩 Tasdiqlash kodi avtomatik tarzda aynan shu yerga yuboriladi.`
+              );
+            }
             continue;
           }
 
@@ -348,7 +370,7 @@ async function startBot() {
               chatId,
               `Assalomu alaykum, <b>${userFirstName}</b>! 🎓\n\n` +
               `<b>TalabaAI</b> platformasining rasmiy botiga xush kelibsiz.\n\n` +
-              `Saytda ro‘yxatdan o‘tish yoki tizimga kirish uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring (masalan: <code>+998901234567</code>):\n\n` +
+              `Saytdan ro‘yxatdan o‘tishda tasdiqlash kodini olish uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring (masalan: <code>+998901234567</code>):\n\n` +
               `<i>💡 Chat ID raqamingizni bilish uchun <code>/id</code> deb yozing.</i>`,
               {
                 keyboard: [
@@ -365,47 +387,50 @@ async function startBot() {
           const digitsOnly = text.replace(/[^0-9]/g, '');
           if (digitsOnly.length >= 9) {
             const cleanPhone = cleanPhoneNumber(text);
-            const code = generateOtpCode();
 
-            await savePendingOtp(cleanPhone, code, {
-              chatId,
-              telegramUsername: username,
-            });
+            await saveChatPhoneMapping(chatId, cleanPhone);
+            console.log(`[TELEFON ULANDI] Tel: +${cleanPhone} <-> ChatId: ${chatId}`);
 
-            console.log(`[OTP YUBORILDI] Tel: +${cleanPhone} -> Kod: ${code} (ChatId: ${chatId})`);
+            const store = await loadOtpStore();
+            const pending = store.pendingOtps ? store.pendingOtps[cleanPhone] : null;
 
-            await sendTelegramMessage(
-              chatId,
-              `🎓 <b>TalabaAI Tizimi</b>\n\n` +
-              `🔐 Sizning 4 xonali tasdiqlash kodingiz: <code>${code}</code>\n\n` +
-              `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
-              `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
-              `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
-            );
+            if (pending && pending.code && pending.expiresAt > Date.now()) {
+              await sendTelegramMessage(
+                chatId,
+                `🎓 <b>TalabaAI Tizimi</b>\n\n` +
+                `🔐 Saytda so‘ralgan 4 xonali tasdiqlash kodingiz: <code>${pending.code}</code>\n\n` +
+                `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
+                `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
+                `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
+              );
+            } else {
+              await sendTelegramMessage(
+                chatId,
+                `✅ <b>Telefon raqamingiz muvaffaqiyatli ulandi!</b>\n\n` +
+                `📱 <b>Raqamingiz:</b> <code>+${cleanPhone}</code>\n\n` +
+                `Endi saytga (<b>huzayfa0.uz</b>) o‘tib, ro‘yxatdan o‘tish yoki tizimga kirishda ushbu raqamingizni kiritib <b>«Kodni olish»</b> tugmasini bosing.\n\n` +
+                `📩 Tasdiqlash kodi avtomatik tarzda aynan shu yerga yuboriladi.`
+              );
+            }
             continue;
           }
 
           // 4. Boshqa matn yozilgan holat
           const store = await loadOtpStore();
-          const savedPhone = store.chatPhoneMap[String(chatId)];
+          const savedPhone = store.chatPhoneMap ? store.chatPhoneMap[String(chatId)] : null;
 
           if (savedPhone) {
-            // Oldin telefonini yuborgan bo'lsa, yangi kod beramiz
-            const code = generateOtpCode();
-            await savePendingOtp(savedPhone, code, {
-              chatId,
-              telegramUsername: username,
-            });
-
             await sendTelegramMessage(
               chatId,
-              `Yangi tasdiqlash kodi: <code>${code}</code>\n\nAmal qilish muddati: 5 daqiqa.`
+              `ℹ️ <b>Sizning hisobingiz ulangan:</b> <code>+${savedPhone}</code>\n\n` +
+              `Saytda (<b>huzayfa0.uz</b>) ro‘yxatdan o‘tish yoki kirishda ushbu telefon raqamni kiritsangiz, tasdiqlash kodi avtomatik tarzda shu yerga yuboriladi.\n\n` +
+              `<i>💡 Chat ID raqamingizni bilish uchun <code>/id</code> deb yozing.</i>`
             );
           } else {
             // Telefon yuborishni so'raymiz
             await sendTelegramMessage(
               chatId,
-              `Iltimos, tasdiqlash kodini olish uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring:`,
+              `Iltimos, profilingizni ulash uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring (masalan: <code>+998901234567</code>):`,
               {
                 keyboard: [
                   [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],

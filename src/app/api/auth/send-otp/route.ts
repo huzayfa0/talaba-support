@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       success: true,
       message: result.message,
       isSimulated: result.isSimulated,
-      demoCode: result.code, // Test rejimida qulay tekshirish uchun
+      demoCode: result.isSimulated ? result.code : undefined,
       botUsername: result.botUsername,
     });
   } catch (error) {

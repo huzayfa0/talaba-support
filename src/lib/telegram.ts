@@ -53,7 +53,12 @@ export async function sendTelegramOtp(
   // Agar bot tokeni va targetChatId mavjud bo'lsa, Telegram Bot API orqali to'g'ridan-to'g'ri xabar jo'natamiz
   if (botToken && botToken.trim().length > 10 && targetChatId) {
     try {
-      const textMessage = `🎓 <b>TalabaAI Tasdiqlash Kodi:</b> <code>${code}</code>\n\nUshbu 4 xonali tasdiqlash kodini saytda ro‘yxatdan o‘tish oynasiga kiriting.\n⏳ Amal qilish muddati: 5 daqiqa.\n<i>Xavfsizlik uchun kodni hech kimga bermang!</i>`;
+      const textMessage =
+        `🎓 <b>TalabaAI Tizimi</b>\n\n` +
+        `🔐 Sizning 4 xonali tasdiqlash kodingiz: <code>${code}</code>\n\n` +
+        `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
+        `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
+        `⚠️ <i>Xavfsizlik uchun kodni hech kimga bermang!</i>`;
 
       const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
