@@ -355,9 +355,9 @@ export default function VideoCoursesManager({
   });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 animate-in fade-in duration-200">
+    <div className="w-full max-w-none px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-200">
       {/* Sarlavha & Admin tugmasi */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 p-0.5 shadow-lg shadow-emerald-500/20 shrink-0">
             <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">

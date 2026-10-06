@@ -348,9 +348,9 @@ export default function DarsxonaRoom({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-5 animate-in fade-in duration-200">
+    <div className="w-full max-w-none px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-200">
       {/* Yuqori xabar va Xonalar boshqaruvi */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-600/10 via-purple-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">

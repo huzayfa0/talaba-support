@@ -598,7 +598,7 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
   );
 
   return (
-    <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+    <div className="w-full px-0 py-2 sm:py-2.5">
       {/* Sarlavha paneli */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
         <div>

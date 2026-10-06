@@ -356,7 +356,7 @@ export default function Home() {
 
       {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
       {user.isLoggedIn ? (
-        <div className="hidden lg:block lg:pl-28 pr-6 pt-5 pb-3">
+        <div className="hidden lg:block lg:pl-28 pr-6 pt-3.5 pb-2">
           <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
             {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
             <div>
@@ -447,7 +447,7 @@ export default function Home() {
       )}
 
       {/* Main Content Area */}
-      <main className={`flex-1 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-24 lg:pb-12' : 'w-full px-2 sm:px-4 pb-12'}`}>
+      <main className={`flex-1 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-16 lg:pb-8' : 'w-full px-2 sm:px-4 pb-12'}`}>
         {/* Agar foydalanuvchi tizimga kirmagan bo'lsa va darslar, darsxona, guruhlar yoki kontaktlar bo'limida bo'lsa -> Reklama va ro'yxatdan o'tish qo'llanmasi */}
         {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
           <GuestPromoBanner

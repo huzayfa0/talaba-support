@@ -157,7 +157,7 @@ ${project.adabiyotlar.join('\n')}
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8">
+    <div className="w-full px-0 py-2 sm:py-2.5 space-y-4">
       {/* Sarlavha Banner */}
       <div className="text-center max-w-4xl mx-auto space-y-2 sm:space-y-3">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold">

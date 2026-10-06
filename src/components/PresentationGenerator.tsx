@@ -219,7 +219,7 @@ export default function PresentationGenerator({ user, existingProjectsCount = 0,
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+    <div className="w-full px-0 py-2 sm:py-2.5">
       {/* BOSQICH 1: MAVZU VA SOZLAMALAR */}
       {step === 1 && (
         <div className="space-y-5 sm:space-y-7 animate-in fade-in duration-300">

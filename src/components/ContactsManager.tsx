@@ -397,7 +397,7 @@ export default function ContactsManager({ user, onOpenAuth }: ContactsManagerPro
   }
 
   return (
-    <div className="max-w-[1536px] mx-auto px-3 sm:px-6 lg:px-8 py-6 relative">
+    <div className="w-full px-0 py-2 sm:py-2.5 relative">
       {/* Toast bildirishnomasi */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 border border-cyan-500/40 text-cyan-200 text-xs font-semibold shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-5">

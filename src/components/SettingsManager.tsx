@@ -121,9 +121,9 @@ export default function SettingsManager({
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 animate-in fade-in duration-200">
+    <div className="w-full max-w-none px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-200">
       {/* Sarlavha */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/20 shrink-0">
             <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
@@ -182,9 +182,9 @@ export default function SettingsManager({
       )}
 
       {/* Grid: Profil va Tarif */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
         {/* Chap blok: Profil ma'lumotlarini tahrirlash (8 col) */}
-        <div className="lg:col-span-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
+        <div className="lg:col-span-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-4">
           <div className="flex items-center gap-2.5 pb-3 border-b border-slate-800">
             <User size={18} className="text-indigo-400" />
             <h2 className="text-sm font-bold text-white">Talaba Ma‘lumotlari</h2>
@@ -198,13 +198,13 @@ export default function SettingsManager({
                   F.I.SH (Ism familiyangiz)
                 </label>
                 <div className="relative">
-                  <User size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <User size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Masalan: Sardor Abdullayev"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -215,13 +215,13 @@ export default function SettingsManager({
                   Telefon Raqam
                 </label>
                 <div className="relative">
-                  <Phone size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <Phone size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+998 90 123 45 67"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -232,13 +232,13 @@ export default function SettingsManager({
                   OTM / Universitet
                 </label>
                 <div className="relative">
-                  <Building2 size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <Building2 size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={university}
                     onChange={(e) => setUniversity(e.target.value)}
                     placeholder="Masalan: TATU yoki O‘zMU"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -249,13 +249,13 @@ export default function SettingsManager({
                   Fakultet / Yo‘nalish
                 </label>
                 <div className="relative">
-                  <GraduationCap size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <GraduationCap size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={faculty}
                     onChange={(e) => setFaculty(e.target.value)}
                     placeholder="Masalan: Dasturiy Injiniring"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -266,13 +266,13 @@ export default function SettingsManager({
                   Akademik Guruh
                 </label>
                 <div className="relative">
-                  <Users2 size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <Users2 size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={group}
                     onChange={(e) => setGroup(e.target.value)}
                     placeholder="Masalan: 304-guruh"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -283,13 +283,13 @@ export default function SettingsManager({
                   Telegram Username
                 </label>
                 <div className="relative">
-                  <Send size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                  <Send size={16} className="absolute left-3.5 top-3.5 text-slate-500" />
                   <input
                     type="text"
                     value={telegramUsername}
                     onChange={(e) => setTelegramUsername(e.target.value)}
                     placeholder="@username"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 text-white text-xs outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-indigo-500 text-white text-sm outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -299,9 +299,9 @@ export default function SettingsManager({
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-7 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-bold shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Save size={14} />
+                <Save size={15} />
                 <span>{isSaving ? 'Saqlanmoqda...' : 'O‘zgarishlarni Saqlash'}</span>
               </button>
             </div>
@@ -309,7 +309,7 @@ export default function SettingsManager({
         </div>
 
         {/* O'ng blok: Tarif va Tokenlar (4 col) */}
-        <div className="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        <div className="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3.5">
           <div className="flex items-center gap-2.5 pb-3 border-b border-slate-800">
             <Zap size={18} className="text-amber-400" />
             <h2 className="text-sm font-bold text-white">Tarif & Imtiyozlar</h2>
@@ -378,20 +378,20 @@ export default function SettingsManager({
       </div>
 
       {/* Gemini API Kalit va Xavfsizlik bo'limi */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
         {/* Gemini API Kalit sozlamalari */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3.5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div className="flex items-center gap-2.5">
               <Key size={18} className="text-amber-400" />
               <h2 className="text-sm font-bold text-white">Gemini AI Kaliti</h2>
             </div>
             {savedApiKey ? (
-              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 Ulangan
               </span>
             ) : (
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-slate-800 text-slate-400">
+              <span className="px-2.5 py-0.5 text-[10px] font-medium rounded-full bg-slate-800 text-slate-400">
                 Ulanmagan
               </span>
             )}
@@ -408,14 +408,14 @@ export default function SettingsManager({
                 value={apiKeyInput}
                 onChange={(e) => setApiKeyInput(e.target.value)}
                 placeholder={savedApiKey ? '••••••••••••••••••••••••' : 'AIzaSy... kalitini kiriting'}
-                className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-800 focus:border-amber-500 text-white text-xs outline-none transition-colors placeholder:text-slate-600 font-mono"
+                className="w-full pl-3.5 pr-10 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-amber-500 text-white text-xs outline-none transition-colors placeholder:text-slate-600 font-mono"
               />
               <button
                 type="button"
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="absolute right-3 top-3 text-slate-500 hover:text-white"
+                className="absolute right-3.5 top-3.5 text-slate-500 hover:text-white"
               >
-                {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
+                {showApiKey ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
 
@@ -424,7 +424,7 @@ export default function SettingsManager({
                 type="button"
                 onClick={handleSaveApiKey}
                 disabled={!apiKeyInput.trim()}
-                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-bold text-xs transition-colors shadow cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-bold text-xs transition-colors shadow cursor-pointer"
               >
                 Kalitni Saqlash
               </button>
@@ -433,7 +433,7 @@ export default function SettingsManager({
                 <button
                   type="button"
                   onClick={handleRemoveApiKey}
-                  className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-red-500/20 hover:text-red-400 text-slate-400 text-xs font-semibold transition-colors cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-red-500/20 hover:text-red-400 text-slate-400 text-xs font-semibold transition-colors cursor-pointer"
                 >
                   O‘chirish
                 </button>
@@ -453,7 +453,7 @@ export default function SettingsManager({
         </div>
 
         {/* Xavfsizlik & Parol yangilash */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3.5">
           <div className="flex items-center gap-2.5 pb-3 border-b border-slate-800">
             <Shield size={18} className="text-emerald-400" />
             <h2 className="text-sm font-bold text-white">Xavfsizlik & Kirish</h2>
@@ -470,7 +470,7 @@ export default function SettingsManager({
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Yangi parol (kamida 6 ta belgi)"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 text-white text-xs outline-none transition-colors placeholder:text-slate-600"
+                className="w-full px-3.5 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 focus:border-emerald-500 text-white text-xs outline-none transition-colors placeholder:text-slate-600"
               />
             </div>
 
@@ -487,7 +487,7 @@ export default function SettingsManager({
                   }
                 }}
                 disabled={!newPassword.trim()}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs transition-colors shadow cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs transition-colors shadow cursor-pointer"
               >
                 Parolni Yangilash
               </button>

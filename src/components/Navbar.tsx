@@ -154,16 +154,16 @@ export default function Navbar({
       {/* Faqat tizimga kirgan foydalanuvchilar uchun ko'rinadi                       */}
       {/* ========================================================================= */}
       {user.isLoggedIn && (
-        <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-20 z-40 flex-col items-center justify-between py-5 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[32px] shadow-2xl transition-all">
+        <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-[84px] z-40 flex-col items-center py-4 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[32px] shadow-2xl transition-all">
         {/* Yuqori: TalabaAI Logo (9 marta bosilganda maxfiy admin ochiladi) */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-1.5 shrink-0 pt-1">
           <div
             onClick={handleSecretIconClick}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 hover:scale-105 active:scale-95 transition-transform cursor-pointer group"
+            className="w-14 h-14 rounded-[20px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 hover:scale-105 active:scale-95 transition-transform cursor-pointer group"
             title="TalabaAI (Admin: 9 marta bosing)"
           >
-            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center group-hover:bg-slate-900 transition-colors">
-              <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors pointer-events-none" size={20} />
+            <div className="w-full h-full bg-slate-950 rounded-[18px] flex items-center justify-center group-hover:bg-slate-900 transition-colors">
+              <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors pointer-events-none" size={22} />
             </div>
           </div>
           <span className="text-[10px] font-extrabold tracking-tight text-slate-400 select-none">
@@ -171,8 +171,8 @@ export default function Navbar({
           </span>
         </div>
 
-        {/* Markaz: Vertikal navigatsiya tugmalari (2-rasmdagidek yorqin squircle bilan) */}
-        <nav className="flex flex-col items-center gap-3.5 my-auto w-full px-2.5">
+        {/* Markaz: Vertikal navigatsiya tugmalari (2-rasmdagidek yorqin squircle bilan, zich va qulay joylashuv) */}
+        <nav className="flex flex-col items-center gap-3 mt-4 w-full px-2.5">
           {mainTabs.slice(0, 4).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
@@ -186,16 +186,16 @@ export default function Navbar({
                   }}
                   onMouseEnter={() => setHoveredDockItem(tab.id)}
                   onMouseLeave={() => setHoveredDockItem(null)}
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all cursor-pointer relative ${
+                  className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer relative ${
                     isActive
                       ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/35 scale-105 font-bold'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
                   }`}
                   aria-label={tab.fullLabel}
                 >
-                  <Icon size={22} className={tab.id === 'darsxona' && isActive ? 'animate-pulse text-white' : ''} />
+                  <Icon size={24} className={tab.id === 'darsxona' && isActive ? 'animate-pulse text-white' : ''} />
                   {tab.id === 'darsxona' && !isActive && !isLocked && (
-                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                    <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 animate-ping" />
                   )}
                   {isLocked && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400 shadow-sm" title="Kirish kerak">
@@ -206,7 +206,7 @@ export default function Navbar({
 
                 {/* Tooltip on hover */}
                 {hoveredDockItem === tab.id && (
-                  <div className="absolute left-16 ml-2 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100 flex items-center gap-1.5">
+                  <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100 flex items-center gap-1.5">
                     <span>{tab.fullLabel}</span>
                     {isLocked ? (
                       <span className="ml-1 px-1.5 py-0.5 text-[9px] rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
@@ -229,19 +229,19 @@ export default function Navbar({
               onClick={() => setIsToolsFlyoutOpen(!isToolsFlyoutOpen)}
               onMouseEnter={() => setHoveredDockItem('helper_tools')}
               onMouseLeave={() => setHoveredDockItem(null)}
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all cursor-pointer ${
+              className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer ${
                 isHelperToolActive
                   ? 'bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-600 text-white shadow-xl shadow-purple-500/35 scale-105'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
               }`}
               aria-label="Yordamchi Dasturlar"
             >
-              <LayoutGrid size={22} />
+              <LayoutGrid size={24} />
             </button>
 
             {/* Tooltip */}
             {hoveredDockItem === 'helper_tools' && !isToolsFlyoutOpen && (
-              <div className="absolute left-16 ml-2 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+              <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
                 <span>Yordamchi Dasturlar (Slaydlar, Mustaqil ish, AI)</span>
               </div>
             )}
@@ -253,7 +253,7 @@ export default function Navbar({
                   className="fixed inset-0 z-40"
                   onClick={() => setIsToolsFlyoutOpen(false)}
                 />
-                <div className="absolute left-16 ml-3 w-80 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
+                <div className="absolute left-20 ml-3 w-80 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
                   <div className="px-3 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 mb-2 flex items-center justify-between">
                     <span className="flex items-center gap-1.5 text-indigo-300">
                       <Sparkles size={13} /> Yordamchi Dasturlar
@@ -316,26 +316,26 @@ export default function Navbar({
               }}
               onMouseEnter={() => setHoveredDockItem('settings')}
               onMouseLeave={() => setHoveredDockItem(null)}
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all cursor-pointer ${
+              className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer ${
                 activeTab === 'settings'
                   ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/35 scale-105'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
               }`}
               aria-label="Sozlamalar"
             >
-              <Settings size={22} />
+              <Settings size={24} />
             </button>
 
             {hoveredDockItem === 'settings' && (
-              <div className="absolute left-16 ml-2 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+              <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
                 <span>Sozlamalar & Profil</span>
               </div>
             )}
           </div>
         </nav>
 
-        {/* Past: Profil va Chiqish tugmalari */}
-        <div className="flex flex-col items-center gap-2.5 w-full pt-2 border-t border-slate-800/80">
+        {/* Past: Profil va Chiqish tugmalari (mt-auto orqali pastga chiroyli joylashtiriladi) */}
+        <div className="mt-auto flex flex-col items-center gap-2.5 w-full pt-3 border-t border-slate-800/80 pb-1 shrink-0">
           {/* Profile Dropdown trigger */}
           <div className="relative">
             <button
@@ -347,14 +347,14 @@ export default function Navbar({
                 }
               }}
               title={user.isLoggedIn ? `${user.name} (Profil menyusi)` : 'Kirish'}
-              className="w-11 h-11 rounded-2xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              className="w-12 h-12 rounded-[18px] bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer font-bold text-xs"
             >
               {user.isLoggedIn ? (
-                <span className="text-xs font-bold">
+                <span>
                   {user.name.slice(0, 2).toUpperCase()}
                 </span>
               ) : (
-                <User size={18} />
+                <User size={20} />
               )}
             </button>
 
@@ -365,7 +365,7 @@ export default function Navbar({
                   className="fixed inset-0 z-40"
                   onClick={() => setIsProfileMenuOpen(false)}
                 />
-                <div className="absolute left-14 bottom-0 w-64 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3.5 text-slate-100 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
+                <div className="absolute left-20 bottom-1 w-64 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3.5 text-slate-100 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
                   <div className="pb-2.5 mb-2 border-b border-slate-800">
                     <p className="text-xs font-bold text-white truncate">{user.name}</p>
                     <p className="text-[11px] text-slate-400 truncate">{user.group || user.university || 'Talaba'}</p>
@@ -430,9 +430,9 @@ export default function Navbar({
             <button
               onClick={onLogout}
               title="Akkountdan chiqish"
-              className="w-9 h-9 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-11 h-11 rounded-2xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 flex items-center justify-center transition-colors cursor-pointer"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
             </button>
           )}
         </div>
