@@ -151,8 +151,10 @@ export default function Navbar({
     <>
       {/* ========================================================================= */}
       {/* 1. LAPTOP & DESKTOP (2-RASM): SUZUVCHI CHAP VERTIKAL DOCK-SIDEBAR (>= lg) */}
+      {/* Faqat tizimga kirgan foydalanuvchilar uchun ko'rinadi                       */}
       {/* ========================================================================= */}
-      <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-20 z-40 flex-col items-center justify-between py-5 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[32px] shadow-2xl transition-all">
+      {user.isLoggedIn && (
+        <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-20 z-40 flex-col items-center justify-between py-5 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[32px] shadow-2xl transition-all">
         {/* Yuqori: TalabaAI Logo (9 marta bosilganda maxfiy admin ochiladi) */}
         <div className="flex flex-col items-center gap-2">
           <div
@@ -435,6 +437,7 @@ export default function Navbar({
           )}
         </div>
       </aside>
+      )}
 
       {/* ========================================================================= */}
       {/* 2. SMARTFON / MOBIL (1-RASM): YUQORI SALOMLASHISH PANELI (< lg)           */}
@@ -468,89 +471,96 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* O'ng: Tokenlar va AI Dasturlar tugmasi */}
-        <div className="flex items-center gap-1.5">
-          {/* AI Yordamchi Dasturlar Sheet Trigger */}
-          <button
-            onClick={() => setIsMobileToolsOpen(true)}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              isHelperToolActive
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20'
-                : 'bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
-            }`}
-          >
-            <LayoutGrid size={13} className="text-indigo-400" />
-            <span className="text-[11px]">Dasturlar</span>
-          </button>
+        {/* O'ng: Tizimga kirish yoki Tokenlar */}
+        {user.isLoggedIn ? (
+          <div className="flex items-center gap-1.5">
+            {/* AI Yordamchi Dasturlar Sheet Trigger */}
+            <button
+              onClick={() => setIsMobileToolsOpen(true)}
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                isHelperToolActive
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20'
+                  : 'bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              }`}
+            >
+              <LayoutGrid size={13} className="text-indigo-400" />
+              <span className="text-[11px]">Dasturlar</span>
+            </button>
 
-          {/* Tokenlar */}
-          {user.plan === 'ultra' ? (
-            <div className="px-2 py-1 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 text-[11px] font-bold flex items-center gap-1">
-              <Crown size={12} className="text-amber-400 fill-amber-400" />
-              <span>VIP</span>
-            </div>
-          ) : user.plan === 'premium' ? (
-            <div className="px-2 py-1 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-bold flex items-center gap-1">
-              <Star size={12} className="text-amber-400 fill-amber-400" />
-              <span>{user.tokens ?? 100}</span>
-            </div>
-          ) : (
-            <div className="px-2 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-[11px] font-medium flex items-center gap-1">
-              <Zap size={12} className="text-indigo-400 fill-indigo-400/30" />
-              <span>{user.tokens ?? 10}</span>
-            </div>
-          )}
-        </div>
+            {/* Tokenlar */}
+            {user.plan === 'ultra' ? (
+              <div className="px-2 py-1 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 text-[11px] font-bold flex items-center gap-1">
+                <Crown size={12} className="text-amber-400 fill-amber-400" />
+                <span>VIP</span>
+              </div>
+            ) : user.plan === 'premium' ? (
+              <div className="px-2 py-1 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-bold flex items-center gap-1">
+                <Star size={12} className="text-amber-400 fill-amber-400" />
+                <span>{user.tokens ?? 100}</span>
+              </div>
+            ) : (
+              <div className="px-2 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-[11px] font-medium flex items-center gap-1">
+                <Zap size={12} className="text-indigo-400 fill-indigo-400/30" />
+                <span>{user.tokens ?? 10}</span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => { window.location.href = '/login'; }}
+            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-600/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <User size={13} />
+            <span>Kirish</span>
+          </button>
+        )}
       </header>
 
       {/* ========================================================================= */}
       {/* 3. SMARTFON / MOBIL (1-RASM): PASTKI NAVIGATSIYA PANELI (< lg)            */}
+      {/* Faqat tizimga kirgan foydalanuvchilar uchun ko'rinadi                       */}
       {/* ========================================================================= */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-slate-900/95 backdrop-blur-2xl border-t border-slate-800/80 px-2 py-1.5 flex items-center justify-around shadow-2xl">
-        {mainTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
-          const isLocked = !user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'contacts'].includes(tab.id);
-          return (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setIsMobileToolsOpen(false);
-              }}
-              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl transition-all cursor-pointer relative min-w-[56px] ${
-                isActive
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {/* Active Squircle Pill Indicator (1-rasmdagi uslubda) */}
-              <div
-                className={`w-10 h-7 rounded-xl flex items-center justify-center transition-all relative ${
+      {user.isLoggedIn && (
+        <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-slate-900/95 backdrop-blur-2xl border-t border-slate-800/80 px-2 py-1.5 flex items-center justify-around shadow-2xl">
+          {mainTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setIsMobileToolsOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl transition-all cursor-pointer relative min-w-[56px] ${
                   isActive
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 scale-105'
-                    : 'bg-transparent'
+                    ? 'text-white'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Icon size={18} className={tab.id === 'darsxona' && isActive ? 'animate-pulse' : ''} />
-                {isLocked && !isActive && (
-                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400">
-                    <Lock size={8} />
-                  </span>
+                {/* Active Squircle Pill Indicator (1-rasmdagi uslubda) */}
+                <div
+                  className={`w-10 h-7 rounded-xl flex items-center justify-center transition-all relative ${
+                    isActive
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 scale-105'
+                      : 'bg-transparent'
+                  }`}
+                >
+                  <Icon size={18} className={tab.id === 'darsxona' && isActive ? 'animate-pulse' : ''} />
+                </div>
+
+                <span className={`text-[10px] tracking-tight mt-0.5 ${isActive ? 'font-extrabold text-emerald-400' : 'font-medium'}`}>
+                  {tab.label}
+                </span>
+
+                {tab.id === 'darsxona' && !isActive && (
+                  <span className="absolute top-1.5 right-3 w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
                 )}
-              </div>
-
-              <span className={`text-[10px] tracking-tight mt-0.5 ${isActive ? 'font-extrabold text-emerald-400' : 'font-medium'}`}>
-                {tab.label}
-              </span>
-
-              {tab.id === 'darsxona' && !isActive && !isLocked && (
-                <span className="absolute top-1.5 right-3 w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
-              )}
-            </button>
-          );
-        })}
-      </nav>
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       {/* ========================================================================= */}
       {/* 4. MOBIL YORDAMCHI DASTURLAR MODAL OYNSI (Sheet)                          */}

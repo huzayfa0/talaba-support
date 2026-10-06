@@ -21,7 +21,7 @@ import {
   ResearchResult,
   NavTab,
 } from '@/types';
-import { GraduationCap, Heart, Search, Crown, Star, Zap, User } from 'lucide-react';
+import { GraduationCap, Heart, Search, Crown, Star, Zap, User, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>('darslar');
@@ -152,6 +152,22 @@ export default function Home() {
     lastHeartClickRef.current = now;
     if (heartClicksRef.current >= 3) {
       heartClicksRef.current = 0;
+      window.location.href = '/secret-admin-console';
+    }
+  };
+
+  const logoClicksRef = React.useRef<number>(0);
+  const lastLogoClickRef = React.useRef<number>(0);
+  const handleSecretLogoClick = () => {
+    const now = Date.now();
+    if (now - lastLogoClickRef.current < 1200) {
+      logoClicksRef.current += 1;
+    } else {
+      logoClicksRef.current = 1;
+    }
+    lastLogoClickRef.current = now;
+    if (logoClicksRef.current >= 9) {
+      logoClicksRef.current = 0;
       window.location.href = '/secret-admin-console';
     }
   };
@@ -339,72 +355,99 @@ export default function Home() {
       />
 
       {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
-      <div className="hidden lg:block lg:pl-28 pr-6 pt-5 pb-3">
-        <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
-          {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
-          <div>
-            <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              Assalomu alaykum, {user.isLoggedIn ? user.name.split(' ')[0] : 'Talaba'} 👋
-            </h1>
-            <p className="text-xs text-slate-400 mt-0.5">
-              TalabaAI bilan bugungi darslar va topshiriqlaringiz tayyor
-            </p>
-          </div>
-
-          {/* O'ng: Qidiruv, Tokenlar va Profil */}
-          <div className="flex items-center gap-3">
-            {/* Tezkor qidiruv */}
-            <div className="relative w-64 xl:w-80">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Darslar, mavzular yoki kontaktlar..."
-                className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
-              />
+      {user.isLoggedIn ? (
+        <div className="hidden lg:block lg:pl-28 pr-6 pt-5 pb-3">
+          <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+            {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
+            <div>
+              <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                Assalomu alaykum, {user.name.split(' ')[0]} 👋
+              </h1>
+              <p className="text-xs text-slate-400 mt-0.5">
+                TalabaAI bilan bugungi darslar va topshiriqlaringiz tayyor
+              </p>
             </div>
 
-            {/* Tokenlar ko'rsatkichi */}
-            {user.plan === 'ultra' ? (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-md shadow-purple-500/10">
-                <Crown size={15} className="text-amber-300 fill-amber-300" />
-                <span>Ultra VIP (Cheksiz)</span>
+            {/* O'ng: Qidiruv, Tokenlar va Profil */}
+            <div className="flex items-center gap-3">
+              {/* Tezkor qidiruv */}
+              <div className="relative w-64 xl:w-80">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Darslar, mavzular yoki kontaktlar..."
+                  className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
+                />
               </div>
-            ) : user.plan === 'premium' ? (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10">
-                <Star size={15} className="text-amber-400 fill-amber-400" />
-                <span>Premium ({user.tokens ?? 100} token)</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
-                <Zap size={15} className="text-indigo-400 fill-indigo-400/30" />
-                <span>{user.tokens ?? 10} bepul token</span>
-              </div>
-            )}
 
-            {/* Profil / Kirish */}
-            <button
-              onClick={() => {
-                if (user.isLoggedIn) {
-                  setActiveTab('settings');
-                } else {
-                  window.location.href = '/login';
-                }
-              }}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+              {/* Tokenlar ko'rsatkichi */}
+              {user.plan === 'ultra' ? (
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-md shadow-purple-500/10">
+                  <Crown size={15} className="text-amber-300 fill-amber-300" />
+                  <span>Ultra VIP (Cheksiz)</span>
+                </div>
+              ) : user.plan === 'premium' ? (
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10">
+                  <Star size={15} className="text-amber-400 fill-amber-400" />
+                  <span>Premium ({user.tokens ?? 100} token)</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
+                  <Zap size={15} className="text-indigo-400 fill-indigo-400/30" />
+                  <span>{user.tokens ?? 10} bepul token</span>
+                </div>
+              )}
+
+              {/* Profil */}
+              <button
+                onClick={() => setActiveTab('settings')}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+              >
+                <div className="w-6 h-6 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[11px]">
+                  {user.name.slice(0, 2).toUpperCase()}
+                </div>
+                <span className="truncate max-w-[120px]">{user.name}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Guest Header (Desktop) */
+        <div className="hidden lg:block w-full max-w-6xl mx-auto px-4 pt-6 pb-2">
+          <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+            <div
+              onClick={handleSecretLogoClick}
+              className="flex items-center gap-3 cursor-pointer group select-none"
+              title="TalabaAI (Admin: 9 marta bosing)"
             >
-              <div className="w-6 h-6 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[11px]">
-                {user.isLoggedIn ? user.name.slice(0, 2).toUpperCase() : <User size={13} />}
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+                <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                  <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors" size={22} />
+                </div>
               </div>
-              <span className="truncate max-w-[120px]">
-                {user.isLoggedIn ? user.name : 'Kirish'}
-              </span>
+              <div>
+                <h1 className="font-black text-white text-lg tracking-tight leading-none group-hover:text-indigo-200 transition-colors">
+                  Talaba<span className="text-indigo-400">AI</span>
+                </h1>
+                <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                  O‘zbekiston Talabalari Uchun Ta‘lim Platformasi
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => { window.location.href = '/login'; }}
+              className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <User size={15} />
+              <span>Tizimga Kirish / Ro‘yxatdan O‘tish</span>
             </button>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content Area */}
-      <main className="flex-1 lg:pl-28 lg:pr-6 pb-24 lg:pb-12">
+      <main className={`flex-1 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-24 lg:pb-12' : 'w-full px-2 sm:px-4 pb-12'}`}>
         {/* Agar foydalanuvchi tizimga kirmagan bo'lsa va darslar, darsxona, guruhlar yoki kontaktlar bo'limida bo'lsa -> Reklama va ro'yxatdan o'tish qo'llanmasi */}
         {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
           <GuestPromoBanner
@@ -500,7 +543,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500 lg:pl-28 lg:pr-6 pb-24 lg:pb-8">
+      <footer className={`border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-24 lg:pb-8' : 'w-full px-4 pb-8'}`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-slate-400">
             <GraduationCap size={16} className="text-indigo-400" />
