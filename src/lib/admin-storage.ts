@@ -435,25 +435,42 @@ export async function registerStudentWithPhone(data: {
 }
 
 /**
- * Telefon raqam va parol bilan kirishni tekshirish
+ * Telefon raqam yoki login hamda parol bilan kirishni tekshirish
  */
 export async function verifyStudentLogin(
-  phone: string,
+  identifier: string,
   password: string
 ): Promise<{ success: boolean; user?: AdminUserRecord; message: string; notFound?: boolean }> {
   const store = await ensureStore();
-  const clean = phone.replace(/[^0-9]/g, '');
+  const raw = (identifier || '').trim();
+  const cleanPhone = raw.replace(/[^0-9]/g, '');
+  const cleanText = raw.toLowerCase().replace(/^@/, '');
 
   const user = store.users.find((u) => {
-    if (!u.phone) return false;
-    return u.phone.replace(/[^0-9]/g, '') === clean;
+    // 1. Telefon raqami bo'yicha (kamida 7 ta raqam bo'lsa)
+    if (cleanPhone.length >= 7 && u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhone) {
+      return true;
+    }
+    // 2. Telegram username bo'yicha
+    if (u.telegramUsername && u.telegramUsername.toLowerCase() === cleanText) {
+      return true;
+    }
+    // 3. Email bo'yicha
+    if (u.email && u.email.toLowerCase() === cleanText) {
+      return true;
+    }
+    // 4. Foydalanuvchi ismi bo'yicha (aniq moslik)
+    if (u.name && u.name.trim().toLowerCase() === cleanText) {
+      return true;
+    }
+    return false;
   });
 
   if (!user) {
     return {
       success: false,
       notFound: true,
-      message: 'Ushbu telefon raqam bilan ro‘yxatdan o‘tilmagan. Iltimos, avval ro‘yxatdan o‘ting.',
+      message: 'Ushbu telefon raqam yoki login bilan hisob topilmadi. Iltimos, ma’lumotlarni tekshiring yoki ro‘yxatdan o‘ting.',
     };
   }
 

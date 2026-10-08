@@ -6,9 +6,10 @@ export async function POST(req: NextRequest) {
   try {
     const { phone, password, deviceId, checkOnlyPhone } = await req.json();
 
-    if (!phone || phone.trim().length < 7) {
+    const identifier = (phone || '').trim();
+    if (!identifier || identifier.length < 3) {
       return NextResponse.json(
-        { error: 'Yaroqli telefon raqam kiritilishi shart' },
+        { error: 'Iltimos, telefon raqamingiz yoki loginingizni kiriting' },
         { status: 400 }
       );
     }
@@ -53,11 +54,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const loginResult = await verifyStudentLogin(phone, password);
+    const loginResult = await verifyStudentLogin(identifier, password);
 
     // Agar parol noto'g'ri bo'lsa -> Urinishni hisoblaymiz!
     if (!loginResult.success) {
-      const failed = await recordFailedAttempt(deviceId || '', ip, phone);
+      const failed = await recordFailedAttempt(deviceId || '', ip, identifier);
 
       if (failed.isBlockedNow) {
         return NextResponse.json(
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Muvaffaqiyatli kirish! Urinishlarni tozalaymiz
-    await clearFailedAttempts(deviceId || '', ip, phone);
+    await clearFailedAttempts(deviceId || '', ip, identifier);
 
     const u = loginResult.user!;
 

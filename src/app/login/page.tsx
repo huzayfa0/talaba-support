@@ -21,19 +21,18 @@ import {
 } from 'lucide-react';
 import { UserProfile } from '@/types';
 
-type AuthViewMode = 'login_phone' | 'login_password' | 'reg_info' | 'reg_otp' | 'reg_password' | 'blocked';
+type AuthViewMode = 'login' | 'reg_info' | 'reg_otp' | 'reg_password' | 'blocked';
 
 export default function LoginPage() {
   const router = useRouter();
 
   // Qurilma ID va holatlar
   const [deviceId, setDeviceId] = useState<string>('');
-  const [viewMode, setViewMode] = useState<AuthViewMode>('login_phone');
+  const [viewMode, setViewMode] = useState<AuthViewMode>('login');
 
   // Login formasi
-  const [loginPhone, setLoginPhone] = useState<string>('+998 ');
+  const [loginPhone, setLoginPhone] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
-  const [loginUserName, setLoginUserName] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(true);
 
@@ -111,62 +110,17 @@ export default function LoginPage() {
     setter(val);
   };
 
-  // 1. LOGIN: Telefon raqamini tekshirish (1-bosqich)
-  const handleLoginPhoneSubmit = async (e: React.FormEvent) => {
+  // 1. LOGIN: Telefon / Login va Parol bilan to'g'ridan-to'g'ri tizimga kirish
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    if (loginPhone.replace(/[^0-9]/g, '').length < 9) {
-      setErrorMsg('Iltimos, to‘liq telefon raqamingizni kiriting');
+    const idVal = loginPhone.trim();
+    if (!idVal) {
+      setErrorMsg('Iltimos, telefon raqamingiz yoki loginingizni kiriting');
       return;
     }
-
-    setLoading(true);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: loginPhone,
-          deviceId,
-          checkOnlyPhone: true,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.isBlocked) {
-        localStorage.setItem('talaba_device_blocked', 'true');
-        setViewMode('blocked');
-        setBlockReason(data.error);
-        return;
-      }
-
-      if (data.exists) {
-        setLoginUserName(data.userName || '');
-        setViewMode('login_password');
-      } else {
-        // Agar topilmasa, to'g'ridan-to'g'ri ro'yxatdan o'tishni taklif qilamiz
-        setRegPhone(loginPhone);
-        setErrorMsg('Bu telefon raqam topilmadi. Ro‘yxatdan o‘tish oynasiga yo‘naltirilmoqdasiz...');
-        setTimeout(() => {
-          setViewMode('reg_info');
-          setErrorMsg(null);
-        }, 1200);
-      }
-    } catch {
-      setErrorMsg('Server bilan aloqada xatolik yuz berdi');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 2. LOGIN: Parolni tekshirish (2-bosqich)
-  const handleLoginPasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
 
     if (!loginPassword) {
       setErrorMsg('Iltimos, parolingizni kiriting');
@@ -179,7 +133,7 @@ export default function LoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone: loginPhone,
+          phone: idVal,
           password: loginPassword,
           deviceId,
         }),
@@ -198,7 +152,7 @@ export default function LoginPage() {
       if (!res.ok || !data.success) {
         setFailedAttempts(data.attempts || failedAttempts + 1);
         setMaxAttempts(data.maxAttempts || 20);
-        setErrorMsg(data.error || 'Parol noto‘g‘ri kiritildi');
+        setErrorMsg(data.error || 'Login yoki parol noto‘g‘ri kiritildi');
         return;
       }
 
@@ -209,7 +163,7 @@ export default function LoginPage() {
 
       setTimeout(() => {
         router.push('/');
-      }, 800);
+      }, 700);
     } catch {
       setErrorMsg('Tizimga kirishda xatolik yuz berdi');
     } finally {
@@ -479,73 +433,27 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* 1. LOGIN: Telefon raqamini kiritish bosqichi */}
-          {viewMode === 'login_phone' && (
-            <form onSubmit={handleLoginPhoneSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
+          {/* LOGIN: Telefon/Login va Parol bilan to'g'ridan-to'g'ri tizimga kirish */}
+          {viewMode === 'login' && (
+            <form onSubmit={handleLoginSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <Phone size={13} className="text-cyan-400" /> Telefon raqamingiz
+                  <Phone size={13} className="text-cyan-400" /> Telefon raqam yoki Login
                 </label>
                 <input
-                  type="tel"
-                  autoComplete="tel"
+                  type="text"
+                  autoComplete="username"
                   required
                   value={loginPhone}
-                  onChange={(e) => handlePhoneChange(e.target.value, setLoginPhone)}
-                  placeholder="+998 90 123 45 67"
-                  className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-medium tracking-wide focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner font-mono"
+                  onChange={(e) => setLoginPhone(e.target.value)}
+                  placeholder="+998 90 123 45 67 yoki login"
+                  className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-medium tracking-wide focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 sm:py-3 rounded-full font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#00d2ff] via-[#0092ff] to-[#006aff] shadow-[0_4px_20px_rgba(0,180,255,0.48),0_0_10px_rgba(0,180,255,0.35)] hover:shadow-[0_4px_28px_rgba(0,210,255,0.7)] hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 select-none"
-              >
-                {loading ? (
-                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <span>Davom etish</span>
-                )}
-              </button>
-
-              <div className="pt-2 text-center text-xs text-slate-400">
-                Akkountingiz yo‘qmi?{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setErrorMsg(null);
-                    setRegPhone(loginPhone);
-                    setViewMode('reg_info');
-                  }}
-                  className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors cursor-pointer"
-                >
-                  Ro‘yxatdan o‘tish
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* 2. LOGIN: Parol kiritish bosqichi */}
-          {viewMode === 'login_password' && (
-            <form onSubmit={handleLoginPasswordSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
-              <div className="flex items-center justify-between text-xs pb-1 border-b border-slate-800">
-                <span className="text-slate-400 font-mono">{loginPhone}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setErrorMsg(null);
-                    setViewMode('login_phone');
-                  }}
-                  className="text-cyan-400 hover:text-cyan-300 text-[11px] font-semibold"
-                >
-                  O‘zgartirish
-                </button>
-              </div>
-
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <KeyRound size={13} className="text-cyan-400" /> Parolingizni kiriting
+                  <KeyRound size={13} className="text-cyan-400" /> Parolingiz
                 </label>
                 <div className="relative">
                   <input
@@ -555,7 +463,7 @@ export default function LoginPage() {
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Parol"
+                    placeholder="Parolni kiriting"
                     className="w-full pl-3.5 pr-10 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                   <button
@@ -589,7 +497,7 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={() => alert('Parolni unutgan bo‘lsangiz, Telegram orqali qayta ro‘yxatdan o‘tishingiz yoki yangi parol o‘rnatishingiz mumkin.')}
+                  onClick={() => alert('Parolni unutgan bo‘lsangiz, Telegram orqali yangi akkaunt yaratishingiz yoki adminga murojaat qilishingiz mumkin.')}
                   className="text-slate-400 hover:text-cyan-300 transition-colors"
                 >
                   Parolni unutdingizmi?
@@ -604,18 +512,22 @@ export default function LoginPage() {
                 {loading ? (
                   <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <span>Kirish</span>
+                  <span>Tizimga kirish</span>
                 )}
               </button>
 
               <div className="pt-2 text-center text-xs text-slate-400">
-                Boshqa raqam bilan kirish:{' '}
+                Akkountingiz yo‘qmi?{' '}
                 <button
                   type="button"
-                  onClick={() => setViewMode('login_phone')}
-                  className="text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer"
+                  onClick={() => {
+                    setErrorMsg(null);
+                    setRegPhone(loginPhone || '+998 ');
+                    setViewMode('reg_info');
+                  }}
+                  className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors cursor-pointer"
                 >
-                  Orqaga
+                  Ro‘yxatdan o‘tish
                 </button>
               </div>
             </form>
@@ -688,7 +600,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => {
                     setErrorMsg(null);
-                    setViewMode('login_phone');
+                    setViewMode('login');
                   }}
                   className="text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer"
                 >
