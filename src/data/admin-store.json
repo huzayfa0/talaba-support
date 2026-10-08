@@ -30,7 +30,7 @@
       "phone": "+998912174579",
       "telegramUsername": "huzayfa_0",
       "passwordHash": "Samandar2004",
-      "university": "O'zbekiston Milliy Universiteti",
+      "university": "Toshkent axborot texnologiyalari universiteti",
       "faculty": "Axborot texnologiyalari",
       "group": "304-guruh",
       "plan": "ultra",
@@ -41,19 +41,6 @@
       "failedAttempts": 0,
       "customNotes": "Telegram bot orqali ro‘yxatdan o‘tgan talaba",
       "lastFailedAt": "2026-10-04T09:43:42.542Z"
-    },
-    {
-      "id": "user-1791022454249",
-      "name": "Samandar",
-      "email": "998912174579@talaba.uz",
-      "university": "O'zbekiston Milliy Universiteti",
-      "faculty": "Axborot texnologiyalari",
-      "group": "304-guruh",
-      "plan": "free",
-      "tokens": 10,
-      "createdAt": "2026-10-03T10:14:14.249Z",
-      "updatedAt": "2026-10-03T10:14:14.249Z",
-      "isBlocked": false
     },
     {
       "id": "user-1790750055605",

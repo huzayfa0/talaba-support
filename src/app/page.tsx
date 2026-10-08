@@ -34,10 +34,11 @@ export default function Home() {
   const [user, setUser] = useState<UserProfile>({
     name: 'Talaba',
     email: '',
-    university: "O'zbekiston Milliy Universiteti",
+    university: "Toshkent axborot texnologiyalari universiteti",
     faculty: "Axborot texnologiyalari",
     group: "304-guruh",
     tokens: 10,
+    plan: 'free',
     isLoggedIn: false,
   });
 
@@ -53,7 +54,7 @@ export default function Home() {
       let currentProfile: UserProfile = {
         name: 'Talaba',
         email: '',
-        university: "O'zbekiston Milliy Universiteti",
+        university: "Toshkent axborot texnologiyalari universiteti",
         faculty: "Axborot texnologiyalari",
         group: "304-guruh",
         tokens: 10,
@@ -66,8 +67,10 @@ export default function Home() {
       }
       setUser(currentProfile);
 
-      // Server bilan sinxronizatsiya (Admin bergan Premium/Ultra tarifni yangilash)
-      syncWithServer(currentProfile);
+      // Server bilan sinxronizatsiya (FAQAT haqiqiy kirgan foydalanuvchilar uchun)
+      if (currentProfile.isLoggedIn && (currentProfile.id || currentProfile.phone)) {
+        syncWithServer(currentProfile);
+      }
     } catch (e) {
       console.warn("LocalStorage o'qishda xatolik:", e);
     }
@@ -216,6 +219,11 @@ export default function Home() {
 
   // Server bilan profilni tekshirish
   const syncWithServer = async (profile: UserProfile) => {
+    // Agar foydalanuvchi login qilmagan bo'lsa yoki ID/telefoni bo'lmasa, serverdan hech narsa so'ralmaydi
+    if (!profile.isLoggedIn || (!profile.id && !profile.phone)) {
+      return;
+    }
+
     try {
       const res = await fetch('/api/user/sync', {
         method: 'POST',
@@ -236,6 +244,16 @@ export default function Home() {
       });
       const data = await res.json();
       const syncedUser = data.user || data.profile;
+
+      // Agar serverda foydalanuvchi bloklangan bo'lsa yoki topilmasa -> tizimdan chiqaramiz
+      if (data.isGuest || !syncedUser || syncedUser.isBlocked) {
+        if (syncedUser?.isBlocked) {
+          alert('DIQQAT: Sizning hisobingiz admin tomonidan bloklangan.');
+        }
+        handleLogout();
+        return;
+      }
+
       if (data.success && syncedUser) {
         const updated: UserProfile = {
           ...profile,
@@ -249,7 +267,8 @@ export default function Home() {
           telegramUsername: syncedUser.telegramUsername || profile.telegramUsername,
           plan: syncedUser.plan || profile.plan || 'free',
           tokens: syncedUser.tokens ?? profile.tokens,
-          isBlocked: syncedUser.isBlocked,
+          isBlocked: false,
+          isLoggedIn: true,
         };
         setUser(updated);
         localStorage.setItem('talaba_user_profile', JSON.stringify(updated));
@@ -263,7 +282,9 @@ export default function Home() {
   const handleSaveProfile = (newProfile: UserProfile) => {
     setUser(newProfile);
     localStorage.setItem('talaba_user_profile', JSON.stringify(newProfile));
-    syncWithServer(newProfile);
+    if (newProfile.isLoggedIn && (newProfile.id || newProfile.phone)) {
+      syncWithServer(newProfile);
+    }
   };
 
   // Akkountdan chiqish
@@ -271,7 +292,7 @@ export default function Home() {
     const guestUser: UserProfile = {
       name: 'Talaba',
       email: '',
-      university: "O'zbekiston Milliy Universiteti",
+      university: "Toshkent axborot texnologiyalari universiteti",
       faculty: "Axborot texnologiyalari",
       group: "304-guruh",
       tokens: 10,

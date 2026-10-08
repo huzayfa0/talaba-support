@@ -259,17 +259,18 @@ export async function updateStudentProfileDirect(
 
 /**
  * Talaba saytni ochganda uning profilini sinxronlash
- * Agar admin unga Premium yoki Ultra bergan bo'lsa, mijoz darhol yangilanadi!
- * Agar talaba OTM/fakultet/guruhni o'zgartirsa, admin bazasi darhol yangilanadi!
+ * Faqat TIZIMGA KIRGAN (isLoggedIn === true) va ID yoki telefoni aniq bo'lgan talaba profili sinxronlanadi!
+ * Mehmonlar yoki ro'yxatdan o'tmaganlar uchun hech qachon bazadan begona foydalanuvchi biriktirilmaydi.
  */
 export async function syncStudentProfile(profile: UserProfile): Promise<UserProfile> {
   const store = await ensureStore();
 
-  // Agar foydalanuvchi tizimdan chiqqan bo'lsa (isLoggedIn === false), bepul mehmon rejimida qoladi
-  if (profile.isLoggedIn === false) {
+  // Agar foydalanuvchi tizimga kirmagan bo'lsa (mehmon bo'lsa) yoki ma'lumoti yetarli bo'lmasa,
+  // hech qachon begona foydalanuvchiga ulanmaydi, sof mehmon profilini qaytaradi.
+  if (!profile.isLoggedIn || (!profile.id && !profile.phone)) {
     return {
       ...profile,
-      name: profile.name || 'Talaba',
+      name: profile.name && profile.name.trim().toLowerCase() !== 'talaba' ? profile.name : 'Talaba',
       email: '',
       plan: 'free',
       tokens: 10,
@@ -279,22 +280,14 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
 
   const cleanPhone = (p?: string) => (p || '').replace(/\D/g, '');
   const searchPhone = cleanPhone(profile.phone);
-  const searchEmail = (profile.email || '').trim().toLowerCase();
-  const searchName = (profile.name || '').trim().toLowerCase();
 
-  let existingUser = store.users.find(
+  // FAQAT aniq ID yoki aniq to'liq telefon raqami bo'yicha qat'iy qidiramiz!
+  // Hech qanday ism bo'yicha yoki 'ultra' bo'yicha yoki store.users[0] fallback bo'lmaydi!
+  const existingUser = store.users.find(
     (u) =>
       (profile.id && u.id === profile.id) ||
-      (searchPhone && cleanPhone(u.phone) && cleanPhone(u.phone) === searchPhone) ||
-      (searchEmail && u.email.toLowerCase() === searchEmail) ||
-      (searchName && searchName !== 'talaba' && (u.name.toLowerCase() === searchName || u.name.toLowerCase().includes(searchName) || searchName.includes(u.name.toLowerCase())))
+      (searchPhone && searchPhone.length >= 9 && cleanPhone(u.phone) === searchPhone)
   );
-
-  // Agar aniq topilmagan bo'lsa va nomi 'Talaba' yoki bo'sh bo'lsa,
-  // admin bazasidagi Ultra VIP yoki birinchi faol foydalanuvchini ulaymiz!
-  if (!existingUser && (!searchEmail && !searchPhone) && searchName === 'talaba') {
-    existingUser = store.users.find((u) => u.plan === 'ultra' && !u.isBlocked) || store.users[0];
-  }
 
   if (existingUser) {
     // 1. Agar talaba OTM, fakultet, guruh, telefon, ism yoki telegramni o'zgartirgan bo'lsa,
@@ -339,6 +332,7 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
         plan: 'free',
         tokens: 0,
         isBlocked: true,
+        isLoggedIn: false,
       };
     }
 
@@ -355,42 +349,18 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
       plan: existingUser.plan,
       tokens: existingUser.tokens,
       isBlocked: false,
+      isLoggedIn: true,
     };
   }
 
-  // Agar mavjud bo'lmasa, uni yangi talaba sifatida adminStore bazasiga kiritamiz
-  const newUser: AdminUserRecord = {
-    id: profile.id || `user-${Date.now()}`,
-    name: profile.name && profile.name.toLowerCase() !== 'talaba' ? profile.name.trim() : 'Hurmatli Talaba',
-    email: searchEmail || (searchPhone ? `${searchPhone}@talaba.uz` : `talaba_${Date.now()}@edu.uz`),
-    phone: profile.phone?.trim() || '',
-    telegramUsername: profile.telegramUsername?.trim().replace(/^@/, '') || '',
-    university: profile.university?.trim() || "Toshkent axborot texnologiyalari universiteti",
-    faculty: profile.faculty?.trim() || 'Axborot texnologiyalari',
-    group: profile.group?.trim() || '304-guruh',
-    plan: profile.plan || 'free',
-    tokens: profile.tokens ?? 10,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    isBlocked: false,
-  };
-
-  store.users.unshift(newUser);
-  await saveStore(store);
-
+  // Agar aniq ID yoki telefon bo'yicha topilmasa - HECH QACHON yangi foydalanuvchi qo'shilmaydi va begona kishiga ulanmaydi!
   return {
     ...profile,
-    id: newUser.id,
-    name: newUser.name,
-    email: newUser.email,
-    phone: newUser.phone,
-    telegramUsername: newUser.telegramUsername,
-    university: newUser.university,
-    faculty: newUser.faculty,
-    group: newUser.group,
-    plan: newUser.plan,
-    tokens: newUser.tokens,
-    isBlocked: false,
+    name: 'Talaba',
+    email: '',
+    plan: 'free',
+    tokens: 10,
+    isLoggedIn: false,
   };
 }
 
@@ -447,7 +417,7 @@ export async function registerStudentWithPhone(data: {
     phone: cleanPhone,
     telegramUsername: cleanTelegram,
     passwordHash: data.password.trim(),
-    university: "O'zbekiston Milliy Universiteti",
+    university: "Toshkent axborot texnologiyalari universiteti",
     faculty: 'Axborot texnologiyalari',
     group: '304-guruh',
     plan: 'free',
@@ -494,8 +464,8 @@ export async function verifyStudentLogin(
     };
   }
 
-  // Agar foydalanuvchida hali parol o'rnatilmagan bo'lsa yoki parol mos kelsa
-  if (user.passwordHash && user.passwordHash.trim() !== password.trim()) {
+  // Parol tekshiruvi: foydalanuvchida parol o'rnatilgan bo'lishi va kiritilgan parolga aynan mos kelishi shart!
+  if (!user.passwordHash || user.passwordHash.trim() !== password.trim()) {
     user.failedAttempts = (user.failedAttempts || 0) + 1;
     user.lastFailedAt = new Date().toISOString();
     await saveStore(store);
