@@ -20,7 +20,9 @@ import {
   AtSign,
   ChevronDown,
 } from 'lucide-react';
-import { UserProfile } from '@/types';
+import { Language, UserProfile } from '@/types';
+import ThemeLanguageSwitcher from '@/components/ThemeLanguageSwitcher';
+import { TRANSLATIONS } from '@/lib/translations';
 
 type AuthViewMode = 'login' | 'register' | 'blocked';
 
@@ -36,6 +38,11 @@ const MAIN_UNIVERSITIES = [
 
 export default function LoginPage() {
   const router = useRouter();
+
+  // Til va Rejim (Tungi / Kunduzgi)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [lang, setLang] = useState<Language>('uz');
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.uz;
 
   // Qurilma ID va ko'rinish holati
   const [deviceId, setDeviceId] = useState<string>('');
@@ -68,8 +75,25 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Qurilma bloklanganligini tekshirish
+  // Til, Mavzu va Qurilma bloklanganligini tekshirish
   useEffect(() => {
+    // 1. Saqlangan tilni o'qish
+    const savedLang = localStorage.getItem('talaba_lang') as Language;
+    if (savedLang && ['uz', 'kaa', 'kk', 'ru', 'en'].includes(savedLang)) {
+      setLang(savedLang);
+    }
+
+    // 2. Saqlangan mavzuni (Theme) o'qish va qo'llash
+    const savedTheme = localStorage.getItem('talaba_theme') as 'dark' | 'light';
+    if (savedTheme === 'light') {
+      setTheme('light');
+      document.documentElement.classList.add('light');
+    } else {
+      setTheme('dark');
+      document.documentElement.classList.remove('light');
+    }
+
+    // 3. Qurilma ID
     let currentDeviceId = localStorage.getItem('talaba_device_id');
     if (!currentDeviceId) {
       currentDeviceId = `dev_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -100,6 +124,24 @@ export default function LoginPage() {
       })
       .catch(() => {});
   }, []);
+
+  // Mavzuni almashtirish (Tungi / Kunduzgi)
+  const handleToggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('talaba_theme', next);
+    if (next === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  };
+
+  // Tilni almashtirish
+  const handleLangChange = (newLang: Language) => {
+    setLang(newLang);
+    localStorage.setItem('talaba_lang', newLang);
+  };
 
   // Telefon raqami formatlash
   const handlePhoneChange = (val: string, setter: (v: string) => void) => {
@@ -272,11 +314,19 @@ export default function LoginPage() {
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-medium transition-all backdrop-blur-md active:scale-95 group shadow-sm"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform text-cyan-400" />
-          <span>Bosh sahifaga qaytish</span>
+          <span>{t.auth.backHome}</span>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500 hidden sm:inline">TalabaAI Xavfsiz Tizim</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Tungi / Kunduzgi rejim va Til tanlash */}
+          <ThemeLanguageSwitcher
+            currentLang={lang}
+            onLangChange={handleLangChange}
+            currentTheme={theme}
+            onThemeToggle={handleToggleTheme}
+          />
+
+          <span className="text-xs text-slate-500 hidden sm:inline">{t.auth.securityBadge}</span>
           <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-semibold">
             <Sparkles size={12} className="text-cyan-400" />
             <span>v1.0 Pro</span>
@@ -338,21 +388,21 @@ export default function LoginPage() {
 
               <div>
                 <h2 className="text-xl sm:text-2xl font-black text-red-400 tracking-tight">
-                  Qurilma Bloklandi!
+                  {t.auth.blockedTitle}
                 </h2>
                 <p className="text-xs text-slate-300 mt-2 leading-relaxed px-2">
-                  Xavfsizlik talablariga muvofiq, ketma-ket <b>20 marta</b> noto‘g‘ri parol kiritilgani sababli ushbu qurilma orqali saytga kirish butunlay to‘xtatildi.
+                  {t.auth.blockedDesc}
                 </p>
               </div>
 
               <div className="p-3 rounded-xl bg-red-950/40 border border-red-900/60 text-left text-[11px] text-red-300 font-mono space-y-1">
-                <p><b>Qurilma ID:</b> {deviceId || 'aniqlanmoqda'}</p>
-                <p><b>Holat:</b> Doimiy avto-blok (Permanent Block)</p>
+                <p><b>{t.auth.deviceLabel}</b> {deviceId || 'aniqlanmoqda'}</p>
+                <p><b>Holat:</b> {t.auth.permanentBlock}</p>
                 {blockReason && <p className="text-rose-200"><b>Sabab:</b> {blockReason}</p>}
               </div>
 
               <p className="text-[11px] text-slate-400">
-                Blokdan chiqarish uchun platforma ma’muriyatiga (Admin) murojaat qiling.
+                {t.auth.blockedAdminContact}
               </p>
             </div>
           )}
@@ -365,8 +415,8 @@ export default function LoginPage() {
               </h1>
               <p className="text-[11px] sm:text-xs text-slate-400 mt-1 font-normal tracking-wide">
                 {viewMode === 'register'
-                  ? 'Talaba ma’lumotlarini kiritib ro‘yxatdan o‘ting'
-                  : 'Xush kelibsiz! Tizimga kiring.'}
+                  ? t.auth.registerSubtitle
+                  : t.auth.loginSubtitle}
               </p>
             </div>
           )}
@@ -392,7 +442,7 @@ export default function LoginPage() {
             <form onSubmit={handleLoginSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <User size={13} className="text-cyan-400" /> Loginingiz
+                  <User size={13} className="text-cyan-400" /> {t.auth.loginLabel}
                 </label>
                 <input
                   type="text"
@@ -400,14 +450,14 @@ export default function LoginPage() {
                   required
                   value={loginUsername}
                   onChange={(e) => setLoginUsername(e.target.value)}
-                  placeholder="Loginni kiriting"
+                  placeholder={t.auth.loginPlaceholder}
                   className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-medium tracking-wide focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
 
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <KeyRound size={13} className="text-cyan-400" /> Parolingiz
+                  <KeyRound size={13} className="text-cyan-400" /> {t.auth.passwordLabel}
                 </label>
                 <div className="relative">
                   <input
@@ -417,7 +467,7 @@ export default function LoginPage() {
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Parolingizni kiriting"
+                    placeholder={t.auth.passwordPlaceholder}
                     className="w-full pl-3.5 pr-10 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                   <button
@@ -446,15 +496,15 @@ export default function LoginPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-3.5 h-3.5 rounded border-slate-700 bg-slate-900 text-cyan-500 focus:ring-cyan-500/30 accent-cyan-500 cursor-pointer"
                   />
-                  <span className="text-slate-400 hover:text-slate-300">Eslab qolish</span>
+                  <span className="text-slate-400 hover:text-slate-300">{t.auth.rememberMe}</span>
                 </label>
 
                 <button
                   type="button"
-                  onClick={() => alert('Parolni unutgan bo‘lsangiz, yangi akkaunt yaratishingiz yoki administratorga murojaat qilishingiz mumkin.')}
+                  onClick={() => alert(t.auth.forgotPasswordAlert)}
                   className="text-slate-400 hover:text-cyan-300 transition-colors"
                 >
-                  Parolni unutdingizmi?
+                  {t.auth.forgotPassword}
                 </button>
               </div>
 
@@ -466,12 +516,12 @@ export default function LoginPage() {
                 {loading ? (
                   <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <span>Tizimga kirish</span>
+                  <span>{t.auth.loginBtn}</span>
                 )}
               </button>
 
               <div className="pt-2 text-center text-xs text-slate-400">
-                Akkountingiz yo‘qmi?{' '}
+                {t.auth.noAccount}{' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -481,7 +531,7 @@ export default function LoginPage() {
                   }}
                   className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors cursor-pointer"
                 >
-                  Ro‘yxatdan o‘tish
+                  {t.auth.goToRegister}
                 </button>
               </div>
             </form>
@@ -494,14 +544,14 @@ export default function LoginPage() {
               {/* Ism Familiya */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <User size={13} className="text-cyan-400" /> To‘liq Ism va Familiyangiz
+                  <User size={13} className="text-cyan-400" /> {t.auth.fullName}
                 </label>
                 <input
                   type="text"
                   required
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
-                  placeholder="Masalan: Sardor Aliyev"
+                  placeholder={t.auth.fullNamePlaceholder}
                   className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
@@ -510,21 +560,21 @@ export default function LoginPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                    <AtSign size={13} className="text-cyan-400" /> Yangi Login
+                    <AtSign size={13} className="text-cyan-400" /> {t.auth.newLogin}
                   </label>
                   <input
                     type="text"
                     required
                     value={regUsername}
                     onChange={(e) => setRegUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
-                    placeholder="masalan: sardor99"
+                    placeholder={t.auth.newLoginPlaceholder}
                     className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                 </div>
 
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1">
-                    Jinsi
+                    {t.auth.gender}
                   </label>
                   <div className="grid grid-cols-2 gap-1.5 h-[36px] sm:h-[40px]">
                     <button
@@ -536,7 +586,7 @@ export default function LoginPage() {
                           : 'bg-[#111927]/90 border-slate-700/60 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <span>👨 Erkak</span>
+                      <span>{t.auth.male}</span>
                     </button>
                     <button
                       type="button"
@@ -547,7 +597,7 @@ export default function LoginPage() {
                           : 'bg-[#111927]/90 border-slate-700/60 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <span>👩 Ayol</span>
+                      <span>{t.auth.female}</span>
                     </button>
                   </div>
                 </div>
@@ -556,7 +606,7 @@ export default function LoginPage() {
               {/* Universitet (OTM): 1-rasm talabi bo'yicha Tatu, Milliy, Moliya, Alfraganus, Amaliy, ToshMI dan bittasini tanlaydi */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <GraduationCap size={13} className="text-cyan-400" /> O‘qiyotgan Universitetingiz (OTM)
+                  <GraduationCap size={13} className="text-cyan-400" /> {t.auth.university}
                 </label>
                 <div className="relative">
                   <select
@@ -581,28 +631,28 @@ export default function LoginPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                    <Mail size={13} className="text-cyan-400" /> Gmail (Pochta)
+                    <Mail size={13} className="text-cyan-400" /> {t.auth.email}
                   </label>
                   <input
                     type="email"
                     required
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    placeholder="example@gmail.com"
+                    placeholder={t.auth.emailPlaceholder}
                     className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner font-mono"
                   />
                 </div>
 
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                    <Phone size={13} className="text-cyan-400" /> Telefon raqam
+                    <Phone size={13} className="text-cyan-400" /> {t.auth.phone}
                   </label>
                   <input
                     type="tel"
                     required
                     value={regPhone}
                     onChange={(e) => handlePhoneChange(e.target.value, setRegPhone)}
-                    placeholder="+998 90 123 45 67"
+                    placeholder={t.auth.phonePlaceholder}
                     className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                 </div>
@@ -612,28 +662,28 @@ export default function LoginPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                    <KeyRound size={13} className="text-cyan-400" /> Yangi Parol
+                    <KeyRound size={13} className="text-cyan-400" /> {t.auth.newPassword}
                   </label>
                   <input
                     type={showRegPassword ? 'text' : 'password'}
                     required
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    placeholder="Kamida 4 ta belgi"
+                    placeholder={t.auth.newPasswordPlaceholder}
                     className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                 </div>
 
                 <div>
                   <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                    <Lock size={13} className="text-cyan-400" /> Parolni takrorlang
+                    <Lock size={13} className="text-cyan-400" /> {t.auth.confirmPassword}
                   </label>
                   <input
                     type={showRegPassword ? 'text' : 'password'}
                     required
                     value={regConfirmPassword}
                     onChange={(e) => setRegConfirmPassword(e.target.value)}
-                    placeholder="Parolni qayta tering"
+                    placeholder={t.auth.confirmPasswordPlaceholder}
                     className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                 </div>
@@ -647,7 +697,7 @@ export default function LoginPage() {
                   className="text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   {showRegPassword ? <EyeOff size={13} /> : <Eye size={13} />}
-                  <span>{showRegPassword ? 'Parolni yashirish' : 'Parolni ko‘rsatish'}</span>
+                  <span>{showRegPassword ? t.auth.hidePassword : t.auth.showPassword}</span>
                 </button>
               </div>
 
@@ -663,14 +713,14 @@ export default function LoginPage() {
                   ) : (
                     <>
                       <Sparkles size={15} />
-                      <span>Ro‘yxatdan o‘tish va Kirish</span>
+                      <span>{t.auth.registerBtn}</span>
                     </>
                   )}
                 </button>
               </div>
 
               <div className="pt-2 text-center text-xs text-slate-400">
-                Akkountingiz bormi?{' '}
+                {t.auth.haveAccount}{' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -680,7 +730,7 @@ export default function LoginPage() {
                   }}
                   className="text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer"
                 >
-                  Tizimga kirish
+                  {t.auth.goToLogin}
                 </button>
               </div>
             </form>
@@ -711,7 +761,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="w-full py-2 text-center text-[10px] sm:text-xs text-slate-500 border-t border-slate-900/60 z-20 shrink-0">
-        <p>&copy; {new Date().getFullYear()} TalabaAI - SIS Corpartion. Barcha huquqlar himoyalangan.</p>
+        <p>&copy; {new Date().getFullYear()} TalabaAI - SIS Corpartion. {t.auth.copyright}</p>
       </footer>
     </div>
   );

@@ -171,4 +171,12 @@ html.light option {
   color: #0f172a !important;
 }
 
+html.light .bg-gradient-to-r,
+html.light .bg-gradient-to-r *,
+html.light button.bg-gradient-to-r,
+html.light button.bg-gradient-to-r * {
+  color: #ffffff !important;
+}
+
+
 

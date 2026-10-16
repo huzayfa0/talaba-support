@@ -72,6 +72,49 @@ export interface Translations {
     calloutDesc: string;
     calloutBtn: string;
   };
+  auth: {
+    backHome: string;
+    securityBadge: string;
+    loginSubtitle: string;
+    registerSubtitle: string;
+    loginLabel: string;
+    loginPlaceholder: string;
+    passwordLabel: string;
+    passwordPlaceholder: string;
+    rememberMe: string;
+    forgotPassword: string;
+    forgotPasswordAlert: string;
+    loginBtn: string;
+    noAccount: string;
+    goToRegister: string;
+    haveAccount: string;
+    goToLogin: string;
+    fullName: string;
+    fullNamePlaceholder: string;
+    newLogin: string;
+    newLoginPlaceholder: string;
+    gender: string;
+    male: string;
+    female: string;
+    university: string;
+    email: string;
+    emailPlaceholder: string;
+    phone: string;
+    phonePlaceholder: string;
+    newPassword: string;
+    newPasswordPlaceholder: string;
+    confirmPassword: string;
+    confirmPasswordPlaceholder: string;
+    showPassword: string;
+    hidePassword: string;
+    registerBtn: string;
+    blockedTitle: string;
+    blockedDesc: string;
+    blockedAdminContact: string;
+    deviceLabel: string;
+    permanentBlock: string;
+    copyright: string;
+  };
 }
 
 export const TRANSLATIONS: Record<Language, Translations> = {
@@ -201,6 +244,49 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       calloutDesc: 'Minglab talabalar darslarni o‘rganish, slaydlar va mustaqil ishlarni tayyorlash uchun har kuni ushbu platformadan foydalanmoqda.',
       calloutBtn: 'Kirish / Ro‘yxatdan O‘tish',
     },
+    auth: {
+      backHome: 'Bosh sahifaga qaytish',
+      securityBadge: 'TalabaAI Xavfsiz Tizim',
+      loginSubtitle: 'Xush kelibsiz! Tizimga kiring.',
+      registerSubtitle: 'Talaba ma’lumotlarini kiritib ro‘yxatdan o‘ting',
+      loginLabel: 'Loginingiz',
+      loginPlaceholder: 'Loginni kiriting',
+      passwordLabel: 'Parolingiz',
+      passwordPlaceholder: 'Parolingizni kiriting',
+      rememberMe: 'Eslab qolish',
+      forgotPassword: 'Parolni unutdingizmi?',
+      forgotPasswordAlert: 'Parolni unutgan bo‘lsangiz, yangi akkaunt yaratishingiz yoki administratorga murojaat qilishingiz mumkin.',
+      loginBtn: 'Tizimga kirish',
+      noAccount: 'Akkountingiz yo‘qmi?',
+      goToRegister: 'Ro‘yxatdan o‘tish',
+      haveAccount: 'Akkountingiz bormi?',
+      goToLogin: 'Tizimga kirish',
+      fullName: 'To‘liq Ism va Familiyangiz',
+      fullNamePlaceholder: 'Masalan: Sardor Aliyev',
+      newLogin: 'Yangi Login',
+      newLoginPlaceholder: 'masalan: sardor99',
+      gender: 'Jinsi',
+      male: '👨 Erkak',
+      female: '👩 Ayol',
+      university: 'O‘qiyotgan Universitetingiz (OTM)',
+      email: 'Gmail (Pochta)',
+      emailPlaceholder: 'example@gmail.com',
+      phone: 'Telefon raqam',
+      phonePlaceholder: '+998 90 123 45 67',
+      newPassword: 'Yangi Parol',
+      newPasswordPlaceholder: 'Kamida 4 ta belgi',
+      confirmPassword: 'Parolni takrorlang',
+      confirmPasswordPlaceholder: 'Parolni qayta tering',
+      showPassword: 'Parolni ko‘rsatish',
+      hidePassword: 'Parolni yashirish',
+      registerBtn: 'Ro‘yxatdan o‘tish va Kirish',
+      blockedTitle: 'Qurilma Bloklandi!',
+      blockedDesc: 'Xavfsizlik talablariga muvofiq, ketma-ket 20 marta noto‘g‘ri parol kiritilgani sababli ushbu qurilma orqali saytga kirish butunlay to‘xtatildi.',
+      blockedAdminContact: 'Blokdan chiqarish uchun platforma ma’muriyatiga (Admin) murojaat qiling.',
+      deviceLabel: 'Qurilma ID:',
+      permanentBlock: 'Doimiy avto-blok (Permanent Block)',
+      copyright: 'Barcha huquqlar himoyalangan.',
+    },
   },
 
   kaa: {
@@ -328,6 +414,49 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       calloutTitle: 'Talabalıq jıllarıńızdı TalabaAI menen ańsatlastırıń!',
       calloutDesc: 'Mıńlaǵan talabalar sabaqlardı úyreniw, slaydlar hám ǵárezsiz jumıslardı tayarlaw ushın hár kúni usı platformadan paydalanbaqta.',
       calloutBtn: 'Kiriw / Dizimnen Ótiw',
+    },
+    auth: {
+      backHome: 'Bas betke qaytıw',
+      securityBadge: 'TalabaAI Qáwipsiz Sistema',
+      loginSubtitle: 'Xosh keldińiz! Sistemaǵa kiriń.',
+      registerSubtitle: 'Talaba maǵlıwmatların kiritip dizimnen ótiń',
+      loginLabel: 'Loginińiz',
+      loginPlaceholder: 'Loginni kirtiń',
+      passwordLabel: 'Parolińiz',
+      passwordPlaceholder: 'Parolińizdı kirtiń',
+      rememberMe: 'Este saqlaw',
+      forgotPassword: 'Paroldi umıttıńızba?',
+      forgotPasswordAlert: 'Paroldi umıtqan bolsańız, jańa akkaunt ashıwıńız yamasa administratorǵa xabarlasıwıńız múmkin.',
+      loginBtn: 'Sistemaǵa kiriw',
+      noAccount: 'Akkauntuńız joqpa?',
+      goToRegister: 'Dizimnen ótiw',
+      haveAccount: 'Akkauntuńız barma?',
+      goToLogin: 'Sistemaǵa kiriw',
+      fullName: 'Tolıq Atı-familiyańız',
+      fullNamePlaceholder: 'Mısalı: Berdaq Dáwletov',
+      newLogin: 'Jańa Login',
+      newLoginPlaceholder: 'mısalı: berdaq99',
+      gender: 'Jınısı',
+      male: '👨 Er adam',
+      female: '👩 Hayal adam',
+      university: 'Oqıp atırǵan Universitetińiz (JOO)',
+      email: 'Gmail (Pochta)',
+      emailPlaceholder: 'example@gmail.com',
+      phone: 'Telefon nomer',
+      phonePlaceholder: '+998 90 123 45 67',
+      newPassword: 'Jańa Parol',
+      newPasswordPlaceholder: 'Keminde 4 belgi',
+      confirmPassword: 'Paroldi tákirarlań',
+      confirmPasswordPlaceholder: 'Paroldi qaytadan jaziń',
+      showPassword: 'Paroldi kórsetiw',
+      hidePassword: 'Paroldi jasırıw',
+      registerBtn: 'Dizimnen ótiw hám Kiriw',
+      blockedTitle: 'Qurılma Bloklandı!',
+      blockedDesc: 'Qáwipsizlik talaplarına muwapıq, 20 márte qáte parol terilgeni sebepli usı qurılma arqalı kiriw toqtatıldı.',
+      blockedAdminContact: 'Bloktan shıǵarıw ushın platforma administratorına múrájet etiń.',
+      deviceLabel: 'Qurılma ID:',
+      permanentBlock: 'Turaqlı avto-blok (Permanent Block)',
+      copyright: 'Barlıq huqıqlar qorǵalǵan.',
     },
   },
 
@@ -457,6 +586,49 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       calloutDesc: 'Мыңдаған студенттер сабақ оқу, слайдтар мен өзіндік жұмыстарды әзірлеу үшін осы платформаны күнделікті қолдануда.',
       calloutBtn: 'Кіру / Тіркелу',
     },
+    auth: {
+      backHome: 'Басты бетке оралу',
+      securityBadge: 'TalabaAI Қауіпсіз Жүйе',
+      loginSubtitle: 'Қош келдіңіз! Жүйеге кіріңіз.',
+      registerSubtitle: 'Студент мәліметтерін енгізіп тіркеліңіз',
+      loginLabel: 'Логиніңіз',
+      loginPlaceholder: 'Логинді енгізіңіз',
+      passwordLabel: 'Құпиясөзіңіз',
+      passwordPlaceholder: 'Құпиясөзді енгізіңіз',
+      rememberMe: 'Есте сақтау',
+      forgotPassword: 'Құпиясөзді ұмыттыңыз ба?',
+      forgotPasswordAlert: 'Құпиясөзді ұмытсаңыз, жаңа тіркелгі жасауға немесе әкімшіге хабарласуға болады.',
+      loginBtn: 'Жүйеге кіру',
+      noAccount: 'Есептік жазбаңыз жоқ па?',
+      goToRegister: 'Тіркелу',
+      haveAccount: 'Есептік жазбаңыз бар ма?',
+      goToLogin: 'Жүйеге кіру',
+      fullName: 'Толық Аты-жөніңіз',
+      fullNamePlaceholder: 'Мысалы: Арман Серікұлы',
+      newLogin: 'Жаңа Логин',
+      newLoginPlaceholder: 'мысалы: arman99',
+      gender: 'Жынысы',
+      male: '👨 Ер',
+      female: '👩 Әйел',
+      university: 'Оқитын Университетіңіз (ЖОО)',
+      email: 'Gmail (Пошта)',
+      emailPlaceholder: 'example@gmail.com',
+      phone: 'Телефон нөмірі',
+      phonePlaceholder: '+998 90 123 45 67',
+      newPassword: 'Жаңа Құпиясөз',
+      newPasswordPlaceholder: 'Кемінде 4 таңба',
+      confirmPassword: 'Құпиясөзді қайталаңыз',
+      confirmPasswordPlaceholder: 'Құпиясөзді қайта теріңіз',
+      showPassword: 'Құпиясөзді көрсету',
+      hidePassword: 'Құпиясөзді жасыру',
+      registerBtn: 'Тіркелу және Кіру',
+      blockedTitle: 'Құрылғы Бұғатталды!',
+      blockedDesc: 'Қауіпсіздік талаптарына сәйкес, 20 рет қате құпиясөз енгізілгендіктен, бұл құрылғы бұғатталды.',
+      blockedAdminContact: 'Бұғаттаудан шығару үшін әкімшіге хабарласыңыз.',
+      deviceLabel: 'Құрылғы ID:',
+      permanentBlock: 'Тұрақты авто-бұғаттау',
+      copyright: 'Барлық құқықтар қорғалған.',
+    },
   },
 
   ru: {
@@ -585,6 +757,49 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       calloutDesc: 'Тысячи студентов ежедневно используют эту платформу для обучения, создания слайдов и выполнения работ.',
       calloutBtn: 'Вход / Регистрация',
     },
+    auth: {
+      backHome: 'Вернуться на главную',
+      securityBadge: 'Безопасная система TalabaAI',
+      loginSubtitle: 'Добро пожаловать! Войдите в систему.',
+      registerSubtitle: 'Заполните данные студента для регистрации',
+      loginLabel: 'Ваш логин',
+      loginPlaceholder: 'Введите логин',
+      passwordLabel: 'Ваш пароль',
+      passwordPlaceholder: 'Введите пароль',
+      rememberMe: 'Запомнить меня',
+      forgotPassword: 'Забыли пароль?',
+      forgotPasswordAlert: 'Если вы забыли пароль, создайте новый аккаунт или обратитесь к администратору.',
+      loginBtn: 'Войти в систему',
+      noAccount: 'Нет аккаунта?',
+      goToRegister: 'Зарегистрироваться',
+      haveAccount: 'Уже есть аккаунт?',
+      goToLogin: 'Войти в систему',
+      fullName: 'Полное имя и фамилия',
+      fullNamePlaceholder: 'Например: Сардор Алиев',
+      newLogin: 'Новый логин',
+      newLoginPlaceholder: 'например: sardor99',
+      gender: 'Пол',
+      male: '👨 Мужской',
+      female: '👩 Женский',
+      university: 'Ваш университет (ВУЗ)',
+      email: 'Электронная почта (Gmail)',
+      emailPlaceholder: 'example@gmail.com',
+      phone: 'Номер телефона',
+      phonePlaceholder: '+998 90 123 45 67',
+      newPassword: 'Новый пароль',
+      newPasswordPlaceholder: 'Минимум 4 символа',
+      confirmPassword: 'Повторите пароль',
+      confirmPasswordPlaceholder: 'Введите пароль еще раз',
+      showPassword: 'Показать пароль',
+      hidePassword: 'Скрыть пароль',
+      registerBtn: 'Зарегистрироваться и войти',
+      blockedTitle: 'Устройство заблокировано!',
+      blockedDesc: 'В целях безопасности после 20 неверных попыток ввода пароля доступ с данного устройства заблокирован.',
+      blockedAdminContact: 'Для разблокировки обратитесь к администратору платформы.',
+      deviceLabel: 'ID Устройства:',
+      permanentBlock: 'Постоянная блокировка',
+      copyright: 'Все права защищены.',
+    },
   },
 
   en: {
@@ -712,6 +927,49 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       calloutTitle: 'Make your student years easier with TalabaAI!',
       calloutDesc: 'Thousands of students use this platform daily to study courses, generate slides, and complete assignments.',
       calloutBtn: 'Sign In / Register',
+    },
+    auth: {
+      backHome: 'Back to Home',
+      securityBadge: 'TalabaAI Secure System',
+      loginSubtitle: 'Welcome! Sign in to continue.',
+      registerSubtitle: 'Enter student details to register',
+      loginLabel: 'Your Login',
+      loginPlaceholder: 'Enter login',
+      passwordLabel: 'Your Password',
+      passwordPlaceholder: 'Enter password',
+      rememberMe: 'Remember me',
+      forgotPassword: 'Forgot password?',
+      forgotPasswordAlert: 'If you forgot your password, please create a new account or contact support.',
+      loginBtn: 'Sign In',
+      noAccount: 'Don\'t have an account?',
+      goToRegister: 'Sign Up',
+      haveAccount: 'Already have an account?',
+      goToLogin: 'Sign In',
+      fullName: 'Full Name and Surname',
+      fullNamePlaceholder: 'E.g.: Sardor Aliyev',
+      newLogin: 'New Login',
+      newLoginPlaceholder: 'e.g.: sardor99',
+      gender: 'Gender',
+      male: '👨 Male',
+      female: '👩 Female',
+      university: 'Your University',
+      email: 'Email (Gmail)',
+      emailPlaceholder: 'example@gmail.com',
+      phone: 'Phone Number',
+      phonePlaceholder: '+998 90 123 45 67',
+      newPassword: 'New Password',
+      newPasswordPlaceholder: 'At least 4 characters',
+      confirmPassword: 'Confirm Password',
+      confirmPasswordPlaceholder: 'Re-enter password',
+      showPassword: 'Show password',
+      hidePassword: 'Hide password',
+      registerBtn: 'Register and Sign In',
+      blockedTitle: 'Device Blocked!',
+      blockedDesc: 'Due to security policies, access from this device has been suspended after 20 failed login attempts.',
+      blockedAdminContact: 'Contact the platform administrator to request an unblock.',
+      deviceLabel: 'Device ID:',
+      permanentBlock: 'Permanent Block',
+      copyright: 'All rights reserved.',
     },
   },
 };
