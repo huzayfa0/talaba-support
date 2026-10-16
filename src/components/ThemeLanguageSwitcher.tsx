@@ -58,7 +58,7 @@ export default function ThemeLanguageSwitcher({
       </button>
 
       {/* 2. Tilni tanlash (5 ta til) */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative z-50" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           type="button"
@@ -72,7 +72,7 @@ export default function ThemeLanguageSwitcher({
 
         {/* Dropdown menyu */}
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-48 sm:w-52 rounded-2xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-1.5 text-slate-100 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute right-0 mt-2 w-48 sm:w-52 rounded-2xl bg-slate-900/98 backdrop-blur-3xl border border-slate-700/80 p-1.5 text-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_1px_1px_rgba(255,255,255,0.1)] z-[9999] animate-in fade-in zoom-in-95 duration-150">
             <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800/80 mb-1">
               Tilni tanlang (5 ta til)
             </div>

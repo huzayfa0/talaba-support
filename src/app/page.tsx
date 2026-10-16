@@ -455,8 +455,8 @@ export default function Home() {
 
       {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
       {user.isLoggedIn ? (
-        <div className="hidden lg:block lg:pl-28 pr-6 pt-3.5 pb-2">
-          <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+        <div className="relative z-50 hidden lg:block lg:pl-28 pr-6 pt-3.5 pb-2">
+          <div className="relative z-50 flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
             {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
             <div>
               <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
@@ -520,8 +520,8 @@ export default function Home() {
         </div>
       ) : (
         /* Guest Header (Desktop & Mobile) */
-        <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+        <div className="relative z-50 w-full max-w-6xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-2">
+          <div className="relative z-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
             <div
               onClick={handleSecretLogoClick}
               className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
@@ -564,7 +564,7 @@ export default function Home() {
       )}
 
       {/* Main Content Area */}
-      <main className={`flex-1 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-16 lg:pb-8' : 'w-full px-2 sm:px-4 pb-12'}`}>
+      <main className={`flex-1 relative z-10 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-16 lg:pb-8' : 'w-full px-2 sm:px-4 pb-12'}`}>
         {/* Agar foydalanuvchi tizimga kirmagan bo'lsa va darslar, darsxona, guruhlar yoki kontaktlar bo'limida bo'lsa -> Reklama va ro'yxatdan o'tish qo'llanmasi */}
         {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
           <GuestPromoBanner
