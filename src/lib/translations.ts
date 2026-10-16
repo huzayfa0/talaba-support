@@ -114,6 +114,14 @@ export interface Translations {
     deviceLabel: string;
     permanentBlock: string;
     copyright: string;
+    forgotTitle: string;
+    forgotSubtitle: string;
+    forgotPhoneLabel: string;
+    forgotPhonePlaceholder: string;
+    forgotSendBtn: string;
+    forgotResendBtn: (sec: number) => string;
+    forgotSuccessMsg: string;
+    forgotBackBtn: string;
   };
 }
 
@@ -286,6 +294,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       deviceLabel: 'Qurilma ID:',
       permanentBlock: 'Doimiy avto-blok (Permanent Block)',
       copyright: 'Barcha huquqlar himoyalangan.',
+      forgotTitle: 'Parolni Tiklash',
+      forgotSubtitle: 'Ro‘yxatdan o‘tgan Telegram raqamingizni kiriting va login-parolingizni oling',
+      forgotPhoneLabel: 'Ro‘yxatdan o‘tgan Telegram / Telefon raqam',
+      forgotPhonePlaceholder: '+998 90 123 45 67',
+      forgotSendBtn: 'Telegramga Yuborish',
+      forgotResendBtn: (sec: number) => `Qayta yuborish (${sec}s)`,
+      forgotSuccessMsg: 'Login va parolingiz Telegram orqali yuborildi! Telegram botingizni tekshiring.',
+      forgotBackBtn: 'Kirish oynasiga qaytish',
     },
   },
 
@@ -457,6 +473,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       deviceLabel: 'Qurılma ID:',
       permanentBlock: 'Turaqlı avto-blok (Permanent Block)',
       copyright: 'Barlıq huqıqlar qorǵalǵan.',
+      forgotTitle: 'Paroldi Qayta Tiklew',
+      forgotSubtitle: 'Dizimnen ótken Telegram nomerińizdi jazıń hám login-parolińizdi alıń',
+      forgotPhoneLabel: 'Dizimnen ótken Telegram / Telefon nomer',
+      forgotPhonePlaceholder: '+998 90 123 45 67',
+      forgotSendBtn: 'Telegramǵa Jiberiw',
+      forgotResendBtn: (sec: number) => `Qaytadan jiberiw (${sec}s)`,
+      forgotSuccessMsg: 'Login hám parolińiz Telegram arqalı jiberildi! Telegram botıńızdı tekseriń.',
+      forgotBackBtn: 'Kiriw aynasına qaytıw',
     },
   },
 
@@ -628,6 +652,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       deviceLabel: 'Құрылғы ID:',
       permanentBlock: 'Тұрақты авто-бұғаттау',
       copyright: 'Барлық құқықтар қорғалған.',
+      forgotTitle: 'Құпия сөзді қалпына келтіру',
+      forgotSubtitle: 'Тіркелген Telegram нөміріңізді енгізіп, логин мен құпия сөзіңізді алыңыз',
+      forgotPhoneLabel: 'Тіркелген Telegram / Телефон нөмірі',
+      forgotPhonePlaceholder: '+998 90 123 45 67',
+      forgotSendBtn: 'Telegram-ға жіберу',
+      forgotResendBtn: (sec: number) => `Қайта жіберу (${sec}с)`,
+      forgotSuccessMsg: 'Логин мен құпия сөз Telegram арқылы жіберілді! Telegram ботыңызды тексеріңіз.',
+      forgotBackBtn: 'Кіру терезесіне оралу',
     },
   },
 
@@ -799,6 +831,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       deviceLabel: 'ID Устройства:',
       permanentBlock: 'Постоянная блокировка',
       copyright: 'Все права защищены.',
+      forgotTitle: 'Восстановление пароля',
+      forgotSubtitle: 'Введите зарегистрированный номер Telegram и получите логин с паролем',
+      forgotPhoneLabel: 'Зарегистрированный номер Telegram / Телефона',
+      forgotPhonePlaceholder: '+998 90 123 45 67',
+      forgotSendBtn: 'Отправить в Telegram',
+      forgotResendBtn: (sec: number) => `Отправить повторно (${sec}с)`,
+      forgotSuccessMsg: 'Логин и пароль успешно отправлены в ваш Telegram! Проверьте бота.',
+      forgotBackBtn: 'Вернуться к входу',
     },
   },
 
@@ -970,6 +1010,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       deviceLabel: 'Device ID:',
       permanentBlock: 'Permanent Block',
       copyright: 'All rights reserved.',
+      forgotTitle: 'Password Recovery',
+      forgotSubtitle: 'Enter your registered Telegram phone number to receive your login and password',
+      forgotPhoneLabel: 'Registered Telegram / Phone number',
+      forgotPhonePlaceholder: '+998 90 123 45 67',
+      forgotSendBtn: 'Send to Telegram',
+      forgotResendBtn: (sec: number) => `Resend in (${sec}s)`,
+      forgotSuccessMsg: 'Your login and password have been sent to your Telegram! Check the bot.',
+      forgotBackBtn: 'Back to Login',
     },
   },
 };

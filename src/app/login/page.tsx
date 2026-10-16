@@ -19,12 +19,13 @@ import {
   Mail,
   AtSign,
   ChevronDown,
+  Send,
 } from 'lucide-react';
 import { Language, UserProfile } from '@/types';
 import ThemeLanguageSwitcher from '@/components/ThemeLanguageSwitcher';
 import { TRANSLATIONS } from '@/lib/translations';
 
-type AuthViewMode = 'login' | 'register' | 'blocked';
+type AuthViewMode = 'login' | 'register' | 'blocked' | 'forgot';
 
 // Asosiy 6 ta universitet to'liq rasmiy nomi bilan
 const MAIN_UNIVERSITIES = [
@@ -69,6 +70,11 @@ export default function LoginPage() {
   const [regPassword, setRegPassword] = useState<string>('');
   const [regConfirmPassword, setRegConfirmPassword] = useState<string>('');
   const [showRegPassword, setShowRegPassword] = useState<boolean>(false);
+
+  // Parolni tiklash (Forgot Password) holatlari
+  const [forgotPhone, setForgotPhone] = useState<string>('+998 ');
+  const [forgotCountdown, setForgotCountdown] = useState<number>(0);
+  const [forgotLoading, setForgotLoading] = useState<boolean>(false);
 
   // Xabarlar va yuklanish
   const [loading, setLoading] = useState<boolean>(false);
@@ -150,6 +156,51 @@ export default function LoginPage() {
       return;
     }
     setter(val);
+  };
+
+  // 30 sekundlik orqaga hisoblash taymeri (Qayta yuborish uchun)
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (forgotCountdown > 0) {
+      timer = setTimeout(() => {
+        setForgotCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [forgotCountdown]);
+
+  // Parolni tiklash: Telegram orqali login va parolni yuborish
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (forgotCountdown > 0 || forgotLoading) return;
+
+    setErrorMsg(null);
+    setSuccessMsg(null);
+    setForgotLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: forgotPhone }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setErrorMsg(data.error || 'Hisob topilmadi yoki xatolik yuz berdi');
+        return;
+      }
+
+      setSuccessMsg(data.message || t.auth.forgotSuccessMsg);
+      if (data.username) {
+        setLoginUsername(data.username);
+      }
+      setForgotCountdown(30);
+    } catch {
+      setErrorMsg('Tarmoq xatoligi yuz berdi. Iltimos, qayta urinib ko‘ring.');
+    } finally {
+      setForgotLoading(false);
+    }
   };
 
   // 1. LOGIN: Faqat Login va Parol bilan kirish
@@ -416,6 +467,8 @@ export default function LoginPage() {
               <p className="text-[11px] sm:text-xs text-slate-400 mt-1 font-normal tracking-wide">
                 {viewMode === 'register'
                   ? t.auth.registerSubtitle
+                  : viewMode === 'forgot'
+                  ? t.auth.forgotSubtitle
                   : t.auth.loginSubtitle}
               </p>
             </div>
@@ -501,8 +554,12 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={() => alert(t.auth.forgotPasswordAlert)}
-                  className="text-slate-400 hover:text-cyan-300 transition-colors"
+                  onClick={() => {
+                    setErrorMsg(null);
+                    setSuccessMsg(null);
+                    setViewMode('forgot');
+                  }}
+                  className="text-slate-400 hover:text-cyan-300 transition-colors cursor-pointer"
                 >
                   {t.auth.forgotPassword}
                 </button>
@@ -532,6 +589,74 @@ export default function LoginPage() {
                   className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors cursor-pointer"
                 >
                   {t.auth.goToRegister}
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* 2. PAROLNI TIKLASH SHAKLI (Telegram orqali login va parolni yuborish) */}
+          {viewMode === 'forgot' && (
+            <form onSubmit={handleForgotSubmit} className="space-y-4 text-left animate-in fade-in duration-200">
+              <div>
+                <label className="block text-[11px] font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
+                  <Phone size={13} className="text-cyan-400" /> {t.auth.forgotPhoneLabel}
+                </label>
+                <div className="relative">
+                  <input
+                    type="tel"
+                    required
+                    value={forgotPhone}
+                    onChange={(e) => handlePhoneChange(e.target.value, setForgotPhone)}
+                    placeholder={t.auth.forgotPhonePlaceholder}
+                    className="w-full pl-3.5 pr-10 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  />
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none">
+                    <Send size={15} />
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1.5 leading-relaxed">
+                  Telegram raqamingizni kiritsangiz, tizimga bog‘langan login va parolingiz avtomatik Telegram orqali yuboriladi.
+                </p>
+              </div>
+
+              {/* Yuborish tugmasi (30s countdown taymer bilan) */}
+              <button
+                type="submit"
+                disabled={forgotLoading || forgotCountdown > 0}
+                className={`w-full py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm text-white transition-all flex items-center justify-center gap-2 select-none ${
+                  forgotCountdown > 0
+                    ? 'bg-slate-800 text-slate-400 border border-slate-700 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-[#00d2ff] via-[#0092ff] to-[#006aff] shadow-[0_4px_20px_rgba(0,180,255,0.48)] hover:shadow-[0_4px_28px_rgba(0,210,255,0.7)] hover:scale-[1.01] active:scale-[0.98] cursor-pointer'
+                }`}
+              >
+                {forgotLoading ? (
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : forgotCountdown > 0 ? (
+                  <>
+                    <Send size={14} className="text-slate-400" />
+                    <span>{t.auth.forgotResendBtn(forgotCountdown)}</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={14} />
+                    <span>{t.auth.forgotSendBtn}</span>
+                  </>
+                )}
+              </button>
+
+              {/* Kirish oynasiga qaytish tugmasi */}
+              <div className="pt-2 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErrorMsg(null);
+                    setSuccessMsg(null);
+                    setViewMode('login');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"
+                >
+                  <ArrowLeft size={13} />
+                  <span>{t.auth.forgotBackBtn}</span>
                 </button>
               </div>
             </form>
