@@ -148,10 +148,24 @@ export async function saveUserChatMapping(
 }
 
 /**
- * Telefon raqami bo'yicha Telegram chatId ni topish
+ * Telefon raqami bo'yicha Telegram chatId ni topish (aniq yoki oxirgi 9/7 xona bo'yicha)
  */
 export async function getChatIdByPhone(phone: string): Promise<string | number | null> {
   const clean = cleanPhoneNumber(phone);
   const store = await loadStore();
-  return store.phoneChatMap[clean] || null;
+  if (store.phoneChatMap && store.phoneChatMap[clean]) {
+    return store.phoneChatMap[clean];
+  }
+
+  const clean9 = clean.slice(-9);
+  if (clean9.length >= 7 && store.phoneChatMap) {
+    for (const [p, cid] of Object.entries(store.phoneChatMap)) {
+      const pClean = cleanPhoneNumber(p);
+      if (pClean.slice(-9) === clean9 || pClean.slice(-7) === clean.slice(-7)) {
+        return cid;
+      }
+    }
+  }
+
+  return null;
 }

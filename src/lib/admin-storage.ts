@@ -367,17 +367,38 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
 }
 
 /**
- * Telefon raqami bo'yicha foydalanuvchini topish
+ * Telefon raqami yoki login/telegram bo'yicha foydalanuvchini topish
  */
 export async function findUserByPhone(phone: string): Promise<AdminUserRecord | null> {
   const store = await ensureStore();
-  const clean = phone.replace(/[^0-9]/g, '');
-  return (
-    store.users.find((u) => {
+  const raw = (phone || '').trim();
+  const clean = raw.replace(/[^0-9]/g, '');
+  const clean9 = clean.slice(-9);
+  const clean7 = clean.slice(-7);
+  const lowerRaw = raw.toLowerCase().replace(/^@/, '');
+
+  // 1. Telefon raqami bo'yicha qat'iy va moslashuvchan qidiruv
+  if (clean.length >= 7) {
+    const byExactPhone = store.users.find((u) => {
       if (!u.phone) return false;
-      return u.phone.replace(/[^0-9]/g, '') === clean;
-    }) || null
-  );
+      const uClean = u.phone.replace(/[^0-9]/g, '');
+      if (uClean === clean) return true;
+      if (clean9.length === 9 && uClean.slice(-9) === clean9) return true;
+      if (clean7.length === 7 && uClean.slice(-7) === clean7) return true;
+      return false;
+    });
+    if (byExactPhone) return byExactPhone;
+  }
+
+  // 2. Login (username), telegram yoki email bo'yicha qidiruv
+  const byUsername = store.users.find((u) => {
+    if (u.username && u.username.toLowerCase() === lowerRaw) return true;
+    if (u.telegramUsername && u.telegramUsername.toLowerCase() === lowerRaw) return true;
+    if (u.email && u.email.toLowerCase() === lowerRaw) return true;
+    return false;
+  });
+
+  return byUsername || null;
 }
 
 export interface RegisterStudentInput {

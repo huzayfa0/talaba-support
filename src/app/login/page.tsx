@@ -195,6 +195,9 @@ export default function LoginPage() {
       if (data.username) {
         setLoginUsername(data.username);
       }
+      if (data.password) {
+        setLoginPassword(data.password);
+      }
       setForgotCountdown(30);
     } catch {
       setErrorMsg('Tarmoq xatoligi yuz berdi. Iltimos, qayta urinib ko‘ring.');

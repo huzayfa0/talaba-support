@@ -9,6 +9,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(projectRoot, 'src', 'data');
 const OTP_FILE = path.join(DATA_DIR, 'otp-store.json');
 const SECURITY_FILE = path.join(DATA_DIR, 'security-store.json');
+const ADMIN_FILE = path.join(DATA_DIR, 'admin-store.json');
 
 // Standart token
 let BOT_TOKEN = '8222935062:AAH7vuajffGpGH-I0VvNPebbF41qVeWEgZ0';
@@ -96,6 +97,69 @@ async function sendTelegramMessage(chatId, text, replyMarkup = null) {
     console.error('Xabar yuborishda xatolik:', err);
     return null;
   }
+async function findUserInAdminStore(phone, username, chatId) {
+  try {
+    const content = await fs.readFile(ADMIN_FILE, 'utf-8');
+    const store = JSON.parse(content);
+    if (!Array.isArray(store.users)) return null;
+
+    const clean = phone ? cleanPhoneNumber(phone) : '';
+    const clean9 = clean.slice(-9);
+    const clean7 = clean.slice(-7);
+    const lowerTg = (username || '').toLowerCase().replace(/^@/, '');
+
+    // 1. Telefon raqam bo'yicha qidiruv
+    if (clean.length >= 7) {
+      const u = store.users.find((user) => {
+        if (!user.phone) return false;
+        const uClean = cleanPhoneNumber(user.phone);
+        if (uClean === clean) return true;
+        if (clean9.length === 9 && uClean.slice(-9) === clean9) return true;
+        if (clean7.length === 7 && uClean.slice(-7) === clean7) return true;
+        return false;
+      });
+      if (u) return { user: u, store };
+    }
+
+    // 2. Telegram username bo'yicha qidiruv
+    if (lowerTg) {
+      const u = store.users.find((user) => {
+        if (!user.telegramUsername) return false;
+        return user.telegramUsername.toLowerCase().replace(/^@/, '') === lowerTg;
+      });
+      if (u) return { user: u, store };
+    }
+
+    return null;
+  } catch (err) {
+    console.error('findUserInAdminStore xatolik:', err);
+    return null;
+  }
+}
+
+async function sendCredentialsMessage(chatId, user) {
+  const replyMarkup = {
+    keyboard: [
+      [{ text: '🔑 Mening login va parolim' }],
+      [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],
+    ],
+    resize_keyboard: true,
+    one_time_keyboard: false,
+  };
+
+  await sendTelegramMessage(
+    chatId,
+    `🎓 <b>TalabaAI — Shaxsiy hisobingiz ma’lumotlari:</b>\n\n` +
+    `Assalomu alaykum, <b>${user.name || 'Talaba'}</b>!\n` +
+    `Sizning tizimga kirish uchun login va parolingiz:\n\n` +
+    `👤 <b>Login:</b> <code>${user.username || user.phone}</code>\n` +
+    `🔑 <b>Parol:</b> <code>${user.passwordHash}</code>\n` +
+    `🏫 <b>OTM:</b> ${user.university || 'TATU'}\n` +
+    `📱 <b>Telefon:</b> ${user.phone}\n\n` +
+    `👉 <b>Saytga kirish:</b> <a href="https://huzayfa0.uz/login">huzayfa0.uz/login</a>\n\n` +
+    `⚠️ <i>Xavfsizligingiz uchun ushbu login va parolni begonalarga bermang!</i>`,
+    replyMarkup
+  );
 }
 
 const BACKUP_CONFIG_FILE = path.join(DATA_DIR, 'backup-config.json');
@@ -311,28 +375,51 @@ async function startBot() {
             await saveChatPhoneMapping(chatId, cleanPhone);
             console.log(`[TELEFON ULANDI] Tel: +${cleanPhone} <-> ChatId: ${chatId}`);
 
-            const store = await loadOtpStore();
-            const pending = store.pendingOtps ? store.pendingOtps[cleanPhone] : null;
+            // Foydalanuvchini bazadan qidiramiz
+            let found = await findUserInAdminStore(cleanPhone, username, chatId);
 
-            // Agar oldinroq aynan shu raqam uchun saytdan kod so'ralgan bo'lsa va muddati o'tmagan bo'lsa
-            if (pending && pending.code && pending.expiresAt > Date.now()) {
-              await sendTelegramMessage(
-                chatId,
-                `🎓 <b>TalabaAI Tizimi</b>\n\n` +
-                `🔐 Saytda so‘ralgan 4 xonali tasdiqlash kodingiz: <code>${pending.code}</code>\n\n` +
-                `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
-                `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
-                `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
-              );
+            if (found) {
+              const { user, store } = found;
+              user.phone = `+${cleanPhone}`;
+              if (username) user.telegramUsername = username;
+              user.updatedAt = new Date().toISOString();
+              try {
+                await fs.writeFile(ADMIN_FILE, JSON.stringify(store, null, 2), 'utf-8');
+              } catch {}
+              await sendCredentialsMessage(chatId, user);
             } else {
-              // Foydalanuvchi faqat raqamini uladi, kod saytdan so'ralganda keladi
-              await sendTelegramMessage(
-                chatId,
-                `✅ <b>Telefon raqamingiz muvaffaqiyatli ulandi!</b>\n\n` +
-                `📱 <b>Raqamingiz:</b> <code>+${cleanPhone}</code>\n\n` +
-                `Endi saytga (<b>huzayfa0.uz</b>) o‘tib, ro‘yxatdan o‘tish yoki tizimga kirishda ushbu raqamingizni kiritib <b>«Kodni olish»</b> tugmasini bosing.\n\n` +
-                `📩 Tasdiqlash kodi avtomatik tarzda aynan shu yerga yuboriladi.`
-              );
+              // Agar bazada topilmasa, ushbu tasdiqlangan telegram foydalanuvchi uchun avtomatik profil yaratamiz
+              try {
+                const content = await fs.readFile(ADMIN_FILE, 'utf-8');
+                const store = JSON.parse(content);
+                if (!Array.isArray(store.users)) store.users = [];
+
+                const newUser = {
+                  id: `user-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+                  name: userFirstName || 'Talaba',
+                  username: username || `talaba_${cleanPhone.slice(-4)}`,
+                  email: `${cleanPhone}@talaba.uz`,
+                  phone: `+${cleanPhone}`,
+                  telegramUsername: username || '',
+                  passwordHash: `talaba_${cleanPhone.slice(-4)}`,
+                  university: 'Muhammad al-Xorazmiy nomidagi Toshkent axborot texnologiyalari universiteti (TATU)',
+                  faculty: 'Axborot texnologiyalari',
+                  group: '304-guruh',
+                  plan: 'free',
+                  tokens: 10,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  isBlocked: false,
+                  failedAttempts: 0,
+                  customNotes: 'Telegram bot orqali avtomatik ro‘yxatdan o‘tgan talaba',
+                };
+
+                store.users.unshift(newUser);
+                await fs.writeFile(ADMIN_FILE, JSON.stringify(store, null, 2), 'utf-8');
+                await sendCredentialsMessage(chatId, newUser);
+              } catch (err) {
+                console.error('Yangi user yaratishda xatolik:', err);
+              }
             }
             continue;
           }
@@ -364,22 +451,61 @@ async function startBot() {
             }
           }
 
+          // 1.3 Login va parol so'rash buyrug'i
+          if (
+            text === '🔑 Mening login va parolim' ||
+            text === '/login' ||
+            text === '/parol' ||
+            text === '/hisob' ||
+            text.toLowerCase().includes('login') ||
+            text.toLowerCase().includes('parol')
+          ) {
+            const store = await loadOtpStore();
+            const savedPhone = store.chatPhoneMap ? store.chatPhoneMap[String(chatId)] : null;
+            const found = await findUserInAdminStore(savedPhone, username, chatId);
+
+            if (found) {
+              await sendCredentialsMessage(chatId, found.user);
+            } else {
+              await sendTelegramMessage(
+                chatId,
+                `Hisob ma’lumotlaringizni aniqlash uchun iltimos, pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing:`,
+                {
+                  keyboard: [
+                    [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],
+                  ],
+                  resize_keyboard: true,
+                  one_time_keyboard: false,
+                }
+              );
+            }
+            continue;
+          }
+
           // 2. /start yoki /help buyrug'i
           if (text.startsWith('/start') || text === '/help') {
-            await sendTelegramMessage(
-              chatId,
-              `Assalomu alaykum, <b>${userFirstName}</b>! 🎓\n\n` +
-              `<b>TalabaAI</b> platformasining rasmiy botiga xush kelibsiz.\n\n` +
-              `Saytdan ro‘yxatdan o‘tishda tasdiqlash kodini olish uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring (masalan: <code>+998901234567</code>):\n\n` +
-              `<i>💡 Chat ID raqamingizni bilish uchun <code>/id</code> deb yozing.</i>`,
-              {
-                keyboard: [
-                  [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],
-                ],
-                resize_keyboard: true,
-                one_time_keyboard: false,
-              }
-            );
+            const store = await loadOtpStore();
+            const savedPhone = store.chatPhoneMap ? store.chatPhoneMap[String(chatId)] : null;
+            const found = await findUserInAdminStore(savedPhone, username, chatId);
+
+            if (found) {
+              await sendCredentialsMessage(chatId, found.user);
+            } else {
+              await sendTelegramMessage(
+                chatId,
+                `Assalomu alaykum, <b>${userFirstName}</b>! 🎓\n\n` +
+                `<b>TalabaAI</b> platformasining rasmiy botiga xush kelibsiz.\n\n` +
+                `Saytdagi shaxsiy profilingiz, login va parolingizni bilish yoki tasdiqlash kodini olish uchun pastdagi tugmani bosing:`,
+                {
+                  keyboard: [
+                    [{ text: '🔑 Mening login va parolim' }],
+                    [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],
+                  ],
+                  resize_keyboard: true,
+                  one_time_keyboard: false,
+                }
+              );
+            }
             continue;
           }
 
@@ -391,25 +517,22 @@ async function startBot() {
             await saveChatPhoneMapping(chatId, cleanPhone);
             console.log(`[TELEFON ULANDI] Tel: +${cleanPhone} <-> ChatId: ${chatId}`);
 
-            const store = await loadOtpStore();
-            const pending = store.pendingOtps ? store.pendingOtps[cleanPhone] : null;
-
-            if (pending && pending.code && pending.expiresAt > Date.now()) {
-              await sendTelegramMessage(
-                chatId,
-                `🎓 <b>TalabaAI Tizimi</b>\n\n` +
-                `🔐 Saytda so‘ralgan 4 xonali tasdiqlash kodingiz: <code>${pending.code}</code>\n\n` +
-                `Ushbu kodni saytga kiriting va ro‘yxatdan o‘tishni yakunlang.\n` +
-                `⏳ Amal qilish muddati: <b>5 daqiqa</b>\n\n` +
-                `<i>⚠️ Xavfsizlik uchun kodni hech kimga bermang!</i>`
-              );
+            const found = await findUserInAdminStore(cleanPhone, username, chatId);
+            if (found) {
+              const { user, store } = found;
+              user.phone = `+${cleanPhone}`;
+              if (username) user.telegramUsername = username;
+              user.updatedAt = new Date().toISOString();
+              try {
+                await fs.writeFile(ADMIN_FILE, JSON.stringify(store, null, 2), 'utf-8');
+              } catch {}
+              await sendCredentialsMessage(chatId, user);
             } else {
               await sendTelegramMessage(
                 chatId,
                 `✅ <b>Telefon raqamingiz muvaffaqiyatli ulandi!</b>\n\n` +
                 `📱 <b>Raqamingiz:</b> <code>+${cleanPhone}</code>\n\n` +
-                `Endi saytga (<b>huzayfa0.uz</b>) o‘tib, ro‘yxatdan o‘tish yoki tizimga kirishda ushbu raqamingizni kiritib <b>«Kodni olish»</b> tugmasini bosing.\n\n` +
-                `📩 Tasdiqlash kodi avtomatik tarzda aynan shu yerga yuboriladi.`
+                `Endi saytga (<b>huzayfa0.uz</b>) o‘tib, ro‘yxatdan o‘tish yoki tizimga kirishda ushbu raqamingizni kiritishingiz mumkin.`
               );
             }
             continue;
@@ -418,21 +541,18 @@ async function startBot() {
           // 4. Boshqa matn yozilgan holat
           const store = await loadOtpStore();
           const savedPhone = store.chatPhoneMap ? store.chatPhoneMap[String(chatId)] : null;
+          const found = await findUserInAdminStore(savedPhone, username, chatId);
 
-          if (savedPhone) {
-            await sendTelegramMessage(
-              chatId,
-              `ℹ️ <b>Sizning hisobingiz ulangan:</b> <code>+${savedPhone}</code>\n\n` +
-              `Saytda (<b>huzayfa0.uz</b>) ro‘yxatdan o‘tish yoki kirishda ushbu telefon raqamni kiritsangiz, tasdiqlash kodi avtomatik tarzda shu yerga yuboriladi.\n\n` +
-              `<i>💡 Chat ID raqamingizni bilish uchun <code>/id</code> deb yozing.</i>`
-            );
+          if (found) {
+            await sendCredentialsMessage(chatId, found.user);
           } else {
             // Telefon yuborishni so'raymiz
             await sendTelegramMessage(
               chatId,
-              `Iltimos, profilingizni ulash uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing yoki telefon raqamingizni yozib yuboring (masalan: <code>+998901234567</code>):`,
+              `Iltimos, hisobingiz ma’lumotlarini olish uchun pastdagi <b>"📱 Telefon raqamimni yuborish"</b> tugmasini bosing:`,
               {
                 keyboard: [
+                  [{ text: '🔑 Mening login va parolim' }],
                   [{ text: '📱 Telefon raqamimni yuborish', request_contact: true }],
                 ],
                 resize_keyboard: true,
