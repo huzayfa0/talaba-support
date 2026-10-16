@@ -1,4 +1,4 @@
-export type Language = 'uz' | 'ru' | 'en';
+export type Language = 'uz' | 'kaa' | 'kk' | 'ru' | 'en';
 
 export type PresentationStyle = 'modern-dark' | 'academic-blue' | 'minimal-light' | 'emerald-green' | 'creative-purple';
 

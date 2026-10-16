@@ -20,8 +20,33 @@ import {
   MustaqilIshProject,
   ResearchResult,
   NavTab,
+  Language,
 } from '@/types';
+import ThemeLanguageSwitcher from '@/components/ThemeLanguageSwitcher';
 import { GraduationCap, Heart, Search, Crown, Star, Zap, User, Sparkles } from 'lucide-react';
+
+const HEADER_TEXTS: Record<Language, { subtitle: string; loginBtn: string }> = {
+  uz: {
+    subtitle: 'O‘zbekiston Talabalari Uchun Ta‘lim Platformasi',
+    loginBtn: 'Tizimga Kirish / Ro‘yxatdan O‘tish',
+  },
+  kaa: {
+    subtitle: 'Qaraqalpaqstan Talabaları Ushın Bilimlendiriw Platforması',
+    loginBtn: 'Sistemaǵa Kiriw / Dizimnen Ótiw',
+  },
+  kk: {
+    subtitle: 'Студенттерге арналған білім беру платформасы',
+    loginBtn: 'Жүйеге кіру / Тіркелу',
+  },
+  ru: {
+    subtitle: 'Образовательная платформа для студентов Узбекистана',
+    loginBtn: 'Вход в систему / Регистрация',
+  },
+  en: {
+    subtitle: 'Educational Platform for Students in Uzbekistan',
+    loginBtn: 'Sign In / Register',
+  },
+};
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>('darslar');
@@ -46,6 +71,59 @@ export default function Home() {
   const [presentations, setPresentations] = useState<PresentationProject[]>([]);
   const [mustaqilIshlar, setMustaqilIshlar] = useState<MustaqilIshProject[]>([]);
   const [researches, setResearches] = useState<ResearchResult[]>([]);
+
+  // Tungi / Kunduzgi rejim va Til
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [lang, setLang] = useState<Language>('uz');
+
+  // Dastlabki mavzu va tilni yuklash
+  useEffect(() => {
+    try {
+      const savedLang = localStorage.getItem('talaba_lang') as Language;
+      if (savedLang && ['uz', 'kaa', 'kk', 'ru', 'en'].includes(savedLang)) {
+        setLang(savedLang);
+      }
+
+      const savedTheme = localStorage.getItem('talaba_theme') as 'dark' | 'light';
+      if (savedTheme === 'light') {
+        setTheme('light');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      } else {
+        setTheme('dark');
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleToggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    try {
+      localStorage.setItem('talaba_theme', next);
+      if (next === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleLangChange = (newLang: Language) => {
+    setLang(newLang);
+    try {
+      localStorage.setItem('talaba_lang', newLang);
+    } catch {
+      // ignore
+    }
+  };
 
   // Dastlabki yuklash va Server bilan sinxronizatsiya
   useEffect(() => {
@@ -389,7 +467,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* O'ng: Qidiruv, Tokenlar va Profil */}
+            {/* O'ng: Qidiruv, Tungi/Kunduzgi rejim, Til, Tokenlar va Profil */}
             <div className="flex items-center gap-3">
               {/* Tezkor qidiruv */}
               <div className="relative w-64 xl:w-80">
@@ -400,6 +478,14 @@ export default function Home() {
                   className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
                 />
               </div>
+
+              {/* Tungi / Kunduzgi rejim va Til */}
+              <ThemeLanguageSwitcher
+                currentLang={lang}
+                onLangChange={handleLangChange}
+                currentTheme={theme}
+                onThemeToggle={handleToggleTheme}
+              />
 
               {/* Tokenlar ko'rsatkichi */}
               {user.plan === 'ultra' ? (
@@ -433,15 +519,15 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        /* Guest Header (Desktop) */
-        <div className="hidden lg:block w-full max-w-6xl mx-auto px-4 pt-6 pb-2">
-          <div className="flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+        /* Guest Header (Desktop & Mobile) */
+        <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
             <div
               onClick={handleSecretLogoClick}
-              className="flex items-center gap-3 cursor-pointer group select-none"
+              className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
               title="TalabaAI (Admin: 9 marta bosing)"
             >
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
                 <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
                   <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors" size={22} />
                 </div>
@@ -451,18 +537,28 @@ export default function Home() {
                   Talaba<span className="text-indigo-400">AI</span>
                 </h1>
                 <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                  O‘zbekiston Talabalari Uchun Ta‘lim Platformasi
+                  {HEADER_TEXTS[lang]?.subtitle || HEADER_TEXTS.uz.subtitle}
                 </p>
               </div>
             </div>
 
-            <button
-              onClick={() => { window.location.href = '/login'; }}
-              className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <User size={15} />
-              <span>Tizimga Kirish / Ro‘yxatdan O‘tish</span>
-            </button>
+            {/* O'ng taraf: Tungi/Kunduzgi rejim, Til tanlash (5 ta til) va Kirish tugmasi */}
+            <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 flex-wrap">
+              <ThemeLanguageSwitcher
+                currentLang={lang}
+                onLangChange={handleLangChange}
+                currentTheme={theme}
+                onThemeToggle={handleToggleTheme}
+              />
+
+              <button
+                onClick={() => { window.location.href = '/login'; }}
+                className="px-4 sm:px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer shrink-0"
+              >
+                <User size={15} />
+                <span>{HEADER_TEXTS[lang]?.loginBtn || HEADER_TEXTS.uz.loginBtn}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
