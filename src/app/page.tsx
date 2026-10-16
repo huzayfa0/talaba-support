@@ -23,30 +23,8 @@ import {
   Language,
 } from '@/types';
 import ThemeLanguageSwitcher from '@/components/ThemeLanguageSwitcher';
+import { TRANSLATIONS } from '@/lib/translations';
 import { GraduationCap, Heart, Search, Crown, Star, Zap, User, Sparkles } from 'lucide-react';
-
-const HEADER_TEXTS: Record<Language, { subtitle: string; loginBtn: string }> = {
-  uz: {
-    subtitle: 'O‘zbekiston Talabalari Uchun Ta‘lim Platformasi',
-    loginBtn: 'Tizimga Kirish / Ro‘yxatdan O‘tish',
-  },
-  kaa: {
-    subtitle: 'Qaraqalpaqstan Talabaları Ushın Bilimlendiriw Platforması',
-    loginBtn: 'Sistemaǵa Kiriw / Dizimnen Ótiw',
-  },
-  kk: {
-    subtitle: 'Студенттерге арналған білім беру платформасы',
-    loginBtn: 'Жүйеге кіру / Тіркелу',
-  },
-  ru: {
-    subtitle: 'Образовательная платформа для студентов Узбекистана',
-    loginBtn: 'Вход в систему / Регистрация',
-  },
-  en: {
-    subtitle: 'Educational Platform for Students in Uzbekistan',
-    loginBtn: 'Sign In / Register',
-  },
-};
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>('darslar');
@@ -75,6 +53,7 @@ export default function Home() {
   // Tungi / Kunduzgi rejim va Til
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [lang, setLang] = useState<Language>('uz');
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.uz;
 
   // Dastlabki mavzu va tilni yuklash
   useEffect(() => {
@@ -451,6 +430,7 @@ export default function Home() {
         onOpenAuth={() => { window.location.href = '/login'; }}
         onLogout={handleLogout}
         user={user}
+        lang={lang}
       />
 
       {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
@@ -460,10 +440,10 @@ export default function Home() {
             {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
             <div>
               <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Assalomu alaykum, {user.name.split(' ')[0]} 👋
+                {t.header.greeting}, {user.name.split(' ')[0]} 👋
               </h1>
               <p className="text-xs text-slate-400 mt-0.5">
-                TalabaAI bilan bugungi darslar va topshiriqlaringiz tayyor
+                {t.header.greetingSub}
               </p>
             </div>
 
@@ -474,7 +454,7 @@ export default function Home() {
                 <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Darslar, mavzular yoki kontaktlar..."
+                  placeholder={t.header.searchPlaceholder}
                   className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
                 />
               </div>
@@ -491,17 +471,17 @@ export default function Home() {
               {user.plan === 'ultra' ? (
                 <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-md shadow-purple-500/10">
                   <Crown size={15} className="text-amber-300 fill-amber-300" />
-                  <span>Ultra VIP (Cheksiz)</span>
+                  <span>{t.header.ultraVIP}</span>
                 </div>
               ) : user.plan === 'premium' ? (
                 <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10">
                   <Star size={15} className="text-amber-400 fill-amber-400" />
-                  <span>Premium ({user.tokens ?? 100} token)</span>
+                  <span>{t.header.premium} ({user.tokens ?? 100} token)</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
                   <Zap size={15} className="text-indigo-400 fill-indigo-400/30" />
-                  <span>{user.tokens ?? 10} bepul token</span>
+                  <span>{user.tokens ?? 10} {t.header.freeTokens}</span>
                 </div>
               )}
 
@@ -537,7 +517,7 @@ export default function Home() {
                   Talaba<span className="text-indigo-400">AI</span>
                 </h1>
                 <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                  {HEADER_TEXTS[lang]?.subtitle || HEADER_TEXTS.uz.subtitle}
+                  {t.header.subtitle}
                 </p>
               </div>
             </div>
@@ -556,7 +536,7 @@ export default function Home() {
                 className="px-4 sm:px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer shrink-0"
               >
                 <User size={15} />
-                <span>{HEADER_TEXTS[lang]?.loginBtn || HEADER_TEXTS.uz.loginBtn}</span>
+                <span>{t.header.loginBtn}</span>
               </button>
             </div>
           </div>
@@ -569,6 +549,7 @@ export default function Home() {
         {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
           <GuestPromoBanner
             activeTab={activeTab}
+            lang={lang}
             onOpenLogin={() => {
               window.location.href = '/login';
             }}

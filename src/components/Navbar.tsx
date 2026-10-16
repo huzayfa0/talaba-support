@@ -23,7 +23,8 @@ import {
   X,
   Lock,
 } from 'lucide-react';
-import { UserProfile, NavTab } from '@/types';
+import { UserProfile, NavTab, Language } from '@/types';
+import { TRANSLATIONS } from '@/lib/translations';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -32,6 +33,7 @@ interface NavbarProps {
   onOpenAuth: () => void;
   onLogout?: () => void;
   user: UserProfile;
+  lang?: Language;
 }
 
 export default function Navbar({
@@ -41,7 +43,9 @@ export default function Navbar({
   onOpenAuth,
   onLogout,
   user,
+  lang = 'uz',
 }: NavbarProps) {
+  const t = (TRANSLATIONS[lang] || TRANSLATIONS.uz).navbar;
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isToolsFlyoutOpen, setIsToolsFlyoutOpen] = useState(false);
   const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
@@ -73,34 +77,34 @@ export default function Navbar({
   const mainTabs = [
     {
       id: 'darslar' as const,
-      label: 'Darslar',
-      fullLabel: 'Online Video Darslar',
+      label: t.darslar,
+      fullLabel: t.darslarFull,
       icon: GraduationCap,
       badge: '5 ta Bepul',
     },
     {
       id: 'darsxona' as const,
-      label: 'Darsxona',
-      fullLabel: 'Jonli Darsxona',
+      label: t.darsxona,
+      fullLabel: t.darsxonaFull,
       icon: Radio,
       badge: 'Live',
     },
     {
       id: 'groups' as const,
-      label: 'Guruhlar',
-      fullLabel: 'O‘quv Guruhlari & Chat',
+      label: t.groups,
+      fullLabel: t.groupsFull,
       icon: Users,
     },
     {
       id: 'contacts' as const,
-      label: 'Kontaktlar',
-      fullLabel: 'Kontaktlar Kitobi',
+      label: t.contacts,
+      fullLabel: t.contactsFull,
       icon: BookUser,
     },
     {
       id: 'settings' as const,
-      label: 'Sozlamalar',
-      fullLabel: 'Sozlamalar & Profil',
+      label: t.settings,
+      fullLabel: t.settingsFull,
       icon: Settings,
     },
   ];
@@ -109,36 +113,36 @@ export default function Navbar({
   const helperTools = [
     {
       id: 'presentation' as const,
-      label: 'Slaydlar',
-      fullLabel: 'Slaydlar (Gamma)',
-      desc: 'Gamma uslubida zamonaviy taqdimotlar',
+      label: t.slides,
+      fullLabel: t.slides,
+      desc: t.slidesDesc,
       icon: Presentation,
       badge: 'Gamma',
       color: 'from-indigo-500 to-purple-500',
     },
     {
       id: 'mustaqil' as const,
-      label: 'Mustaqil Ish',
-      fullLabel: 'Mustaqil Ish & Word',
-      desc: 'Word (.docx) referat va kurs ishlari',
+      label: t.mustaqil,
+      fullLabel: t.mustaqil,
+      desc: t.mustaqilDesc,
       icon: FileText,
       badge: 'Word',
       color: 'from-emerald-500 to-teal-500',
     },
     {
       id: 'research' as const,
-      label: 'Research',
-      fullLabel: 'Smart Research',
-      desc: 'Ilmiy tadqiqot va ma‘lumotlar tahlili',
+      label: t.research,
+      fullLabel: t.research,
+      desc: t.researchDesc,
       icon: Search,
       badge: 'AI',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       id: 'history' as const,
-      label: 'Ishlarim',
-      fullLabel: 'Mening Ishlarim',
-      desc: 'Saqlangan loyihalar va slaydlar tarixi',
+      label: t.history,
+      fullLabel: t.history,
+      desc: t.historyDesc,
       icon: FolderClock,
       badge: 'Tarix',
       color: 'from-amber-500 to-orange-500',
@@ -210,7 +214,7 @@ export default function Navbar({
                     <span>{tab.fullLabel}</span>
                     {isLocked ? (
                       <span className="ml-1 px-1.5 py-0.5 text-[9px] rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                        <Lock size={9} /> Kirish kerak
+                        <Lock size={9} /> {t.loginRequired}
                       </span>
                     ) : tab.badge ? (
                       <span className="ml-2 px-1.5 py-0.5 text-[9px] rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
@@ -234,7 +238,7 @@ export default function Navbar({
                   ? 'bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-600 text-white shadow-xl shadow-purple-500/35 scale-105'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
               }`}
-              aria-label="Yordamchi Dasturlar"
+              aria-label={t.helperTools}
             >
               <LayoutGrid size={24} />
             </button>
@@ -242,7 +246,7 @@ export default function Navbar({
             {/* Tooltip */}
             {hoveredDockItem === 'helper_tools' && !isToolsFlyoutOpen && (
               <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
-                <span>Yordamchi Dasturlar (Slaydlar, Mustaqil ish, AI)</span>
+                <span>{t.helperTools}</span>
               </div>
             )}
 
@@ -256,7 +260,7 @@ export default function Navbar({
                 <div className="absolute left-20 ml-3 w-80 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
                   <div className="px-3 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 mb-2 flex items-center justify-between">
                     <span className="flex items-center gap-1.5 text-indigo-300">
-                      <Sparkles size={13} /> Yordamchi Dasturlar
+                      <Sparkles size={13} /> {t.helperTools}
                     </span>
                     <button
                       onClick={() => setIsToolsFlyoutOpen(false)}
@@ -328,7 +332,7 @@ export default function Navbar({
 
             {hoveredDockItem === 'settings' && (
               <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
-                <span>Sozlamalar & Profil</span>
+                <span>{t.settingsFull}</span>
               </div>
             )}
           </div>
@@ -346,7 +350,7 @@ export default function Navbar({
                   window.location.href = '/login';
                 }
               }}
-              title={user.isLoggedIn ? `${user.name} (Profil menyusi)` : 'Kirish'}
+              title={user.isLoggedIn ? `${user.name} (${t.settings})` : t.login}
               className="w-12 h-12 rounded-[18px] bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer font-bold text-xs"
             >
               {user.isLoggedIn ? (
@@ -368,7 +372,7 @@ export default function Navbar({
                 <div className="absolute left-20 bottom-1 w-64 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3.5 text-slate-100 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
                   <div className="pb-2.5 mb-2 border-b border-slate-800">
                     <p className="text-xs font-bold text-white truncate">{user.name}</p>
-                    <p className="text-[11px] text-slate-400 truncate">{user.group || user.university || 'Talaba'}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{user.group || user.university || t.student}</p>
                     <div className="mt-2 flex items-center gap-1.5">
                       {user.plan === 'ultra' ? (
                         <span className="px-2 py-0.5 text-[10px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30 flex items-center gap-1">
@@ -397,7 +401,7 @@ export default function Navbar({
                       }}
                       className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <User size={14} className="text-indigo-400" /> Profilni tahrirlash
+                      <User size={14} className="text-indigo-400" /> {t.editProfile}
                     </button>
                     <button
                       onClick={() => {
@@ -406,7 +410,7 @@ export default function Navbar({
                       }}
                       className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <Key size={14} className="text-amber-400" /> API Kalit sozlamalari
+                      <Key size={14} className="text-amber-400" /> {t.apiKeySettings}
                     </button>
                     {onLogout && (
                       <button
@@ -416,7 +420,7 @@ export default function Navbar({
                         }}
                         className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors flex items-center gap-2 font-semibold cursor-pointer"
                       >
-                        <LogOut size={14} /> Akkountdan chiqish
+                        <LogOut size={14} /> {t.logout}
                       </button>
                     )}
                   </div>
@@ -429,7 +433,7 @@ export default function Navbar({
           {user.isLoggedIn && onLogout && (
             <button
               onClick={onLogout}
-              title="Akkountdan chiqish"
+              title={t.logout}
               className="w-11 h-11 rounded-2xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 flex items-center justify-center transition-colors cursor-pointer"
             >
               <LogOut size={18} />
@@ -463,10 +467,10 @@ export default function Navbar({
           {/* Salom matni */}
           <div className="flex flex-col">
             <span className="text-[10px] text-slate-400 font-medium leading-tight">
-              Xush kelibsiz
+              {t.welcome}
             </span>
             <h1 className="text-sm font-extrabold text-white tracking-tight truncate max-w-[150px]">
-              {user.isLoggedIn ? user.name.split(' ')[0] : 'Talaba'}
+              {user.isLoggedIn ? user.name.split(' ')[0] : t.student}
             </h1>
           </div>
         </div>
@@ -484,7 +488,7 @@ export default function Navbar({
               }`}
             >
               <LayoutGrid size={13} className="text-indigo-400" />
-              <span className="text-[11px]">Dasturlar</span>
+              <span className="text-[11px]">{t.tools}</span>
             </button>
 
             {/* Tokenlar */}
@@ -511,7 +515,7 @@ export default function Navbar({
             className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-600/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
           >
             <User size={13} />
-            <span>Kirish</span>
+            <span>{t.login}</span>
           </button>
         )}
       </header>
@@ -578,8 +582,8 @@ export default function Navbar({
                   <Sparkles size={18} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-extrabold text-white">Yordamchi Dasturlar (AI)</h3>
-                  <p className="text-[11px] text-slate-400">Slaydlar, Mustaqil ishlar va Tadqiqot</p>
+                  <h3 className="text-sm font-extrabold text-white">{t.helperTools}</h3>
+                  <p className="text-[11px] text-slate-400">{t.helperToolsDesc}</p>
                 </div>
               </div>
               <button
