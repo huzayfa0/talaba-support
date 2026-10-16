@@ -67,3 +67,34 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+
+/* ========================================================================= */
+/* SAYT XAVFSIZLIGI: MATNLARNI BELGILASH, TORTISH VA NUSXALASHNI O'CHIRISH    */
+/* ========================================================================= */
+*, *::before, *::after {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Foydalanuvchi input va textarea maydonlarida bemalol yoza olishi uchun istisno */
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Matn tanlanganda rang o'zgarmasligi uchun */
+::selection {
+  background: transparent;
+  color: inherit;
+}
+
+::-moz-selection {
+  background: transparent;
+  color: inherit;
+}
+

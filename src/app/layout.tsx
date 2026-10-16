@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import SecurityProtection from '@/components/SecurityProtection';
 
 export const metadata: Metadata = {
   title: "TalabaAI — Slaydlar (Gamma) va Mustaqil Ish Generatori",
@@ -20,7 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uz" className="dark">
-      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased select-none">
+        <SecurityProtection />
         {children}
       </body>
     </html>
