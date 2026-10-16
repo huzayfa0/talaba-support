@@ -24,15 +24,18 @@ interface GuestPromoBannerProps {
   activeTab: NavTab;
   onOpenLogin: () => void;
   lang?: Language;
+  theme?: 'dark' | 'light';
 }
 
 export default function GuestPromoBanner({
   activeTab,
   onOpenLogin,
   lang = 'uz',
+  theme = 'dark',
 }: GuestPromoBannerProps) {
   const t = (TRANSLATIONS[lang] || TRANSLATIONS.uz).banner;
   const tabTitle = t.getTabTitle(activeTab);
+  const isLight = theme === 'light';
 
   const featureIcons = [
     { icon: GraduationCap, color: 'from-emerald-500 to-teal-500' },
@@ -46,26 +49,55 @@ export default function GuestPromoBanner({
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8 animate-in fade-in duration-300">
       {/* 1. ASOSIY REKLAMA VA HERO BANNER */}
-      <div className="relative overflow-hidden rounded-[36px] bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 p-6 sm:p-10 shadow-2xl">
+      <div
+        className={`guest-promo-hero relative overflow-hidden rounded-[36px] p-6 sm:p-10 transition-all duration-300 ${
+          isLight
+            ? 'bg-white border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)]'
+            : 'bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 shadow-2xl'
+        }`}
+      >
         {/* Orqa fon bezak nurlari */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
+        {isLight ? (
+          <>
+            <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-indigo-50/90 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-purple-50/90 blur-3xl pointer-events-none" />
+          </>
+        ) : (
+          <>
+            <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
+          </>
+        )}
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto space-y-5">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-xs font-bold shadow-sm">
-            <Lock size={14} className="text-amber-400" />
+          <div
+            className={`guest-promo-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-all ${
+              isLight
+                ? 'bg-indigo-50 border border-indigo-200 text-indigo-700'
+                : 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300'
+            }`}
+          >
+            <Lock size={14} className={isLight ? 'text-amber-600' : 'text-amber-400'} />
             <span>{t.lockedBadge(tabTitle)}</span>
           </div>
 
           {/* Sarlavha */}
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
-            Talaba<span className="text-indigo-400">AI</span>
+          <h1
+            className={`text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight ${
+              isLight ? 'text-slate-900' : 'text-white'
+            }`}
+          >
+            Talaba<span className={isLight ? 'text-indigo-600' : 'text-indigo-400'}>AI</span>
             <span>{t.heroTitlePost}</span>
           </h1>
 
           {/* Ta'rif */}
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+          <p
+            className={`text-sm sm:text-base leading-relaxed max-w-2xl font-normal ${
+              isLight ? 'text-slate-600' : 'text-slate-300'
+            }`}
+          >
             {t.heroDesc(tabTitle)}
           </p>
 
@@ -84,22 +116,40 @@ export default function GuestPromoBanner({
               href="https://t.me/darsliklar_ai_bot"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className={`w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm ${
+                isLight
+                  ? 'bg-slate-50 hover:bg-slate-100 border border-slate-300 text-slate-800 hover:text-slate-950'
+                  : 'bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white'
+              }`}
             >
-              <Send size={16} className="text-sky-400" />
+              <Send size={16} className={isLight ? 'text-sky-600' : 'text-sky-400'} />
               <span>{t.btnTelegram}</span>
             </a>
           </div>
 
-          {/* Kichik ishonch belgisi */}
-          <div className="flex items-center gap-4 text-[11px] text-slate-400 pt-2">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 size={13} className="text-emerald-400" /> {t.badgeFreeReg}
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <Zap size={13} className="text-amber-400" /> {t.badgeFreeLessons}
-            </span>
+          {/* Kichik ishonch belgilari (Pill Badge'lar) - Har ikki rejimda ham 100% tiniq va o'qilishi oson */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
+            <div
+              className={`guest-promo-reg-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm ${
+                isLight
+                  ? 'bg-emerald-50 border border-emerald-300 text-emerald-900'
+                  : 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-300'
+              }`}
+            >
+              <CheckCircle2 size={16} className={isLight ? 'text-emerald-600' : 'text-emerald-400 shrink-0'} />
+              <span>{t.badgeFreeReg}</span>
+            </div>
+
+            <div
+              className={`guest-promo-lesson-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm ${
+                isLight
+                  ? 'bg-amber-50 border border-amber-300 text-amber-900'
+                  : 'bg-amber-500/15 border border-amber-500/40 text-amber-300'
+              }`}
+            >
+              <Zap size={16} className={isLight ? 'text-amber-600 fill-amber-500/20' : 'text-amber-400 fill-amber-400/20 shrink-0'} />
+              <span>{t.badgeFreeLessons}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -107,13 +157,25 @@ export default function GuestPromoBanner({
       {/* 2. REKLAMA & PLATFORMA IMKONIYoTLARI (FEATURES SHOWCASE) */}
       <div className="space-y-4">
         <div className="text-center space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-400">
+          <span
+            className={`text-[11px] font-extrabold uppercase tracking-wider ${
+              isLight ? 'text-indigo-600' : 'text-indigo-400'
+            }`}
+          >
             {t.featuresSubtitle}
           </span>
-          <h2 className="text-xl sm:text-2xl font-black text-white">
+          <h2
+            className={`text-xl sm:text-2xl font-black ${
+              isLight ? 'text-slate-900' : 'text-white'
+            }`}
+          >
             {t.featuresTitle}
           </h2>
-          <p className="text-xs text-slate-400 max-w-xl mx-auto">
+          <p
+            className={`text-xs max-w-xl mx-auto ${
+              isLight ? 'text-slate-600' : 'text-slate-400'
+            }`}
+          >
             {t.featuresDesc}
           </p>
         </div>
@@ -125,23 +187,45 @@ export default function GuestPromoBanner({
             return (
               <div
                 key={i}
-                className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800/80 hover:border-indigo-500/40 transition-all shadow-lg hover:shadow-indigo-500/10 group flex flex-col justify-between"
+                className={`guest-promo-card p-5 rounded-3xl transition-all group flex flex-col justify-between ${
+                  isLight
+                    ? 'bg-white border border-slate-200/90 shadow-md hover:shadow-xl hover:border-indigo-300'
+                    : 'bg-slate-900/70 border border-slate-800/80 hover:border-indigo-500/40 shadow-lg hover:shadow-indigo-500/10'
+                }`}
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className={`w-11 h-11 rounded-2xl bg-gradient-to-tr ${iconObj.color} p-0.5 flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform`}>
+                    <div
+                      className={`w-11 h-11 rounded-2xl bg-gradient-to-tr ${iconObj.color} p-0.5 flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform`}
+                    >
                       <Icon size={20} />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
+                    <span
+                      className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                        isLight
+                          ? 'bg-slate-100 border-slate-200 text-slate-700'
+                          : 'bg-slate-800 border-slate-700 text-slate-300'
+                      }`}
+                    >
                       {f.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
+                  <h3
+                    className={`text-sm font-bold transition-colors ${
+                      isLight
+                        ? 'text-slate-900 group-hover:text-indigo-600'
+                        : 'text-white group-hover:text-indigo-300'
+                    }`}
+                  >
                     {f.title}
                   </h3>
 
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p
+                    className={`text-xs leading-relaxed ${
+                      isLight ? 'text-slate-600' : 'text-slate-400'
+                    }`}
+                  >
                     {f.desc}
                   </p>
                 </div>
@@ -152,18 +236,42 @@ export default function GuestPromoBanner({
       </div>
 
       {/* 3. RO'YXATDAN O'TISHNI TUSHUNTIRISH (QANDAY QILIB RO'YXATDAN O'TILADI?) */}
-      <div className="rounded-[32px] bg-slate-900/80 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div
+        className={`guest-promo-card rounded-[32px] p-6 sm:p-8 space-y-6 transition-all ${
+          isLight
+            ? 'bg-white border border-slate-200/90 shadow-xl'
+            : 'bg-slate-900/80 border border-slate-800 shadow-xl'
+        }`}
+      >
+        <div
+          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 ${
+            isLight ? 'border-slate-200' : 'border-slate-800'
+          }`}
+        >
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center">
+              <div
+                className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  isLight
+                    ? 'bg-indigo-100 text-indigo-700'
+                    : 'bg-indigo-500/20 text-indigo-300'
+                }`}
+              >
                 <HelpCircle size={18} />
               </div>
-              <h2 className="text-lg sm:text-xl font-black text-white">
+              <h2
+                className={`text-lg sm:text-xl font-black ${
+                  isLight ? 'text-slate-900' : 'text-white'
+                }`}
+              >
                 {t.stepsTitle}
               </h2>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p
+              className={`text-xs mt-1 ${
+                isLight ? 'text-slate-600' : 'text-slate-400'
+              }`}
+            >
               {t.stepsDesc}
             </p>
           </div>
@@ -181,15 +289,27 @@ export default function GuestPromoBanner({
           {t.steps.map((s, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 space-y-2.5 relative"
+              className={`guest-promo-step-card p-4 rounded-2xl space-y-2.5 relative transition-all ${
+                isLight
+                  ? 'bg-slate-50 border border-slate-200/90 shadow-sm'
+                  : 'bg-slate-950/70 border border-slate-800/80'
+              }`}
             >
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-black text-sm flex items-center justify-center shadow-md">
                 {s.step}
               </div>
-              <h4 className="text-xs font-bold text-white leading-snug">
+              <h4
+                className={`text-xs font-bold leading-snug ${
+                  isLight ? 'text-slate-900' : 'text-white'
+                }`}
+              >
                 {s.title}
               </h4>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p
+                className={`text-[11px] leading-relaxed ${
+                  isLight ? 'text-slate-600' : 'text-slate-400'
+                }`}
+              >
                 {s.desc}
               </p>
             </div>
@@ -198,19 +318,37 @@ export default function GuestPromoBanner({
       </div>
 
       {/* 4. PASTKI CHAQIRUV BLOKI (BOTTOM CALLOUT) */}
-      <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left shadow-xl">
+      <div
+        className={`guest-promo-callout p-6 sm:p-8 rounded-[32px] flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left shadow-xl transition-all ${
+          isLight
+            ? 'bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 border border-indigo-200/80 shadow-md'
+            : 'bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900 border border-indigo-500/30'
+        }`}
+      >
         <div className="space-y-1.5">
-          <h3 className="text-base sm:text-lg font-black text-white">
+          <h3
+            className={`text-base sm:text-lg font-black ${
+              isLight ? 'text-slate-900' : 'text-white'
+            }`}
+          >
             {t.calloutTitle}
           </h3>
-          <p className="text-xs text-slate-300 max-w-xl">
+          <p
+            className={`text-xs max-w-xl ${
+              isLight ? 'text-slate-600' : 'text-slate-300'
+            }`}
+          >
             {t.calloutDesc}
           </p>
         </div>
 
         <button
           onClick={onOpenLogin}
-          className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-950 font-black text-xs shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+          className={`guest-promo-callout-btn px-6 py-3 rounded-2xl font-black text-xs shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+            isLight
+              ? 'bg-slate-900 hover:bg-slate-800 text-white shadow-slate-900/20'
+              : 'bg-white hover:bg-slate-100 text-slate-950'
+          }`}
         >
           <LogIn size={16} />
           <span>{t.calloutBtn}</span>

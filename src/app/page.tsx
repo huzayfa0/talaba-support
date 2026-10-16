@@ -550,6 +550,7 @@ export default function Home() {
           <GuestPromoBanner
             activeTab={activeTab}
             lang={lang}
+            theme={theme}
             onOpenLogin={() => {
               window.location.href = '/login';
             }}
