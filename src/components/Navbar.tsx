@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, NavTab, Language } from '@/types';
 import { TRANSLATIONS } from '@/lib/translations';
+import ThemeLanguageSwitcher from '@/components/ThemeLanguageSwitcher';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -34,6 +35,9 @@ interface NavbarProps {
   onLogout?: () => void;
   user: UserProfile;
   lang?: Language;
+  currentTheme?: 'dark' | 'light';
+  onThemeToggle?: () => void;
+  onLangChange?: (lang: Language) => void;
 }
 
 export default function Navbar({
@@ -44,6 +48,9 @@ export default function Navbar({
   onLogout,
   user,
   lang = 'uz',
+  currentTheme,
+  onThemeToggle,
+  onLangChange,
 }: NavbarProps) {
   const t = (TRANSLATIONS[lang] || TRANSLATIONS.uz).navbar;
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -445,50 +452,56 @@ export default function Navbar({
 
       {/* ========================================================================= */}
       {/* 2. SMARTFON / MOBIL (1-RASM): YUQORI SALOMLASHISH PANELI (< lg)           */}
+      {/* Faqat tizimga kirgan foydalanuvchilar uchun ko'rinadi                       */}
       {/* ========================================================================= */}
-      <header className="lg:hidden sticky top-0 z-40 w-full bg-slate-950/90 backdrop-blur-2xl border-b border-slate-800/80 px-3.5 py-2.5 flex items-center justify-between">
-        {/* Chap: Avatar va Salomlashuv (1-rasmdagidek) */}
-        <div className="flex items-center gap-2.5">
-          {/* Avatar (9 marta bosganda admin konsol ochiladi) */}
-          <div
-            onClick={handleSecretIconClick}
-            className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-md shadow-indigo-500/20 active:scale-95 transition-transform cursor-pointer shrink-0"
-            title="Profil / Admin"
-          >
-            <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-white font-bold text-xs">
-              {user.isLoggedIn ? (
-                user.name.slice(0, 2).toUpperCase()
-              ) : (
-                <User size={16} className="text-indigo-400" />
-              )}
+      {user.isLoggedIn && (
+        <header className="lg:hidden sticky top-0 z-40 w-full bg-slate-950/90 backdrop-blur-2xl border-b border-slate-800/80 px-3 py-2 flex items-center justify-between">
+          {/* Chap: Avatar va Salomlashuv (1-rasmdagidek) */}
+          <div className="flex items-center gap-2">
+            {/* Avatar (9 marta bosganda admin konsol ochiladi) */}
+            <div
+              onClick={handleSecretIconClick}
+              className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-md shadow-indigo-500/20 active:scale-95 transition-transform cursor-pointer shrink-0"
+              title="Profil / Admin"
+            >
+              <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-white font-bold text-xs">
+                {user.name.slice(0, 2).toUpperCase()}
+              </div>
+            </div>
+
+            {/* Salom matni */}
+            <div className="flex flex-col">
+              <span className="text-[10px] text-slate-400 font-medium leading-tight">
+                {t.welcome}
+              </span>
+              <h1 className="text-xs sm:text-sm font-extrabold text-white tracking-tight truncate max-w-[110px] sm:max-w-[140px]">
+                {user.name.split(' ')[0]}
+              </h1>
             </div>
           </div>
 
-          {/* Salom matni */}
-          <div className="flex flex-col">
-            <span className="text-[10px] text-slate-400 font-medium leading-tight">
-              {t.welcome}
-            </span>
-            <h1 className="text-sm font-extrabold text-white tracking-tight truncate max-w-[150px]">
-              {user.isLoggedIn ? user.name.split(' ')[0] : t.student}
-            </h1>
-          </div>
-        </div>
-
-        {/* O'ng: Tizimga kirish yoki Tokenlar */}
-        {user.isLoggedIn ? (
+          {/* O'ng: Tungi/Kunduzgi rejim, Til, Yordamchi Dasturlar va Tokenlar */}
           <div className="flex items-center gap-1.5">
+            {currentTheme && onThemeToggle && onLangChange && (
+              <ThemeLanguageSwitcher
+                currentLang={lang}
+                onLangChange={onLangChange}
+                currentTheme={currentTheme}
+                onThemeToggle={onThemeToggle}
+              />
+            )}
+
             {/* AI Yordamchi Dasturlar Sheet Trigger */}
             <button
               onClick={() => setIsMobileToolsOpen(true)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-2 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
                 isHelperToolActive
                   ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20'
                   : 'bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
               }`}
             >
               <LayoutGrid size={13} className="text-indigo-400" />
-              <span className="text-[11px]">{t.tools}</span>
+              <span className="text-[11px] hidden sm:inline">{t.tools}</span>
             </button>
 
             {/* Tokenlar */}
@@ -509,16 +522,8 @@ export default function Navbar({
               </div>
             )}
           </div>
-        ) : (
-          <button
-            onClick={() => { window.location.href = '/login'; }}
-            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-600/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
-          >
-            <User size={13} />
-            <span>{t.login}</span>
-          </button>
-        )}
-      </header>
+        </header>
+      )}
 
       {/* ========================================================================= */}
       {/* 3. SMARTFON / MOBIL (1-RASM): PASTKI NAVIGATSIYA PANELI (< lg)            */}

@@ -431,6 +431,9 @@ export default function Home() {
         onLogout={handleLogout}
         user={user}
         lang={lang}
+        currentTheme={theme}
+        onThemeToggle={handleToggleTheme}
+        onLangChange={handleLangChange}
       />
 
       {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
@@ -501,7 +504,11 @@ export default function Home() {
       ) : (
         /* Guest Header (Desktop & Mobile) */
         <div className="relative z-50 w-full max-w-6xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-2">
-          <div className="relative z-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-xl">
+          <div className={`relative z-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-3xl backdrop-blur-xl border transition-all ${
+            theme === 'light'
+              ? 'bg-white/95 border-slate-200/90 shadow-lg shadow-slate-200/50'
+              : 'bg-slate-900/70 border-slate-800/80 shadow-xl'
+          }`}>
             <div
               onClick={handleSecretLogoClick}
               className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
@@ -533,10 +540,11 @@ export default function Home() {
 
               <button
                 onClick={() => { window.location.href = '/login'; }}
-                className="px-4 sm:px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer shrink-0"
+                className="px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/25 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer shrink-0"
               >
                 <User size={15} />
-                <span>{t.header.loginBtn}</span>
+                <span className="hidden sm:inline">{t.header.loginBtn}</span>
+                <span className="sm:hidden">{t.navbar.login}</span>
               </button>
             </div>
           </div>
