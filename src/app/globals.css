@@ -111,15 +111,18 @@ html.light body {
 }
 
 html.light .bg-slate-950,
+html.light .bg-slate-950\/60,
 html.light .bg-slate-950\/80,
 html.light .bg-slate-950\/90,
 html.light .bg-\[\#020617\],
 html.light .bg-\[\#030712\] {
-  background-color: #f1f5f9 !important;
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
 html.light .bg-slate-900,
 html.light .bg-slate-900\/50,
+html.light .bg-slate-900\/60,
 html.light .bg-slate-900\/70,
 html.light .bg-slate-900\/80,
 html.light .bg-slate-900\/90,
@@ -130,6 +133,15 @@ html.light .bg-\[\#0a0f1d\]\/90,
 html.light .bg-\[\#111927\]\/90,
 html.light .bg-\[\#111927\]\/95 {
   background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-slate-800,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/70,
+html.light .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
   border-color: #e2e8f0 !important;
 }
 
@@ -151,6 +163,7 @@ html.light .text-slate-400 {
 }
 
 html.light .border-slate-800,
+html.light .border-slate-800\/60,
 html.light .border-slate-800\/80,
 html.light .border-slate-700,
 html.light .border-slate-700\/60,
@@ -174,8 +187,279 @@ html.light option {
 html.light button.bg-gradient-to-r,
 html.light button.bg-gradient-to-r *,
 html.light a.bg-gradient-to-r,
-html.light a.bg-gradient-to-r * {
+html.light a.bg-gradient-to-r *,
+html.light .bg-emerald-600,
+html.light .bg-emerald-600 *,
+html.light .bg-emerald-500,
+html.light .bg-emerald-500 *,
+html.light .bg-teal-600,
+html.light .bg-teal-600 *,
+html.light .bg-cyan-500,
+html.light .bg-cyan-500 *,
+html.light .bg-blue-600,
+html.light .bg-blue-600 *,
+html.light .bg-purple-600,
+html.light .bg-purple-600 *,
+html.light .bg-rose-600,
+html.light .bg-rose-600 * {
   color: #ffffff !important;
+}
+
+/* ========================================================================= */
+/* VIDEO COURSES MANAGER LIGHT MODE MAXIMAL CONTRAST & READABILITY            */
+/* ========================================================================= */
+html.light .course-main-wrapper {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light .course-card {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .course-card:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .course-card-selected {
+  background-color: #ecfdf5 !important;
+  background-image: none !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.16) !important;
+}
+
+html.light .course-card h3,
+html.light .course-card-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+html.light .course-card-selected h3,
+html.light .course-card-selected .course-card-title {
+  color: #064e3b !important;
+  font-weight: 700 !important;
+}
+
+html.light .course-card p,
+html.light .course-card-desc {
+  color: #475569 !important;
+}
+
+html.light .course-card-selected p,
+html.light .course-card-selected .course-card-desc {
+  color: #047857 !important;
+}
+
+html.light .course-card-icon {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .course-card-selected .course-card-icon {
+  background-color: #d1fae5 !important;
+  border-color: #a7f3d0 !important;
+}
+
+html.light .course-card-badge {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+html.light .course-card-selected .course-card-badge {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #86efac !important;
+  font-weight: 700 !important;
+}
+
+html.light .course-card-footer {
+  border-top-color: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+html.light .course-free-text {
+  color: #059669 !important;
+  font-weight: 800 !important;
+}
+
+html.light .course-cat-active {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+html.light .course-cat-active * {
+  color: #ffffff !important;
+}
+
+html.light .course-cat-btn {
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light .course-cat-btn:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Playlist Right Sidebar */
+html.light .course-playlist-container {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .playlist-header {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html.light .playlist-header h3 {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+html.light .playlist-header span {
+  color: #64748b !important;
+}
+
+html.light .course-lesson-item {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .course-lesson-item:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .course-lesson-item .lesson-row-title {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+html.light .course-lesson-item .lesson-row-time {
+  color: #64748b !important;
+}
+
+html.light .course-lesson-active {
+  background: #ecfdf5 !important;
+  background-image: none !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.12) !important;
+}
+
+html.light .course-lesson-active .lesson-row-title {
+  color: #064e3b !important;
+  font-weight: 700 !important;
+}
+
+html.light .course-lesson-active .lesson-row-time {
+  color: #047857 !important;
+}
+
+html.light .lesson-icon-active {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+html.light .lesson-icon-active * {
+  color: #ffffff !important;
+}
+
+html.light .lesson-icon-allowed {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .lesson-icon-locked {
+  background-color: #f1f5f9 !important;
+  color: #94a3b8 !important;
+}
+
+html.light .badge-free {
+  background-color: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: #86efac !important;
+  font-weight: 800 !important;
+}
+
+html.light .badge-opened {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #6ee7b7 !important;
+  font-weight: 700 !important;
+}
+
+html.light .badge-buy {
+  background-color: #f3e8ff !important;
+  color: #6b21a8 !important;
+  border-color: #d8b4fe !important;
+  font-weight: 700 !important;
+}
+
+html.light .badge-buy:hover {
+  background-color: #e9d5ff !important;
+  color: #581c87 !important;
+}
+
+html.light .course-notice-box {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+}
+
+html.light .course-notice-box strong {
+  color: #78350f !important;
+}
+
+html.light .lesson-detail-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+html.light .lesson-detail-meta {
+  color: #475569 !important;
+}
+
+html.light .lesson-detail-desc {
+  color: #334155 !important;
+}
+
+html.light .bg-purple-950\/20,
+html.light .bg-purple-950\/30 {
+  background-color: #faf5ff !important;
+  border-color: #e9d5ff !important;
+}
+
+html.light .bg-emerald-950\/20,
+html.light .bg-emerald-950\/30,
+html.light .bg-emerald-950\/40 {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+}
+
+html.light .bg-purple-500\/10,
+html.light .bg-purple-500\/20 {
+  background-color: #f3e8ff !important;
+  border-color: #d8b4fe !important;
+  color: #6b21a8 !important;
+}
+
+html.light .bg-emerald-500\/10,
+html.light .bg-emerald-500\/20 {
+  background-color: #dcfce7 !important;
+  border-color: #86efac !important;
+  color: #15803d !important;
 }
 
 /* GuestPromoBanner Light Mode Adaptations */

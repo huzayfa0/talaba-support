@@ -416,8 +416,8 @@ export default function VideoCoursesManager({
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    ? 'course-cat-active bg-emerald-600 text-white shadow'
+                    : 'course-cat-btn bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                 }`}
               >
                 {cat === 'all' ? 'Barcha Fanlar' : cat}
@@ -451,29 +451,29 @@ export default function VideoCoursesManager({
                   const firstLesson = subLessons[0];
                   if (firstLesson) setActiveLessonId(firstLesson.id);
                 }}
-                className={`p-4 rounded-2xl text-left transition-all border cursor-pointer relative overflow-hidden ${
+                className={`course-card ${isSelected ? 'course-card-selected' : ''} p-4 rounded-2xl text-left transition-all border cursor-pointer relative overflow-hidden ${
                   isSelected
                     ? 'bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
                     : 'bg-slate-900/70 border-slate-800/80 hover:bg-slate-800/50 hover:border-slate-700'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-xl shrink-0">
+                  <div className="course-card-icon w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-xl shrink-0">
                     {sub.icon || '🎓'}
                   </div>
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="course-card-badge px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                     {subLessons.length} ta dars
                   </span>
                 </div>
 
-                <h3 className="text-xs font-bold text-white line-clamp-1 mb-1">{sub.title}</h3>
-                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
+                <h3 className="course-card-title text-xs font-bold text-white line-clamp-1 mb-1">{sub.title}</h3>
+                <p className="course-card-desc text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
                   {sub.description}
                 </p>
 
-                <div className="flex items-center justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/60">
+                <div className="course-card-footer flex items-center justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/60">
                   <span className="truncate">O‘qituvchi: {sub.instructorName}</span>
-                  <span className="text-emerald-400 font-bold shrink-0">5 ta bepul</span>
+                  <span className="course-free-text text-emerald-400 font-bold shrink-0">5 ta bepul</span>
                 </div>
               </button>
             );
@@ -483,7 +483,7 @@ export default function VideoCoursesManager({
 
       {/* Asosiy Video Player & Playlist (Grid 12 col) */}
       {currentSubject && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl">
+        <div className="course-main-wrapper grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl">
           {/* Chap: Video Player Maydoni (8 col) */}
           <div className="lg:col-span-8 flex flex-col space-y-4">
             <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
@@ -568,21 +568,21 @@ export default function VideoCoursesManager({
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm sm:text-base font-bold text-white">
+                    <span className="lesson-detail-title text-sm sm:text-base font-bold text-white">
                       {activeLesson.title}
                     </span>
                     {activeLesson.isFree ? (
-                      <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      <span className="badge-free px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                         Bepul Dars
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                      <span className="badge-buy px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
                         <Lock size={10} /> Pullik (Premium)
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-slate-400 font-medium">
+                  <div className="lesson-detail-meta flex items-center gap-3 text-xs text-slate-400 font-medium">
                     <span className="flex items-center gap-1">
                       <Clock size={13} /> {activeLesson.durationMinutes} daqiqa
                     </span>
@@ -593,7 +593,7 @@ export default function VideoCoursesManager({
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="lesson-detail-desc text-xs text-slate-300 leading-relaxed">
                   {activeLesson.description}
                 </p>
               </div>
@@ -601,8 +601,8 @@ export default function VideoCoursesManager({
           </div>
 
           {/* O'ng: Pleylist (Darslar ro'yxati) (4 col) */}
-          <div className="lg:col-span-4 flex flex-col bg-slate-950/60 rounded-2xl border border-slate-800 p-3.5 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div className="course-playlist-container lg:col-span-4 flex flex-col bg-slate-950/60 rounded-2xl border border-slate-800 p-3.5 space-y-3">
+            <div className="playlist-header flex items-center justify-between pb-2 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <BookOpen size={16} className="text-emerald-400" />
                 <h3 className="text-xs font-bold text-white">Fanning Barcha Darslari</h3>
@@ -627,7 +627,9 @@ export default function VideoCoursesManager({
                     <div
                       key={lesson.id}
                       onClick={() => handleSelectLesson(lesson)}
-                      className={`p-2.5 rounded-xl transition-all border flex items-center justify-between gap-2.5 cursor-pointer ${
+                      className={`course-lesson-row ${
+                        isActive ? 'course-lesson-active' : 'course-lesson-item'
+                      } p-2.5 rounded-xl transition-all border flex items-center justify-between gap-2.5 cursor-pointer ${
                         isActive
                           ? 'bg-gradient-to-r from-emerald-950/60 to-slate-900 border-emerald-500/40 text-white shadow-md'
                           : 'bg-slate-900/60 border-slate-800/60 hover:bg-slate-800/60 text-slate-300'
@@ -635,22 +637,22 @@ export default function VideoCoursesManager({
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
-                          className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${
+                          className={`course-lesson-icon ${
                             isActive
-                              ? 'bg-emerald-600 text-white'
+                              ? 'lesson-icon-active bg-emerald-600 text-white'
                               : isAllowed
-                              ? 'bg-slate-800 text-slate-300'
-                              : 'bg-slate-800/60 text-slate-500'
-                          }`}
+                              ? 'lesson-icon-allowed bg-slate-800 text-slate-300'
+                              : 'lesson-icon-locked bg-slate-800/60 text-slate-500'
+                          } w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0`}
                         >
                           {isAllowed ? <Play size={12} className="ml-0.5" /> : <Lock size={12} />}
                         </div>
 
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold truncate leading-snug">
+                          <p className="lesson-row-title text-xs font-semibold truncate leading-snug">
                             {lesson.title}
                           </p>
-                          <p className="text-[10px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                          <p className="lesson-row-time text-[10px] text-slate-400 flex items-center gap-1.5 mt-0.5">
                             <Clock size={10} /> {lesson.durationMinutes} min
                           </p>
                         </div>
@@ -658,11 +660,11 @@ export default function VideoCoursesManager({
 
                       <div className="flex items-center gap-1.5 shrink-0">
                         {lesson.isFree ? (
-                          <span className="px-2 py-0.5 text-[9px] font-bold rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="badge-free px-2 py-0.5 text-[9px] font-bold rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                             BEPUL
                           </span>
                         ) : purchasedLessonIds.includes(lesson.id) || purchasedCourseIds.includes(lesson.courseId) ? (
-                          <span className="px-2 py-0.5 text-[9px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-0.5">
+                          <span className="badge-opened px-2 py-0.5 text-[9px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-0.5">
                             <Check size={9} /> OCHILGAN
                           </span>
                         ) : (
@@ -671,7 +673,7 @@ export default function VideoCoursesManager({
                               e.stopPropagation();
                               setLessonToBuy(lesson);
                             }}
-                            className="px-2 py-0.5 text-[9px] font-bold rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 flex items-center gap-1 cursor-pointer transition-colors"
+                            className="badge-buy px-2 py-0.5 text-[9px] font-bold rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 flex items-center gap-1 cursor-pointer transition-colors"
                             title="Darsni alohida sotib olish"
                           >
                             <ShoppingCart size={9} /> SOTIB OLISH
@@ -699,7 +701,7 @@ export default function VideoCoursesManager({
             </div>
 
             {/* Qisqacha eslatma */}
-            <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[10px] text-slate-400 leading-relaxed">
+            <div className="course-notice-box p-3 rounded-xl bg-slate-900 border border-slate-800 text-[10px] text-slate-400 leading-relaxed">
               💡 Har bir fanning 1-darsidan 5-darsigacha <strong>mutlaqo bepul</strong>. 6-darsdan boshlab darslarni ko‘rish uchun Premium yoki Ultra VIP kerak.
             </div>
           </div>
