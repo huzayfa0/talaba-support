@@ -10,23 +10,49 @@ import {
   Sparkles,
   CheckCircle2,
   ShieldAlert,
-  Send,
   Lock,
   Phone,
   User,
   KeyRound,
-  RotateCw,
-  ExternalLink,
-  AlertTriangle
+  AlertTriangle,
+  GraduationCap,
+  Mail,
+  AtSign,
+  UserCheck,
 } from 'lucide-react';
 import { UserProfile } from '@/types';
 
-type AuthViewMode = 'login' | 'reg_info' | 'reg_otp' | 'reg_password' | 'blocked';
+type AuthViewMode = 'login' | 'register' | 'blocked';
+
+const UZBEK_UNIVERSITIES = [
+  "Toshkent axborot texnologiyalari universiteti (TATU)",
+  "O‘zbekiston Milliy universiteti (O‘zMU)",
+  "Toshkent davlat iqtisodiyot universiteti (TDIU)",
+  "Toshkent davlat yuridik universiteti (TDYU)",
+  "Toshkent davlat texnika universiteti (TDTU)",
+  "Toshkent davlat pedagogika universiteti (TDPU)",
+  "Jahon iqtisodiyoti va diplomatiya universiteti (JIDU)",
+  "Samarqand davlat universiteti (SamDU)",
+  "Farg‘ona davlat universiteti (FarDU)",
+  "Andijon davlat universiteti (ADU)",
+  "Namangan davlat universiteti (NamDU)",
+  "Buxoro davlat universiteti (BuxDU)",
+  "Urganch davlat universiteti (UrDU)",
+  "Qarshi davlat universiteti (QarDU)",
+  "Termiz davlat universiteti (TerDU)",
+  "Guliston davlat universiteti (GulDU)",
+  "Inha universiteti (Toshkent)",
+  "Amity universiteti (Toshkent)",
+  "Turin politexnika universiteti (Toshkent)",
+  "Webster universiteti (Toshkent)",
+  "Yangi O‘zbekiston universiteti",
+  "Toshkent tibbiyot akademiyasi (TTA)",
+];
 
 export default function LoginPage() {
   const router = useRouter();
 
-  // Qurilma ID va holatlar
+  // Qurilma ID va ko'rinish holati
   const [deviceId, setDeviceId] = useState<string>('');
   const [viewMode, setViewMode] = useState<AuthViewMode>('login');
 
@@ -41,16 +67,16 @@ export default function LoginPage() {
   const [maxAttempts, setMaxAttempts] = useState<number>(20);
   const [blockReason, setBlockReason] = useState<string>('');
 
-  // Ro'yxatdan o'tish formasi
+  // Yangi to'liq registratsiya formasi
   const [regName, setRegName] = useState<string>('');
+  const [regUsername, setRegUsername] = useState<string>('');
+  const [regUniversity, setRegUniversity] = useState<string>('Toshkent axborot texnologiyalari universiteti (TATU)');
+  const [regEmail, setRegEmail] = useState<string>('');
   const [regPhone, setRegPhone] = useState<string>('+998 ');
-  const [regTelegram, setRegTelegram] = useState<string>('');
-  const [regOtpCode, setRegOtpCode] = useState<string>('');
+  const [regGender, setRegGender] = useState<'erkak' | 'ayol'>('erkak');
   const [regPassword, setRegPassword] = useState<string>('');
   const [regConfirmPassword, setRegConfirmPassword] = useState<string>('');
-  const [botUsername, setBotUsername] = useState<string>('darsliklar_ai_bot');
-  const [otpTimer, setOtpTimer] = useState<number>(300); // 5 daqiqa
-  const [demoCodeNotice, setDemoCodeNotice] = useState<string | null>(null);
+  const [showRegPassword, setShowRegPassword] = useState<boolean>(false);
 
   // Xabarlar va yuklanish
   const [loading, setLoading] = useState<boolean>(false);
@@ -90,17 +116,6 @@ export default function LoginPage() {
       .catch(() => {});
   }, []);
 
-  // OTP Timer sanagichi
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (viewMode === 'reg_otp' && otpTimer > 0) {
-      interval = setInterval(() => {
-        setOtpTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [viewMode, otpTimer]);
-
   // Telefon raqami formatlash
   const handlePhoneChange = (val: string, setter: (v: string) => void) => {
     if (!val.startsWith('+998')) {
@@ -110,7 +125,7 @@ export default function LoginPage() {
     setter(val);
   };
 
-  // 1. LOGIN: Telefon / Login va Parol bilan to'g'ridan-to'g'ri tizimga kirish
+  // 1. LOGIN: Telefon / Login / Gmail va Parol bilan tizimga kirish
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -118,7 +133,7 @@ export default function LoginPage() {
 
     const idVal = loginPhone.trim();
     if (!idVal) {
-      setErrorMsg('Iltimos, telefon raqamingiz yoki loginingizni kiriting');
+      setErrorMsg('Iltimos, login, telefon raqam yoki gmailingizni kiriting');
       return;
     }
 
@@ -162,8 +177,8 @@ export default function LoginPage() {
       setSuccessMsg(`Xush kelibsiz, ${user.name}! Bosh sahifaga yo‘naltirilmoqda...`);
 
       setTimeout(() => {
-        router.push('/');
-      }, 700);
+        window.location.href = '/';
+      }, 600);
     } catch {
       setErrorMsg('Tizimga kirishda xatolik yuz berdi');
     } finally {
@@ -171,30 +186,65 @@ export default function LoginPage() {
     }
   };
 
-  // 3. REGISTRATSIYA: Telegramga OTP kod yuborish (1-bosqich)
-  const handleSendTelegramOtp = async (e: React.FormEvent) => {
+  // 2. YANGI TO'LIQ REGISTRATSIYA
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    if (!regName.trim()) {
-      setErrorMsg('Iltimos, ismingizni kiriting');
+    const name = regName.trim();
+    if (!name || name.length < 3) {
+      setErrorMsg('Iltimos, ism va familiyangizni to‘liq kiriting (kamida 3 ta belgi)');
       return;
     }
 
-    if (regPhone.replace(/[^0-9]/g, '').length < 9) {
-      setErrorMsg('Iltimos, to‘liq telefon raqamingizni kiriting');
+    const username = regUsername.trim().toLowerCase();
+    if (!username || username.length < 3) {
+      setErrorMsg('Iltimos, yangi login kiriting (kamida 3 ta belgi, masalan: sardor99)');
+      return;
+    }
+
+    const university = regUniversity.trim();
+    if (!university) {
+      setErrorMsg('Iltimos, o‘qiyotgan universitetingiz (OTM)ni kiriting yoki tanlang');
+      return;
+    }
+
+    const email = regEmail.trim().toLowerCase();
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      setErrorMsg('Iltimos, to‘g‘ri elektron pochta (Gmail) manzilini kiriting');
+      return;
+    }
+
+    const phoneDigits = regPhone.replace(/[^0-9]/g, '');
+    if (phoneDigits.length < 9) {
+      setErrorMsg('Iltimos, to‘liq telefon raqamingizni kiriting (+998...)');
+      return;
+    }
+
+    if (!regPassword || regPassword.length < 4) {
+      setErrorMsg('Parol kamida 4 ta belgidan iborat bo‘lishi kerak');
+      return;
+    }
+
+    if (regPassword !== regConfirmPassword) {
+      setErrorMsg('Kiritilgan ikkala yangi parol bir-biriga mos kelmadi');
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/send-otp', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone: regPhone,
-          telegramUsername: regTelegram,
+          name,
+          username,
+          university,
+          email,
+          phone: regPhone.trim(),
+          gender: regGender,
+          password: regPassword,
           deviceId,
         }),
       });
@@ -202,111 +252,34 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (data.isBlocked) {
+        localStorage.setItem('talaba_device_blocked', 'true');
         setViewMode('blocked');
-        setBlockReason(data.error);
+        setBlockReason(data.error || 'Qurilma xavfsizlik filtri orqali bloklangan');
         return;
       }
 
       if (!res.ok || !data.success) {
-        setErrorMsg(data.error || 'Tasdiqlash kodini yuborib bo‘lmadi');
+        setErrorMsg(data.error || 'Ro‘yxatdan o‘tishda xatolik yuz berdi');
         return;
       }
 
-      setBotUsername(data.botUsername || 'TalabaAIBot');
-      if (data.isSimulated && data.demoCode) {
-        setDemoCodeNotice(`Tasdiqlash kodi: ${data.demoCode}`);
-      } else {
-        setDemoCodeNotice(null);
-      }
-
-      setSuccessMsg(data.message || 'Tasdiqlash kodi Telegramga yuborildi!');
-      setOtpTimer(300);
-      setViewMode('reg_otp');
-    } catch {
-      setErrorMsg('Telegram serveriga ulanishda xatolik yuz berdi');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 4. REGISTRATSIYA: Kodni tekshirish (2-bosqich)
-  const handleVerifyOtpSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-
-    if (regOtpCode.trim().length !== 4) {
-      setErrorMsg('Tasdiqlash kodi 4 ta raqamdan iborat bo‘lishi kerak');
-      return;
-    }
-
-    // Kod to'g'ri ko'rinishda bo'lsa, parol o'rnatish bosqichiga o'tamiz
-    setViewMode('reg_password');
-  };
-
-  // 5. REGISTRATSIYA: Parol o'rnatish va akkountni yakunlash (3-bosqich)
-  const handleFinalRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    if (regPassword.length < 4) {
-      setErrorMsg('Parol kamida 4 ta belgidan iborat bo‘lishi kerak');
-      return;
-    }
-
-    if (regPassword !== regConfirmPassword) {
-      setErrorMsg('Kiritilgan ikkala parol bir-biriga mos kelmadi');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: regPhone,
-          code: regOtpCode.trim(),
-          name: regName.trim(),
-          password: regPassword,
-          telegramUsername: regTelegram,
-          deviceId,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        setErrorMsg(data.error || 'Akkountni tasdiqlashda xatolik yuz berdi');
-        if (data.error && data.error.includes('kod')) {
-          setViewMode('reg_otp');
-        }
-        return;
-      }
-
+      // Muvaffaqiyatli ro'yxatdan o'tildi!
       const user: UserProfile = data.user;
       localStorage.setItem('talaba_user_profile', JSON.stringify(user));
-      setSuccessMsg('Muvaffaqiyatli ro‘yxatdan o‘tdingiz! Bosh sahifaga yo‘naltirilmoqda...');
+      setSuccessMsg(`Tabriklaymiz, ${user.name}! Muvaffaqiyatli ro‘yxatdan o‘tdingiz. Tizimga yo‘naltirilmoqda...`);
 
       setTimeout(() => {
-        router.push('/');
-      }, 900);
+        window.location.href = '/';
+      }, 700);
     } catch {
-      setErrorMsg('Ro‘yxatdan o‘tishda xatolik yuz berdi');
+      setErrorMsg('Ro‘yxatdan o‘tishda tarmoq xatoligi yuz berdi');
     } finally {
       setLoading(false);
     }
-  };
-
-  // Format timer (mm:ss)
-  const formatTimer = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden bg-[#030712] text-slate-100 flex flex-col justify-between relative selection:bg-cyan-500 selection:text-black">
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col justify-between relative selection:bg-cyan-500 selection:text-black overflow-x-hidden">
       {/* Top Navbar Header */}
       <header className="w-full px-4 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between z-30 relative max-w-7xl mx-auto shrink-0">
         <Link
@@ -331,9 +304,9 @@ export default function LoginPage() {
       <div className="absolute top-40 left-1/2 -translate-x-1/2 w-[240px] sm:w-[380px] h-[220px] bg-blue-600/10 rounded-full blur-[90px] pointer-events-none" />
 
       {/* Main Container */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-2 z-20 w-full max-w-7xl mx-auto">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-4 sm:py-6 z-20 w-full max-w-7xl mx-auto">
         
-        {/* Floating 3D Glowing Sphere / Orb (No clipping, natural glowing aura) */}
+        {/* Floating 3D Glowing Sphere / Orb */}
         <div className="relative flex items-center justify-center -mb-7 sm:-mb-8 z-30 pointer-events-none select-none">
           {viewMode === 'blocked' ? (
             /* Bloklangan holatda qizil xavfsizlik shari */
@@ -363,11 +336,15 @@ export default function LoginPage() {
 
         {/* Glassmorphic Floating Card */}
         <div
-          className={`w-full max-w-[400px] sm:max-w-[420px] rounded-[26px] bg-[#0a0f1d]/85 backdrop-blur-2xl border ${
-            viewMode === 'blocked' ? 'border-red-500/40 shadow-[0_20px_70px_rgba(220,38,38,0.3)]' : 'border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_1px_1px_rgba(255,255,255,0.06),0_0_40px_rgba(0,210,255,0.06)]'
-          } p-5 sm:p-6 pt-9 sm:pt-10 text-center relative transition-all duration-300`}
+          className={`w-full ${
+            viewMode === 'register' ? 'max-w-[500px]' : 'max-w-[420px]'
+          } rounded-[26px] bg-[#0a0f1d]/90 backdrop-blur-2xl border ${
+            viewMode === 'blocked'
+              ? 'border-red-500/40 shadow-[0_20px_70px_rgba(220,38,38,0.3)]'
+              : 'border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_1px_1px_rgba(255,255,255,0.06),0_0_40px_rgba(0,210,255,0.06)]'
+          } p-5 sm:p-6 pt-9 sm:pt-10 text-center relative transition-all duration-300 my-auto`}
         >
-          {/* HOLAT 1: QURILMA BLOKLANDI (20 marta xatodan so'ng) */}
+          {/* HOLAT 1: QURILMA BLOKLANDI */}
           {viewMode === 'blocked' && (
             <div className="animate-in fade-in zoom-in-95 duration-300 py-3 text-center space-y-4">
               <div className="inline-flex p-3 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 mb-1">
@@ -397,13 +374,13 @@ export default function LoginPage() {
 
           {/* STANDART Sarlavha (Bloklanmagan bo'lsa) */}
           {viewMode !== 'blocked' && (
-            <div className="mb-3 sm:mb-4">
+            <div className="mb-4">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-[#38bdf8] via-[#00d2ff] to-[#60a5fa] bg-clip-text text-transparent">
                 SIS Corpartion
               </h1>
               <p className="text-[11px] sm:text-xs text-slate-400 mt-1 font-normal tracking-wide">
-                {viewMode.startsWith('reg_')
-                  ? 'Telegram orqali xavfsiz ro‘yxatdan o‘tish'
+                {viewMode === 'register'
+                  ? 'Talaba ma’lumotlarini kiritib ro‘yxatdan o‘ting'
                   : 'Xush kelibsiz! Tizimga kiring.'}
               </p>
             </div>
@@ -425,20 +402,12 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Test rejimida demo kod ko'rsatgichi */}
-          {demoCodeNotice && viewMode === 'reg_otp' && (
-            <div className="mb-3 p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-200 text-[11px] flex items-center justify-center gap-2">
-              <Sparkles size={14} className="text-amber-400" />
-              <span>{demoCodeNotice}</span>
-            </div>
-          )}
-
-          {/* LOGIN: Telefon/Login va Parol bilan to'g'ridan-to'g'ri tizimga kirish */}
+          {/* 1. LOGIN SHAKLI: Login, Telefon yoki Gmail va Parol bilan kirish */}
           {viewMode === 'login' && (
             <form onSubmit={handleLoginSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <Phone size={13} className="text-cyan-400" /> Telefon raqam yoki Login
+                  <UserCheck size={13} className="text-cyan-400" /> Login, Telefon yoki Gmail
                 </label>
                 <input
                   type="text"
@@ -446,7 +415,7 @@ export default function LoginPage() {
                   required
                   value={loginPhone}
                   onChange={(e) => setLoginPhone(e.target.value)}
-                  placeholder="+998 90 123 45 67 yoki login"
+                  placeholder="Login, +998 90... yoki gmail"
                   className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-medium tracking-wide focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
@@ -497,7 +466,7 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={() => alert('Parolni unutgan bo‘lsangiz, Telegram orqali yangi akkaunt yaratishingiz yoki adminga murojaat qilishingiz mumkin.')}
+                  onClick={() => alert('Parolni unutgan bo‘lsangiz, yangi akkaunt yaratishingiz yoki administratorga murojaat qilishingiz mumkin.')}
                   className="text-slate-400 hover:text-cyan-300 transition-colors"
                 >
                   Parolni unutdingizmi?
@@ -522,8 +491,8 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => {
                     setErrorMsg(null);
-                    setRegPhone(loginPhone || '+998 ');
-                    setViewMode('reg_info');
+                    setSuccessMsg(null);
+                    setViewMode('register');
                   }}
                   className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors cursor-pointer"
                 >
@@ -533,12 +502,20 @@ export default function LoginPage() {
             </form>
           )}
 
-          {/* 3. REGISTRATSIYA 1-QADAM: Ism, Telefon, Telegram */}
-          {viewMode === 'reg_info' && (
-            <form onSubmit={handleSendTelegramOtp} className="space-y-2.5 text-left animate-in fade-in duration-200">
+          {/* 2. REGISTRATSIYA SHAKLI: Ism, Login, Universitet, Gmail, Telefon, Jinsi, Parol */}
+          {viewMode === 'register' && (
+            <form onSubmit={handleRegisterSubmit} className="space-y-2.5 text-left animate-in fade-in duration-200">
+              {/* Datalist OTMlar uchun */}
+              <datalist id="uzbek-universities">
+                {UZBEK_UNIVERSITIES.map((uni, idx) => (
+                  <option key={idx} value={uni} />
+                ))}
+              </datalist>
+
+              {/* Ism Familiya */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <User size={13} className="text-cyan-400" /> To‘liq F.I.Sh (Talaba ismi)
+                  <User size={13} className="text-cyan-400" /> To‘liq Ism va Familiyangiz
                 </label>
                 <input
                   type="text"
@@ -546,38 +523,149 @@ export default function LoginPage() {
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
                   placeholder="Masalan: Sardor Aliyev"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
 
-              <div>
-                <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <Phone size={13} className="text-cyan-400" /> Telefon raqam
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={regPhone}
-                  onChange={(e) => handlePhoneChange(e.target.value, setRegPhone)}
-                  placeholder="+998 90 123 45 67"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
-                />
+              {/* Yangi Login va Jinsi (2 ustun) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                    <AtSign size={13} className="text-cyan-400" /> Yangi Login
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={regUsername}
+                    onChange={(e) => setRegUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
+                    placeholder="masalan: sardor99"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1">
+                    Jinsi
+                  </label>
+                  <div className="grid grid-cols-2 gap-1.5 h-[36px] sm:h-[40px]">
+                    <button
+                      type="button"
+                      onClick={() => setRegGender('erkak')}
+                      className={`h-full rounded-xl text-xs font-semibold flex items-center justify-center gap-1 border transition-all cursor-pointer ${
+                        regGender === 'erkak'
+                          ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-sm'
+                          : 'bg-[#111927]/90 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>👨 Erkak</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRegGender('ayol')}
+                      className={`h-full rounded-xl text-xs font-semibold flex items-center justify-center gap-1 border transition-all cursor-pointer ${
+                        regGender === 'ayol'
+                          ? 'bg-pink-500/20 border-pink-400 text-pink-300 shadow-sm'
+                          : 'bg-[#111927]/90 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>👩 Ayol</span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
+              {/* Universitet (OTM) */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <Send size={13} className="text-cyan-400" /> Telegram Username (yoki ID)
+                  <GraduationCap size={13} className="text-cyan-400" /> O‘qiyotgan Universitetingiz (OTM)
                 </label>
                 <input
                   type="text"
-                  value={regTelegram}
-                  onChange={(e) => setRegTelegram(e.target.value)}
-                  placeholder="@telegram_user"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner font-mono"
+                  required
+                  list="uzbek-universities"
+                  value={regUniversity}
+                  onChange={(e) => setRegUniversity(e.target.value)}
+                  placeholder="OTM nomini tanlang yoki yozing"
+                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
 
-              <div className="pt-1">
+              {/* Gmail va Telefon raqam (2 ustun) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                    <Mail size={13} className="text-cyan-400" /> Gmail (Pochta)
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={regEmail}
+                    onChange={(e) => setRegEmail(e.target.value)}
+                    placeholder="example@gmail.com"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                    <Phone size={13} className="text-cyan-400" /> Telefon raqam
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={regPhone}
+                    onChange={(e) => handlePhoneChange(e.target.value, setRegPhone)}
+                    placeholder="+998 90 123 45 67"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm font-mono focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  />
+                </div>
+              </div>
+
+              {/* Yangi Parol va Parolni tasdiqlash (2 ustun) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                    <KeyRound size={13} className="text-cyan-400" /> Yangi Parol
+                  </label>
+                  <input
+                    type={showRegPassword ? 'text' : 'password'}
+                    required
+                    value={regPassword}
+                    onChange={(e) => setRegPassword(e.target.value)}
+                    placeholder="Kamida 4 ta belgi"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                    <Lock size={13} className="text-cyan-400" /> Parolni takrorlang
+                  </label>
+                  <input
+                    type={showRegPassword ? 'text' : 'password'}
+                    required
+                    value={regConfirmPassword}
+                    onChange={(e) => setRegConfirmPassword(e.target.value)}
+                    placeholder="Parolni qayta tering"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  />
+                </div>
+              </div>
+
+              {/* Parolni ko'rsatish/yashirish */}
+              <div className="flex items-center justify-between text-[11px] pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => setShowRegPassword(!showRegPassword)}
+                  className="text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  {showRegPassword ? <EyeOff size={13} /> : <Eye size={13} />}
+                  <span>{showRegPassword ? 'Parolni yashirish' : 'Parolni ko‘rsatish'}</span>
+                </button>
+              </div>
+
+              {/* Registratsiya tugmasi */}
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={loading}
@@ -587,8 +675,8 @@ export default function LoginPage() {
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <>
-                      <Send size={14} />
-                      <span>Telegramga kod yuborish</span>
+                      <Sparkles size={15} />
+                      <span>Ro‘yxatdan o‘tish va Kirish</span>
                     </>
                   )}
                 </button>
@@ -600,134 +688,14 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => {
                     setErrorMsg(null);
+                    setSuccessMsg(null);
                     setViewMode('login');
                   }}
                   className="text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer"
                 >
-                  Kirish
+                  Tizimga kirish
                 </button>
               </div>
-            </form>
-          )}
-
-          {/* 4. REGISTRATSIYA 2-QADAM: OTP Kodni kiritish */}
-          {viewMode === 'reg_otp' && (
-            <form onSubmit={handleVerifyOtpSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
-              <div className="text-center pb-1">
-                <p className="text-xs text-slate-300 font-medium">
-                  Tasdiqlash kodi yuborildi:
-                </p>
-                <p className="text-xs text-cyan-400 font-mono mt-0.5 font-bold">
-                  {regTelegram ? `@${regTelegram.replace('@', '')}` : regPhone}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-medium text-slate-300 mb-1 text-center">
-                  4 xonali tasdiqlash kodini tering:
-                </label>
-                <input
-                  type="text"
-                  maxLength={4}
-                  required
-                  autoFocus
-                  value={regOtpCode}
-                  onChange={(e) => setRegOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder="• • • •"
-                  className="w-full text-center tracking-[0.6em] font-mono text-2xl sm:text-3xl font-extrabold py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-cyan-500/50 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
-                />
-              </div>
-
-              {/* Botga to'g'ridan-to'g'ri o'tish tugmasi */}
-              <div className="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-500/25 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <Send size={15} className="text-cyan-400 shrink-0" />
-                  <span className="text-slate-300 text-[11px]">Kodni Telegramdan olish:</span>
-                </div>
-                <a
-                  href={`https://t.me/${botUsername}?start=code`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 hover:text-white text-[11px] font-bold flex items-center gap-1 transition-all"
-                >
-                  <span>@{botUsername}</span>
-                  <ExternalLink size={11} />
-                </a>
-              </div>
-
-              {/* Taymer */}
-              <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
-                <span className="font-mono">Vaqt: {formatTimer(otpTimer)}</span>
-                <button
-                  type="button"
-                  onClick={handleSendTelegramOtp}
-                  className="text-[11px] text-cyan-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
-                >
-                  <RotateCw size={11} /> Qayta kod yuborish
-                </button>
-              </div>
-
-              <button
-                type="submit"
-                disabled={regOtpCode.length !== 4}
-                className="w-full py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#00d2ff] via-[#0092ff] to-[#006aff] shadow-[0_4px_20px_rgba(0,180,255,0.48)] hover:shadow-[0_4px_28px_rgba(0,210,255,0.7)] transition-all cursor-pointer flex items-center justify-center gap-2 select-none disabled:opacity-50"
-              >
-                <span>Kodni tasdiqlash</span>
-              </button>
-            </form>
-          )}
-
-          {/* 5. REGISTRATSIYA 3-QADAM: Parol o'rnatish */}
-          {viewMode === 'reg_password' && (
-            <form onSubmit={handleFinalRegister} className="space-y-3 text-left animate-in fade-in duration-200">
-              <div className="text-center pb-1">
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-[11px] font-semibold inline-flex items-center gap-1">
-                  <CheckCircle2 size={12} /> Telegram tasdiqlandi
-                </span>
-                <p className="text-xs text-slate-300 mt-2 font-medium">
-                  Akkountingiz uchun kuchli parol o‘rnating:
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-medium text-slate-300 mb-1">
-                  Yangi parol
-                </label>
-                <input
-                  type="password"
-                  required
-                  value={regPassword}
-                  onChange={(e) => setRegPassword(e.target.value)}
-                  placeholder="Kamida 4 ta belgi"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-medium text-slate-300 mb-1">
-                  Parolni takrorlang
-                </label>
-                <input
-                  type="password"
-                  required
-                  value={regConfirmPassword}
-                  onChange={(e) => setRegConfirmPassword(e.target.value)}
-                  placeholder="Parolni qayta kiriting"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-[0_4px_20px_rgba(16,185,129,0.48)] hover:shadow-[0_4px_28px_rgba(16,185,129,0.7)] transition-all cursor-pointer flex items-center justify-center gap-2 select-none"
-              >
-                {loading ? (
-                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <span>Akkountni faollashtirish va Kirish</span>
-                )}
-              </button>
             </form>
           )}
 

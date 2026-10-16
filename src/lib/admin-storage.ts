@@ -340,8 +340,10 @@ export async function syncStudentProfile(profile: UserProfile): Promise<UserProf
       ...profile,
       id: existingUser.id,
       name: existingUser.name,
+      username: existingUser.username,
       email: existingUser.email,
       phone: existingUser.phone || profile.phone,
+      gender: existingUser.gender,
       telegramUsername: existingUser.telegramUsername || profile.telegramUsername,
       university: existingUser.university || profile.university,
       faculty: existingUser.faculty || profile.faculty,
@@ -378,46 +380,96 @@ export async function findUserByPhone(phone: string): Promise<AdminUserRecord | 
   );
 }
 
-/**
- * Telefon raqam orqali ro'yxatdan o'tish (Telegram tasdiqidan so'ng)
- */
-export async function registerStudentWithPhone(data: {
+export interface RegisterStudentInput {
   name: string;
+  username?: string;
+  email: string;
   phone: string;
+  university: string;
+  gender?: 'erkak' | 'ayol' | string;
   password: string;
   telegramUsername?: string;
-  email?: string;
-}): Promise<AdminUserRecord> {
+}
+
+/**
+ * Yangi talabani to'liq ma'lumotlari (OTM, Gmail, Telefon, Jinsi, Ism-Familiyasi, Login, Parol) bilan ro'yxatdan o'tkazish
+ */
+export async function registerStudent(data: RegisterStudentInput): Promise<{
+  success: boolean;
+  user?: AdminUserRecord;
+  error?: string;
+}> {
   const store = await ensureStore();
-  const cleanPhone = data.phone.trim();
+  const cleanPhone = (data.phone || '').trim();
+  const cleanPhoneDigits = cleanPhone.replace(/[^0-9]/g, '');
+  const cleanEmail = (data.email || '').trim().toLowerCase();
+  const cleanUsername = (data.username || '').trim().toLowerCase();
+  const cleanName = (data.name || '').trim();
+  const cleanUniversity = (data.university || '').trim();
   const cleanTelegram = (data.telegramUsername || '').replace(/^@/, '').trim();
 
-  // Agar mavjud bo'lsa yangilaymiz, bo'lmasa yaratamiz
-  const existingIndex = store.users.findIndex((u) => {
-    if (u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhone.replace(/[^0-9]/g, '')) return true;
-    return false;
-  });
-
-  if (existingIndex >= 0) {
-    const u = store.users[existingIndex];
-    u.name = data.name.trim() || u.name;
-    u.passwordHash = data.password.trim();
-    if (cleanTelegram) u.telegramUsername = cleanTelegram;
-    if (data.email) u.email = data.email.trim();
-    u.updatedAt = new Date().toISOString();
-    u.failedAttempts = 0;
-    await saveStore(store);
-    return u;
+  // 1. Maydonlarni tekshirish
+  if (!cleanName) {
+    return { success: false, error: 'Iltimos, to‘liq Ism va Familiyangizni kiriting' };
+  }
+  if (!cleanPhoneDigits || cleanPhoneDigits.length < 9) {
+    return { success: false, error: 'Iltimos, to‘liq telefon raqamingizni kiriting (+998 ...)' };
+  }
+  if (!cleanEmail || !cleanEmail.includes('@')) {
+    return { success: false, error: 'Iltimos, to‘g‘ri Gmail / elektron pochta manzilini kiriting' };
+  }
+  if (!cleanUniversity) {
+    return { success: false, error: 'Iltimos, o‘qiyotgan universitetingiz (OTM)ni kiriting yoki tanlang' };
+  }
+  if (!data.password || data.password.trim().length < 4) {
+    return { success: false, error: 'Parol kamida 4 ta belgidan iborat bo‘lishi kerak' };
   }
 
+  // 2. Takrorlanishlarni tekshirish
+  const phoneConflict = store.users.find(
+    (u) => u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhoneDigits
+  );
+  if (phoneConflict) {
+    return {
+      success: false,
+      error: 'Ushbu telefon raqam bilan allaqachon ro‘yxatdan o‘tilgan. Iltimos, tizimga kiring.',
+    };
+  }
+
+  if (cleanUsername) {
+    const usernameConflict = store.users.find(
+      (u) => (u.username && u.username.toLowerCase() === cleanUsername) || (u.name && u.name.toLowerCase() === cleanUsername)
+    );
+    if (usernameConflict) {
+      return {
+        success: false,
+        error: 'Ushbu login band. Iltimos, boshqa login tanlang.',
+      };
+    }
+  }
+
+  const emailConflict = store.users.find(
+    (u) => u.email && u.email.toLowerCase() === cleanEmail
+  );
+  if (emailConflict) {
+    return {
+      success: false,
+      error: 'Ushbu Gmail manzil bilan allaqachon ro‘yxatdan o‘tilgan. Iltimos, tizimga kiring.',
+    };
+  }
+
+  // 3. Yangi talaba yozuvini yaratish
+  const fallbackUsername = cleanUsername || cleanEmail.split('@')[0] || `talaba_${Date.now().toString().slice(-4)}`;
   const newUser: AdminUserRecord = {
     id: `user-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-    name: data.name.trim() || 'Hurmatli Talaba',
-    email: data.email?.trim() || `${cleanPhone.replace(/[^0-9]/g, '')}@talaba.uz`,
+    name: cleanName,
+    username: fallbackUsername,
+    email: cleanEmail,
     phone: cleanPhone,
+    gender: data.gender === 'ayol' ? 'ayol' : 'erkak',
     telegramUsername: cleanTelegram,
     passwordHash: data.password.trim(),
-    university: "Toshkent axborot texnologiyalari universiteti",
+    university: cleanUniversity || "Toshkent axborot texnologiyalari universiteti",
     faculty: 'Axborot texnologiyalari',
     group: '304-guruh',
     plan: 'free',
@@ -426,12 +478,57 @@ export async function registerStudentWithPhone(data: {
     updatedAt: new Date().toISOString(),
     isBlocked: false,
     failedAttempts: 0,
-    customNotes: 'Telegram bot orqali ro‘yxatdan o‘tgan talaba',
+    customNotes: 'Platformadan to‘liq ro‘yxatdan o‘tgan talaba',
   };
 
   store.users.unshift(newUser);
   await saveStore(store);
-  return newUser;
+
+  return { success: true, user: newUser };
+}
+
+/**
+ * Telefon raqam orqali ro'yxatdan o'tish (Eski oqimlar bilan moslik uchun)
+ */
+export async function registerStudentWithPhone(data: {
+  name: string;
+  phone: string;
+  password: string;
+  telegramUsername?: string;
+  email?: string;
+  university?: string;
+  gender?: 'erkak' | 'ayol' | string;
+  username?: string;
+}): Promise<AdminUserRecord> {
+  const result = await registerStudent({
+    name: data.name,
+    username: data.username,
+    email: data.email || `${data.phone.replace(/[^0-9]/g, '')}@talaba.uz`,
+    phone: data.phone,
+    university: data.university || "Toshkent axborot texnologiyalari universiteti",
+    gender: data.gender || 'erkak',
+    password: data.password,
+    telegramUsername: data.telegramUsername,
+  });
+
+  if (result.success && result.user) {
+    return result.user;
+  }
+
+  // Agar mavjud bo'lsa yangilab qaytaramiz
+  const store = await ensureStore();
+  const cleanPhone = data.phone.trim().replace(/[^0-9]/g, '');
+  const existing = store.users.find(u => u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhone);
+  if (existing) {
+    existing.name = data.name.trim() || existing.name;
+    existing.passwordHash = data.password.trim();
+    if (data.email) existing.email = data.email.trim();
+    if (data.university) existing.university = data.university.trim();
+    await saveStore(store);
+    return existing;
+  }
+
+  throw new Error(result.error || 'Ro‘yxatdan o‘tishda xatolik');
 }
 
 /**
@@ -447,19 +544,23 @@ export async function verifyStudentLogin(
   const cleanText = raw.toLowerCase().replace(/^@/, '');
 
   const user = store.users.find((u) => {
-    // 1. Telefon raqami bo'yicha (kamida 7 ta raqam bo'lsa)
+    // 1. Yangi Login (username) bo'yicha
+    if (u.username && u.username.toLowerCase() === cleanText) {
+      return true;
+    }
+    // 2. Telefon raqami bo'yicha (kamida 7 ta raqam bo'lsa)
     if (cleanPhone.length >= 7 && u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhone) {
       return true;
     }
-    // 2. Telegram username bo'yicha
-    if (u.telegramUsername && u.telegramUsername.toLowerCase() === cleanText) {
-      return true;
-    }
-    // 3. Email bo'yicha
+    // 3. Email (Gmail) bo'yicha
     if (u.email && u.email.toLowerCase() === cleanText) {
       return true;
     }
-    // 4. Foydalanuvchi ismi bo'yicha (aniq moslik)
+    // 4. Telegram username bo'yicha
+    if (u.telegramUsername && u.telegramUsername.toLowerCase() === cleanText) {
+      return true;
+    }
+    // 5. Foydalanuvchi ismi bo'yicha (aniq moslik)
     if (u.name && u.name.trim().toLowerCase() === cleanText) {
       return true;
     }

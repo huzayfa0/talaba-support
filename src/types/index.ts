@@ -80,8 +80,10 @@ export type UserPlan = 'free' | 'premium' | 'ultra';
 export interface UserProfile {
   id?: string;
   name: string;
+  username?: string;
   email: string;
   phone?: string;
+  gender?: 'erkak' | 'ayol' | string;
   telegramUsername?: string;
   university?: string;
   faculty?: string;
@@ -97,8 +99,10 @@ export interface UserProfile {
 export interface AdminUserRecord {
   id: string;
   name: string;
+  username?: string;
   email: string;
   phone?: string;
+  gender?: 'erkak' | 'ayol' | string;
   telegramUsername?: string;
   passwordHash?: string;
   failedAttempts?: number;

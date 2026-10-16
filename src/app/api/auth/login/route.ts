@@ -97,8 +97,10 @@ export async function POST(req: NextRequest) {
       user: {
         id: u.id,
         name: u.name,
+        username: u.username,
         email: u.email,
         phone: u.phone,
+        gender: u.gender,
         telegramUsername: u.telegramUsername,
         university: u.university,
         faculty: u.faculty,
