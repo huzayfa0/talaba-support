@@ -18,35 +18,20 @@ import {
   GraduationCap,
   Mail,
   AtSign,
-  UserCheck,
+  ChevronDown,
 } from 'lucide-react';
 import { UserProfile } from '@/types';
 
 type AuthViewMode = 'login' | 'register' | 'blocked';
 
-const UZBEK_UNIVERSITIES = [
-  "Toshkent axborot texnologiyalari universiteti (TATU)",
-  "O‘zbekiston Milliy universiteti (O‘zMU)",
-  "Toshkent davlat iqtisodiyot universiteti (TDIU)",
-  "Toshkent davlat yuridik universiteti (TDYU)",
-  "Toshkent davlat texnika universiteti (TDTU)",
-  "Toshkent davlat pedagogika universiteti (TDPU)",
-  "Jahon iqtisodiyoti va diplomatiya universiteti (JIDU)",
-  "Samarqand davlat universiteti (SamDU)",
-  "Farg‘ona davlat universiteti (FarDU)",
-  "Andijon davlat universiteti (ADU)",
-  "Namangan davlat universiteti (NamDU)",
-  "Buxoro davlat universiteti (BuxDU)",
-  "Urganch davlat universiteti (UrDU)",
-  "Qarshi davlat universiteti (QarDU)",
-  "Termiz davlat universiteti (TerDU)",
-  "Guliston davlat universiteti (GulDU)",
-  "Inha universiteti (Toshkent)",
-  "Amity universiteti (Toshkent)",
-  "Turin politexnika universiteti (Toshkent)",
-  "Webster universiteti (Toshkent)",
-  "Yangi O‘zbekiston universiteti",
-  "Toshkent tibbiyot akademiyasi (TTA)",
+// Asosiy 6 ta universitet to'liq rasmiy nomi bilan
+const MAIN_UNIVERSITIES = [
+  "Muhammad al-Xorazmiy nomidagi Toshkent axborot texnologiyalari universiteti (TATU)",
+  "Mirzo Ulug‘bek nomidagi O‘zbekiston Milliy universiteti (O‘zMU)",
+  "Toshkent moliya instituti (Moliya)",
+  "Alfraganus universiteti (Alfraganus)",
+  "Toshkent amaliy fanlar universiteti (Amaliy)",
+  "Toshkent tibbiyot akademiyasi (ToshMI / Toshme)",
 ];
 
 export default function LoginPage() {
@@ -56,8 +41,8 @@ export default function LoginPage() {
   const [deviceId, setDeviceId] = useState<string>('');
   const [viewMode, setViewMode] = useState<AuthViewMode>('login');
 
-  // Login formasi
-  const [loginPhone, setLoginPhone] = useState<string>('');
+  // Login formasi (Faqat Login va Parol)
+  const [loginUsername, setLoginUsername] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(true);
@@ -70,7 +55,7 @@ export default function LoginPage() {
   // Yangi to'liq registratsiya formasi
   const [regName, setRegName] = useState<string>('');
   const [regUsername, setRegUsername] = useState<string>('');
-  const [regUniversity, setRegUniversity] = useState<string>('Toshkent axborot texnologiyalari universiteti (TATU)');
+  const [regUniversity, setRegUniversity] = useState<string>(MAIN_UNIVERSITIES[0]);
   const [regEmail, setRegEmail] = useState<string>('');
   const [regPhone, setRegPhone] = useState<string>('+998 ');
   const [regGender, setRegGender] = useState<'erkak' | 'ayol'>('erkak');
@@ -125,15 +110,15 @@ export default function LoginPage() {
     setter(val);
   };
 
-  // 1. LOGIN: Telefon / Login / Gmail va Parol bilan tizimga kirish
+  // 1. LOGIN: Faqat Login va Parol bilan kirish
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    const idVal = loginPhone.trim();
+    const idVal = loginUsername.trim();
     if (!idVal) {
-      setErrorMsg('Iltimos, login, telefon raqam yoki gmailingizni kiriting');
+      setErrorMsg('Iltimos, loginingizni kiriting');
       return;
     }
 
@@ -206,7 +191,7 @@ export default function LoginPage() {
 
     const university = regUniversity.trim();
     if (!university) {
-      setErrorMsg('Iltimos, o‘qiyotgan universitetingiz (OTM)ni kiriting yoki tanlang');
+      setErrorMsg('Iltimos, o‘qiyotgan universitetingizni tanlang');
       return;
     }
 
@@ -402,20 +387,20 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* 1. LOGIN SHAKLI: Login, Telefon yoki Gmail va Parol bilan kirish */}
+          {/* 1. LOGIN SHAKLI: Faqat Login va Parol so'raladi (2-rasm talabi) */}
           {viewMode === 'login' && (
             <form onSubmit={handleLoginSubmit} className="space-y-3 text-left animate-in fade-in duration-200">
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
-                  <UserCheck size={13} className="text-cyan-400" /> Login, Telefon yoki Gmail
+                  <User size={13} className="text-cyan-400" /> Loginingiz
                 </label>
                 <input
                   type="text"
                   autoComplete="username"
                   required
-                  value={loginPhone}
-                  onChange={(e) => setLoginPhone(e.target.value)}
-                  placeholder="Login, +998 90... yoki gmail"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                  placeholder="Loginni kiriting"
                   className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm font-medium tracking-wide focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                 />
               </div>
@@ -432,7 +417,7 @@ export default function LoginPage() {
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Parolni kiriting"
+                    placeholder="Parolingizni kiriting"
                     className="w-full pl-3.5 pr-10 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
                   />
                   <button
@@ -505,13 +490,7 @@ export default function LoginPage() {
           {/* 2. REGISTRATSIYA SHAKLI: Ism, Login, Universitet, Gmail, Telefon, Jinsi, Parol */}
           {viewMode === 'register' && (
             <form onSubmit={handleRegisterSubmit} className="space-y-2.5 text-left animate-in fade-in duration-200">
-              {/* Datalist OTMlar uchun */}
-              <datalist id="uzbek-universities">
-                {UZBEK_UNIVERSITIES.map((uni, idx) => (
-                  <option key={idx} value={uni} />
-                ))}
-              </datalist>
-
+              
               {/* Ism Familiya */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
@@ -574,20 +553,28 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Universitet (OTM) */}
+              {/* Universitet (OTM): 1-rasm talabi bo'yicha Tatu, Milliy, Moliya, Alfraganus, Amaliy, ToshMI dan bittasini tanlaydi */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1 flex items-center gap-1.5">
                   <GraduationCap size={13} className="text-cyan-400" /> O‘qiyotgan Universitetingiz (OTM)
                 </label>
-                <input
-                  type="text"
-                  required
-                  list="uzbek-universities"
-                  value={regUniversity}
-                  onChange={(e) => setRegUniversity(e.target.value)}
-                  placeholder="OTM nomini tanlang yoki yozing"
-                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#111927]/90 border border-slate-700/60 text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
-                />
+                <div className="relative">
+                  <select
+                    required
+                    value={regUniversity}
+                    onChange={(e) => setRegUniversity(e.target.value)}
+                    className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-[#111927]/95 border border-slate-700/60 text-slate-100 text-xs sm:text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner appearance-none cursor-pointer pr-10"
+                  >
+                    {MAIN_UNIVERSITIES.map((uni, idx) => (
+                      <option key={idx} value={uni} className="bg-[#0b1329] text-slate-100 py-1.5">
+                        {uni}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    <ChevronDown size={16} />
+                  </div>
+                </div>
               </div>
 
               {/* Gmail va Telefon raqam (2 ustun) */}
