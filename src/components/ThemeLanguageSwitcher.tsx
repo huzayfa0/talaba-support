@@ -34,6 +34,7 @@ export default function ThemeLanguageSwitcher({
   onThemeToggle,
 }: ThemeLanguageSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Tashqariga bosilganda dropdownni yopish (touch va click)
@@ -52,6 +53,15 @@ export default function ThemeLanguageSwitcher({
       document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [isOpen]);
+
+  const toggleDropdown = () => {
+    if (!isOpen && dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      // Agar tugma ekranning o'ng yarmida bo'lsa, o'ng tomondan tekislanadi (right-0), aks holda chapdan (left-0)
+      setAlignRight(rect.left > window.innerWidth / 2);
+    }
+    setIsOpen(!isOpen);
+  };
 
   const activeLangObj = LANGUAGES.find((l) => l.code === currentLang) || LANGUAGES[0];
 
@@ -76,9 +86,9 @@ export default function ThemeLanguageSwitcher({
       </button>
 
       {/* 2. Tilni tanlash (5 ta til) */}
-      <div className="relative z-50 shrink-0" ref={dropdownRef}>
+      <div className={`relative shrink-0 ${isOpen ? 'z-[100]' : 'z-50'}`} ref={dropdownRef}>
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleDropdown}
           type="button"
           className={`h-9 sm:h-10 px-2.5 sm:px-3 rounded-2xl border text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-sm ${
             currentTheme === 'light'
@@ -95,19 +105,21 @@ export default function ThemeLanguageSwitcher({
         {/* Orqa fon qoraytirgichi (Backdrop overlay) */}
         {isOpen && (
           <div
-            className="fixed inset-0 z-[9990] bg-black/60 backdrop-blur-[2px] transition-opacity"
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[1px] transition-opacity"
             onClick={() => setIsOpen(false)}
           />
         )}
 
-        {/* Dropdown menyu - Smartfonda: markazda to'liq ko'rinadi (hech qayeri kesilmaydi), Desktopda: tugma tagida */}
+        {/* Dropdown menyu - Tugmaning qoq tagida (JOYIDA) ochiladi */}
         {isOpen && (
           <div
             style={{
               backgroundColor: currentTheme === 'light' ? '#ffffff' : '#0b1120',
               color: currentTheme === 'light' ? '#0f172a' : '#ffffff',
             }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-32px)] max-w-xs sm:absolute sm:left-auto sm:right-0 sm:top-full sm:translate-x-0 sm:translate-y-0 sm:mt-2 sm:w-64 sm:max-w-none max-h-[85vh] overflow-y-auto rounded-2xl border-2 border-indigo-500/60 p-2.5 shadow-[0_25px_70px_rgba(0,0,0,0.85)] z-[9999] animate-in fade-in zoom-in-95 duration-150 select-none"
+            className={`absolute top-full mt-2 w-56 sm:w-60 rounded-2xl border-2 border-indigo-500/60 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-[100] animate-in fade-in zoom-in-95 duration-150 select-none ${
+              alignRight ? 'right-0' : 'left-0'
+            }`}
           >
             {/* Oyna sarlavhasi (Alohida panel ko'rinishida) */}
             <div
@@ -115,10 +127,10 @@ export default function ThemeLanguageSwitcher({
                 backgroundColor: currentTheme === 'light' ? '#f8fafc' : '#111827',
                 borderColor: currentTheme === 'light' ? '#e2e8f0' : '#1f2937',
               }}
-              className="px-3.5 py-2.5 rounded-xl mb-2.5 flex items-center justify-between border"
+              className="px-3 py-2 rounded-xl mb-2 flex items-center justify-between border"
             >
               <div className="flex items-center gap-2">
-                <Globe size={15} className={currentTheme === 'light' ? 'text-indigo-600' : 'text-indigo-400'} />
+                <Globe size={14} className={currentTheme === 'light' ? 'text-indigo-600' : 'text-indigo-400'} />
                 <span className={`text-xs font-bold tracking-wide ${currentTheme === 'light' ? 'text-slate-900' : 'text-white'}`}>
                   {TITLE_BY_LANG[currentLang] || TITLE_BY_LANG.uz}
                 </span>
@@ -126,19 +138,19 @@ export default function ThemeLanguageSwitcher({
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${
+                className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${
                   currentTheme === 'light'
                     ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/80'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
                 title="Yopish"
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Tillar ro'yxati (5 ta til) */}
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {LANGUAGES.map((lang) => {
                 const isSelected = lang.code === currentLang;
                 return (
@@ -165,7 +177,7 @@ export default function ThemeLanguageSwitcher({
                             color: '#f8fafc',
                           }
                     }
-                    className={`w-full px-3.5 py-3 sm:py-2.5 rounded-xl text-xs flex items-center justify-between transition-all cursor-pointer font-medium border ${
+                    className={`w-full px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-all cursor-pointer font-medium border ${
                       isSelected
                         ? 'border-indigo-500 shadow-md font-bold'
                         : currentTheme === 'light'
@@ -173,8 +185,8 @@ export default function ThemeLanguageSwitcher({
                         : 'border-slate-800/80 hover:border-indigo-500/40 hover:bg-slate-800/60'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl sm:text-lg leading-none">{lang.flag}</span>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-lg leading-none">{lang.flag}</span>
                       <span className={`text-xs font-semibold ${
                         isSelected
                           ? 'text-white'
