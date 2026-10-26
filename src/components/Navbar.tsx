@@ -22,6 +22,7 @@ import {
   GraduationCap,
   X,
   Lock,
+  UserCheck,
 } from 'lucide-react';
 import { UserProfile, NavTab, Language } from '@/types';
 import { TRANSLATIONS } from '@/lib/translations';
@@ -135,6 +136,15 @@ export default function Navbar({
       icon: FileText,
       badge: 'Word',
       color: 'from-emerald-500 to-teal-500',
+    },
+    {
+      id: 'obyektivka' as const,
+      label: t.obyektivka,
+      fullLabel: t.obyektivkaFull,
+      desc: t.obyektivkaDesc,
+      icon: UserCheck,
+      badge: 'Doc/PDF',
+      color: 'from-blue-600 via-indigo-600 to-violet-600',
     },
     {
       id: 'research' as const,

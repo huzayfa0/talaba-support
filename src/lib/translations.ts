@@ -32,6 +32,9 @@ export interface Translations {
     slidesDesc: string;
     mustaqil: string;
     mustaqilDesc: string;
+    obyektivka: string;
+    obyektivkaFull: string;
+    obyektivkaDesc: string;
     research: string;
     researchDesc: string;
     history: string;
@@ -158,6 +161,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slidesDesc: 'AI orqali zamonaviy taqdimot va slaydlar',
       mustaqil: 'Mustaqil Ish & Word (.docx)',
       mustaqilDesc: 'Referat, kurs ishi va topshiriqlar',
+      obyektivka: 'Obyektivka (Ma’lumotnoma)',
+      obyektivkaFull: 'Obyektivka (Ma’lumotnoma)',
+      obyektivkaDesc: 'Rasmiy davlat standarti, Word (.docx) va PDF',
       research: 'Smart Research AI',
       researchDesc: 'Ilmiy maqolalar va ma‘lumotlar tahlili',
       history: 'Mening Loyihalarim',
@@ -176,6 +182,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
           case 'groups':
           case 'messenger': return 'O‘quv Guruhlari & Muloqot';
           case 'contacts': return 'Kontaktlar Kitobi';
+          case 'obyektivka': return 'Obyektivka (Ma’lumotnoma)';
           default: return 'Ta‘lim Bo‘limi';
         }
       },
@@ -337,6 +344,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slidesDesc: 'AI arqalı zamanagóy prezentatsiyalar',
       mustaqil: 'Ǵárezsiz Jumıs & Word (.docx)',
       mustaqilDesc: 'Referat, kurs jumısı hám tapsırmalar',
+      obyektivka: 'Obyektivka (Maǵlıwmatnama)',
+      obyektivkaFull: 'Obyektivka (Maǵlıwmatnama)',
+      obyektivkaDesc: 'Rásmiy mámleketlik standart, Word (.docx) hám PDF',
       research: 'Smart Research AI',
       researchDesc: 'Ilimiy maqalalar hám maǵlıwmatlar analizi',
       history: 'Meniń Joybarlarım',
@@ -355,6 +365,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
           case 'groups':
           case 'messenger': return 'Oqıw Toparları & Chat';
           case 'contacts': return 'Kontaktlar Kitabı';
+          case 'obyektivka': return 'Obyektivka (Maǵlıwmatnama)';
           default: return 'Bilimlendiriw Bólimi';
         }
       },
@@ -516,6 +527,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slidesDesc: 'ИИ арқылы заманауи презентациялар жасау',
       mustaqil: 'Өзіндік жұмыс және Word (.docx)',
       mustaqilDesc: 'Реферат, курс жұмысы және тапсырмалар',
+      obyektivka: 'Объективка (Анықтама)',
+      obyektivkaFull: 'Объективка (Анықтама)',
+      obyektivkaDesc: 'Ресми мемлекеттік стандарт, Word (.docx) және PDF',
       research: 'Smart Research AI',
       researchDesc: 'Ғылыми мақалалар мен деректерді талдау',
       history: 'Менің жобаларым',
@@ -534,6 +548,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
           case 'groups':
           case 'messenger': return 'Оқу топтары және чат';
           case 'contacts': return 'Байланыстар кітабы';
+          case 'obyektivka': return 'Объективка (Анықтама)';
           default: return 'Білім бөлімі';
         }
       },
@@ -695,6 +710,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slidesDesc: 'Создание современных слайдов с помощью ИИ',
       mustaqil: 'Самост. работа & Word (.docx)',
       mustaqilDesc: 'Рефераты, курсовые и задания',
+      obyektivka: 'Объективка (Справка-объективка)',
+      obyektivkaFull: 'Объективка (Справка-объективка)',
+      obyektivkaDesc: 'Официальный госстандарт, экспорт в Word (.docx) и PDF',
       research: 'Smart Research AI',
       researchDesc: 'Анализ научных статей и данных',
       history: 'Мои проекты',
@@ -713,6 +731,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
           case 'groups':
           case 'messenger': return 'Учебные группы и чат';
           case 'contacts': return 'Книга контактов';
+          case 'obyektivka': return 'Объективка (Справка-объективка)';
           default: return 'Образовательный раздел';
         }
       },
@@ -874,6 +893,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slidesDesc: 'Generate modern presentations with AI',
       mustaqil: 'Independent Work & Word (.docx)',
       mustaqilDesc: 'Essays, term papers, and assignments',
+      obyektivka: 'Resume (Ma’lumotnoma)',
+      obyektivkaFull: 'Resume (Ma’lumotnoma)',
+      obyektivkaDesc: 'Official state format, Word (.docx) & PDF export',
       research: 'Smart Research AI',
       researchDesc: 'Scientific literature and data research',
       history: 'My Projects',
@@ -892,6 +914,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
           case 'groups':
           case 'messenger': return 'Academic Groups & Chat';
           case 'contacts': return 'Address Book';
+          case 'obyektivka': return 'Resume (Ma’lumotnoma)';
           default: return 'Educational Department';
         }
       },

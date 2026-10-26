@@ -12,6 +12,7 @@ import DarsxonaRoom from '@/components/DarsxonaRoom';
 import SettingsManager from '@/components/SettingsManager';
 import VideoCoursesManager from '@/components/VideoCoursesManager';
 import GuestPromoBanner from '@/components/GuestPromoBanner';
+import ObyektivkaGenerator from '@/components/ObyektivkaGenerator';
 import ApiKeyModal from '@/components/ApiKeyModal';
 import AuthModal from '@/components/AuthModal';
 import {
@@ -645,6 +646,14 @@ export default function Home() {
             onDeleteMustaqilIsh={handleDeleteMustaqilIsh}
             onDeleteResearch={handleDeleteResearch}
             onNavigateTab={setActiveTab}
+          />
+        )}
+
+        {activeTab === 'obyektivka' && (
+          <ObyektivkaGenerator
+            user={user}
+            lang={lang}
+            theme={theme}
           />
         )}
       </main>

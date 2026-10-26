@@ -162,9 +162,46 @@ export type NavTab =
   | 'settings'
   | 'presentation'
   | 'mustaqil'
+  | 'obyektivka'
   | 'research'
   | 'history'
   | 'messenger';
+
+export interface QarindoshItem {
+  id: string;
+  qarindoshligi: string; // Otasi, Onasi, Akasi, Ukasi, Opasi, Singlisi, Turmush o'rtog'i...
+  fish: string;
+  tugilganYiliVaJoyi: string;
+  vafotEtgan: boolean;
+  ishJoyiVaLavozimi: string;
+  turarJoyi: string;
+}
+
+export interface MehnatFaoliyatiItem {
+  id: string;
+  yillar: string;
+  lavozim: string;
+}
+
+export interface ObyektivkaData {
+  photoUrl?: string;
+  fish: string;
+  millati: string;
+  tugilganSana: string;
+  tugilganJoyi: string;
+  malumoti: string;
+  mutaxassisligi: string;
+  joriyLavozim: string;
+  tamomlagan: string;
+  chetTillari: string;
+  ilmiyDaraja: string;
+  ilmiyUnvon: string;
+  davlatMukofotlari: string;
+  partiyaviyligi: string;
+  deputatlik: string;
+  mehnatFaoliyati: MehnatFaoliyatiItem[];
+  qarindoshlar: QarindoshItem[];
+}
 
 export interface CourseLesson {
   id: string;
