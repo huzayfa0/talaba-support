@@ -600,57 +600,57 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
   return (
     <div className="w-full px-0 py-2 sm:py-2.5">
       {/* Sarlavha paneli */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 mb-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
-              TalabaHub Darsxona <Sparkles className="text-indigo-400" size={22} />
+            <h1 className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+              TalabaHub Darsxona <Sparkles className="text-indigo-400" size={16} />
             </h1>
-            <span className="px-2 py-0.5 text-xs font-bold bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30">
+            <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30">
               Guruhlar & Live
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-[11px] text-slate-400 mt-0.5">
             Talabalar uchun Telegram uslubidagi guruhlar, savol-javoblar va Ultra VIP ekran share xonasi
           </p>
         </div>
 
         {/* Tarif holati nishoni */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {user.plan === 'ultra' ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold shadow-sm">
-              <Crown size={15} className="text-amber-400 animate-pulse" />
-              <span>Ultra VIP: Cheksiz yozishmalar & Ekran share faol</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold shadow-sm">
+              <Crown size={13} className="text-amber-400 animate-pulse" />
+              <span>Ultra VIP: Cheksiz & Ekran share</span>
             </div>
           ) : user.plan === 'premium' ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-sm">
-              <Star size={15} className="text-amber-400" />
-              <span>Premium: Guruhlarga to‘liq yozish huquqi faol</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-sm">
+              <Star size={13} className="text-amber-400" />
+              <span>Premium: Yozish huquqi faol</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-300 text-xs">
-              <Lock size={14} className="text-amber-400" />
-              <span>Oddiy (Free): Faqat o‘qish rejimi (Yozish uchun Premium kerak)</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-300 text-xs">
+              <Lock size={12} className="text-amber-400" />
+              <span>Oddiy (Free): Faqat o‘qish</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Asosiy Messenger oynasi (Ekran balandligiga moslashuvchan) */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-12 h-[calc(100dvh-10rem)] sm:h-[calc(100vh-13rem)] min-h-[500px] max-h-[820px]">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 h-[calc(100dvh-7.5rem)] sm:h-[calc(100vh-10rem)] min-h-[460px] max-h-[780px]">
         {/* Chap panel: Guruhlar ro'yxati (Telefonda guruh ochilganda yashiriladi) */}
         <div className={`md:col-span-4 border-r border-slate-800/80 flex-col bg-slate-950/60 ${activeGroup ? 'hidden md:flex' : 'flex'}`}>
-          <div className="p-3.5 border-b border-slate-800/80 space-y-2.5">
+          <div className="p-2.5 border-b border-slate-800/80 space-y-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-white flex items-center gap-2">
-                <Users size={16} className="text-indigo-400" /> O‘quv Guruhlari
+              <h2 className="text-xs font-bold text-white flex items-center gap-1.5">
+                <Users size={14} className="text-indigo-400" /> O‘quv Guruhlari
               </h2>
               <button
                 onClick={() => setIsNewGroupModalOpen(true)}
-                className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1 transition-all cursor-pointer"
+                className="px-2 py-1 text-[11px] font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1 transition-all cursor-pointer"
                 title="Yangi guruh ochish"
               >
-                <Plus size={14} /> Guruh ochish
+                <Plus size={13} /> Guruh ochish
               </button>
             </div>
 
@@ -728,13 +728,13 @@ export default function StudentMessenger({ user, onOpenAuth, onNavigateToDarsxon
                     <button
                       key={group.id}
                       onClick={() => setActiveGroupId(group.id)}
-                      className={`w-full text-left p-3 rounded-2xl transition-all flex items-start gap-3 relative cursor-pointer ${
+                      className={`w-full text-left p-2 rounded-xl transition-all flex items-start gap-2.5 relative cursor-pointer ${
                         isActive
                           ? 'bg-gradient-to-r from-indigo-900/50 to-purple-900/40 border border-indigo-500/30'
                           : 'hover:bg-slate-800/50 text-slate-300'
                       }`}
                     >
-                      <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-xl shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700/60 flex items-center justify-center text-base shrink-0">
                         {group.avatarIcon || '📚'}
                       </div>
                       <div className="flex-1 min-w-0">

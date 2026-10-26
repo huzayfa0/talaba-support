@@ -175,25 +175,25 @@ export default function Navbar({
       {/* Faqat tizimga kirgan foydalanuvchilar uchun ko'rinadi                       */}
       {/* ========================================================================= */}
       {user.isLoggedIn && (
-        <aside className="hidden lg:flex fixed left-4 top-4 bottom-4 w-[84px] z-40 flex-col items-center py-4 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[32px] shadow-2xl transition-all">
+        <aside className="hidden lg:flex fixed left-3 top-3 bottom-3 w-[66px] z-40 flex-col items-center py-3 bg-slate-900/90 backdrop-blur-2xl border border-slate-800/80 rounded-[24px] shadow-2xl transition-all">
         {/* Yuqori: TalabaAI Logo (9 marta bosilganda maxfiy admin ochiladi) */}
-        <div className="flex flex-col items-center gap-1.5 shrink-0 pt-1">
+        <div className="flex flex-col items-center gap-1 shrink-0 pt-0.5">
           <div
             onClick={handleSecretIconClick}
-            className="w-14 h-14 rounded-[20px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 hover:scale-105 active:scale-95 transition-transform cursor-pointer group"
+            className="w-11 h-11 rounded-[16px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/25 hover:scale-105 active:scale-95 transition-transform cursor-pointer group"
             title="TalabaAI (Admin: 9 marta bosing)"
           >
-            <div className="w-full h-full bg-slate-950 rounded-[18px] flex items-center justify-center group-hover:bg-slate-900 transition-colors">
-              <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors pointer-events-none" size={22} />
+            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center group-hover:bg-slate-900 transition-colors">
+              <Sparkles className="text-indigo-400 group-hover:text-purple-300 transition-colors pointer-events-none" size={18} />
             </div>
           </div>
-          <span className="text-[10px] font-extrabold tracking-tight text-slate-400 select-none">
+          <span className="text-[9px] font-extrabold tracking-tight text-slate-400 select-none">
             Talaba<span className="text-indigo-400">AI</span>
           </span>
         </div>
 
-        {/* Markaz: Vertikal navigatsiya tugmalari (2-rasmdagidek yorqin squircle bilan, zich va qulay joylashuv) */}
-        <nav className="flex flex-col items-center gap-3 mt-4 w-full px-2.5">
+        {/* Markaz: Vertikal navigatsiya tugmalari (ixcham va qulay joylashuv) */}
+        <nav className="flex flex-col items-center gap-2 mt-3 w-full px-2">
           {mainTabs.slice(0, 4).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id || (tab.id === 'groups' && activeTab === 'messenger');
@@ -207,31 +207,31 @@ export default function Navbar({
                   }}
                   onMouseEnter={() => setHoveredDockItem(tab.id)}
                   onMouseLeave={() => setHoveredDockItem(null)}
-                  className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer relative ${
+                  className={`w-11 h-11 rounded-[16px] flex items-center justify-center transition-all cursor-pointer relative ${
                     isActive
-                      ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/35 scale-105 font-bold'
+                      ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 scale-105 font-bold'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
                   }`}
                   aria-label={tab.fullLabel}
                 >
-                  <Icon size={24} className={tab.id === 'darsxona' && isActive ? 'animate-pulse text-white' : ''} />
+                  <Icon size={20} className={tab.id === 'darsxona' && isActive ? 'animate-pulse text-white' : ''} />
                   {tab.id === 'darsxona' && !isActive && !isLocked && (
-                    <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping" />
                   )}
                   {isLocked && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400 shadow-sm" title="Kirish kerak">
-                      <Lock size={9} />
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-slate-950 border border-amber-500/60 flex items-center justify-center text-amber-400 shadow-sm" title="Kirish kerak">
+                      <Lock size={8} />
                     </span>
                   )}
                 </button>
 
                 {/* Tooltip on hover */}
                 {hoveredDockItem === tab.id && (
-                  <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100 flex items-center gap-1.5">
+                  <div className="absolute left-16 ml-2 px-2.5 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100 flex items-center gap-1.5">
                     <span>{tab.fullLabel}</span>
                     {isLocked ? (
                       <span className="ml-1 px-1.5 py-0.5 text-[9px] rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                        <Lock size={9} /> {t.loginRequired}
+                        <Lock size={8} /> {t.loginRequired}
                       </span>
                     ) : tab.badge ? (
                       <span className="ml-2 px-1.5 py-0.5 text-[9px] rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
@@ -250,19 +250,19 @@ export default function Navbar({
               onClick={() => setIsToolsFlyoutOpen(!isToolsFlyoutOpen)}
               onMouseEnter={() => setHoveredDockItem('helper_tools')}
               onMouseLeave={() => setHoveredDockItem(null)}
-              className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer ${
+              className={`w-11 h-11 rounded-[16px] flex items-center justify-center transition-all cursor-pointer ${
                 isHelperToolActive
-                  ? 'bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-600 text-white shadow-xl shadow-purple-500/35 scale-105'
+                  ? 'bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-600 text-white shadow-lg shadow-purple-500/30 scale-105'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
               }`}
               aria-label={t.helperTools}
             >
-              <LayoutGrid size={24} />
+              <LayoutGrid size={20} />
             </button>
 
             {/* Tooltip */}
             {hoveredDockItem === 'helper_tools' && !isToolsFlyoutOpen && (
-              <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+              <div className="absolute left-16 ml-2 px-2.5 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
                 <span>{t.helperTools}</span>
               </div>
             )}
@@ -274,20 +274,20 @@ export default function Navbar({
                   className="fixed inset-0 z-40"
                   onClick={() => setIsToolsFlyoutOpen(false)}
                 />
-                <div className="absolute left-20 ml-3 w-80 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
-                  <div className="px-3 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 mb-2 flex items-center justify-between">
+                <div className="absolute left-16 ml-2 w-72 rounded-2xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-2.5 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
+                  <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 mb-1.5 flex items-center justify-between">
                     <span className="flex items-center gap-1.5 text-indigo-300">
-                      <Sparkles size={13} /> {t.helperTools}
+                      <Sparkles size={12} /> {t.helperTools}
                     </span>
                     <button
                       onClick={() => setIsToolsFlyoutOpen(false)}
                       className="text-slate-500 hover:text-white p-0.5"
                     >
-                      <X size={14} />
+                      <X size={13} />
                     </button>
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     {helperTools.map((tool) => {
                       const Icon = tool.icon;
                       const isSelected = activeTab === tool.id;
@@ -298,14 +298,14 @@ export default function Navbar({
                             setActiveTab(tool.id);
                             setIsToolsFlyoutOpen(false);
                           }}
-                          className={`w-full text-left p-2.5 rounded-2xl transition-all flex items-center gap-3 cursor-pointer ${
+                          className={`w-full text-left p-2 rounded-xl transition-all flex items-center gap-2.5 cursor-pointer ${
                             isSelected
                               ? 'bg-indigo-600/25 border border-indigo-500/40 text-white shadow-md'
                               : 'hover:bg-slate-800/70 text-slate-300'
                           }`}
                         >
-                          <div className={`w-9 h-9 rounded-xl bg-gradient-to-tr ${tool.color} p-0.5 shrink-0 flex items-center justify-center text-white shadow-md`}>
-                            <Icon size={17} />
+                          <div className={`w-8 h-8 rounded-lg bg-gradient-to-tr ${tool.color} p-0.5 shrink-0 flex items-center justify-center text-white shadow-sm`}>
+                            <Icon size={15} />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-1">
@@ -318,7 +318,7 @@ export default function Navbar({
                             </div>
                             <p className="text-[10px] text-slate-400 truncate mt-0.5">{tool.desc}</p>
                           </div>
-                          {isSelected && <Check size={16} className="text-indigo-400 shrink-0" />}
+                          {isSelected && <Check size={14} className="text-indigo-400 shrink-0" />}
                         </button>
                       );
                     })}
@@ -337,18 +337,18 @@ export default function Navbar({
               }}
               onMouseEnter={() => setHoveredDockItem('settings')}
               onMouseLeave={() => setHoveredDockItem(null)}
-              className={`w-14 h-14 rounded-[20px] flex items-center justify-center transition-all cursor-pointer ${
+              className={`w-11 h-11 rounded-[16px] flex items-center justify-center transition-all cursor-pointer ${
                 activeTab === 'settings'
-                  ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/35 scale-105'
+                  ? 'bg-gradient-to-tr from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 scale-105'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95'
               }`}
               aria-label="Sozlamalar"
             >
-              <Settings size={24} />
+              <Settings size={20} />
             </button>
 
             {hoveredDockItem === 'settings' && (
-              <div className="absolute left-20 ml-2.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+              <div className="absolute left-16 ml-2 px-2.5 py-1.5 rounded-xl bg-slate-900/95 border border-slate-800 text-white text-xs font-semibold whitespace-nowrap shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
                 <span>{t.settingsFull}</span>
               </div>
             )}
@@ -356,7 +356,7 @@ export default function Navbar({
         </nav>
 
         {/* Past: Profil va Chiqish tugmalari (mt-auto orqali pastga chiroyli joylashtiriladi) */}
-        <div className="mt-auto flex flex-col items-center gap-2.5 w-full pt-3 border-t border-slate-800/80 pb-1 shrink-0">
+        <div className="mt-auto flex flex-col items-center gap-2 w-full pt-2.5 border-t border-slate-800/80 pb-0.5 shrink-0">
           {/* Profile Dropdown trigger */}
           <div className="relative">
             <button
@@ -368,7 +368,7 @@ export default function Navbar({
                 }
               }}
               title={user.isLoggedIn ? `${user.name} (${t.settings})` : t.login}
-              className="w-12 h-12 rounded-[18px] bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer font-bold text-xs"
+              className="w-10 h-10 rounded-[14px] bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer font-bold text-[11px]"
             >
               {user.isLoggedIn ? (
                 <span>
@@ -386,48 +386,48 @@ export default function Navbar({
                   className="fixed inset-0 z-40"
                   onClick={() => setIsProfileMenuOpen(false)}
                 />
-                <div className="absolute left-20 bottom-1 w-64 rounded-3xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-3.5 text-slate-100 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
-                  <div className="pb-2.5 mb-2 border-b border-slate-800">
+                <div className="absolute left-16 bottom-1 w-56 rounded-2xl bg-slate-900/95 backdrop-blur-2xl border border-slate-800 p-2.5 text-slate-100 shadow-2xl z-50 animate-in fade-in slide-in-from-left-2 duration-150">
+                  <div className="pb-2 mb-1.5 border-b border-slate-800">
                     <p className="text-xs font-bold text-white truncate">{user.name}</p>
-                    <p className="text-[11px] text-slate-400 truncate">{user.group || user.university || t.student}</p>
-                    <div className="mt-2 flex items-center gap-1.5">
+                    <p className="text-[10px] text-slate-400 truncate">{user.group || user.university || t.student}</p>
+                    <div className="mt-1.5 flex items-center gap-1.5">
                       {user.plan === 'ultra' ? (
-                        <span className="px-2 py-0.5 text-[10px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30 flex items-center gap-1">
-                          <Crown size={11} className="text-amber-300" /> Ultra VIP
+                        <span className="px-1.5 py-0.5 text-[9px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30 flex items-center gap-1">
+                          <Crown size={10} className="text-amber-300" /> Ultra VIP
                         </span>
                       ) : user.plan === 'premium' ? (
-                        <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/30 flex items-center gap-1">
-                          <Star size={11} className="text-amber-400" /> Premium
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/30 flex items-center gap-1">
+                          <Star size={10} className="text-amber-400" /> Premium
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 text-[10px] font-medium bg-slate-800 text-slate-300 rounded-full">
+                        <span className="px-1.5 py-0.5 text-[9px] font-medium bg-slate-800 text-slate-300 rounded-full">
                           Oddiy (Free)
                         </span>
                       )}
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[9px] text-slate-400 font-mono">
                         {user.plan === 'ultra' ? '∞' : `${user.tokens ?? 10} token`}
                       </span>
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     <button
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         onOpenAuth();
                       }}
-                      className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
+                      className="w-full text-left px-2 py-1.5 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <User size={14} className="text-indigo-400" /> {t.editProfile}
+                      <User size={13} className="text-indigo-400" /> {t.editProfile}
                     </button>
                     <button
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         onOpenApiKey();
                       }}
-                      className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
+                      className="w-full text-left px-2 py-1.5 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <Key size={14} className="text-amber-400" /> {t.apiKeySettings}
+                      <Key size={13} className="text-amber-400" /> {t.apiKeySettings}
                     </button>
                     {onLogout && (
                       <button
@@ -435,9 +435,9 @@ export default function Navbar({
                           setIsProfileMenuOpen(false);
                           onLogout();
                         }}
-                        className="w-full text-left px-2.5 py-2 rounded-xl text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors flex items-center gap-2 font-semibold cursor-pointer"
+                        className="w-full text-left px-2 py-1.5 rounded-xl text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors flex items-center gap-2 font-semibold cursor-pointer"
                       >
-                        <LogOut size={14} /> {t.logout}
+                        <LogOut size={13} /> {t.logout}
                       </button>
                     )}
                   </div>

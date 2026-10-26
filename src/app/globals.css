@@ -7,7 +7,7 @@
 }
 
 html {
-  font-size: 15px;
+  font-size: 13px;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
@@ -15,28 +15,28 @@ html {
 /* Kichik noutbuklar va planshetlar uchun (1024px) */
 @media (min-width: 1024px) {
   html {
-    font-size: 15.5px;
+    font-size: 13px;
   }
 }
 
 /* Standart Full HD ekranlar (1440px - 1920px) */
 @media (min-width: 1440px) {
   html {
-    font-size: 16px;
+    font-size: 13.5px;
   }
 }
 
 /* 2K va katta monitorlar uchun (1920px+) */
 @media (min-width: 1920px) {
   html {
-    font-size: 16.5px;
+    font-size: 14px;
   }
 }
 
 /* 4K ultra-wide monitorlar uchun (2560px+) */
 @media (min-width: 2560px) {
   html {
-    font-size: 18px;
+    font-size: 14.5px;
   }
 }
 

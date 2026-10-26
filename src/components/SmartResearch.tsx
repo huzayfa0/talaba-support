@@ -79,23 +79,23 @@ ${result.sources.map((s) => `• ${s.title} (${s.author || ''} ${s.year || ''})`
   };
 
   return (
-    <div className="w-full px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-300">
+    <div className="w-full px-0 py-2 sm:py-2.5 space-y-3.5 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-2 sm:space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-          <Sparkles size={14} />
-          <span>Talabalar uchun Aqlli Qidiruv va Imtihon Assistenti</span>
+      <div className="text-center max-w-2xl mx-auto space-y-1.5 sm:space-y-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
+          <Sparkles size={13} />
+          <span>Aqlli Qidiruv va Imtihon Assistenti</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">
           Istalgan mavzuda <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent">ilmiy tahlil</span> toping
         </h1>
-        <p className="text-xs sm:text-sm md:text-base text-slate-400 max-w-2xl mx-auto">
-          Mavzuning akademik tushunchasi, faktlar, darslik manbalari va imtihonga tayyorlanish kartochkalari (flashcards).
+        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+          Mavzuning akademik tushunchasi, faktlar, manbalar va imtihon kartochkalari.
         </p>
       </div>
 
       {/* Qidiruv formasi */}
-      <div className="w-full max-w-4xl lg:max-w-5xl mx-auto space-y-4">
+      <div className="w-full max-w-3xl lg:max-w-4xl mx-auto space-y-3">
         <div className="relative">
           <input
             type="text"
@@ -103,9 +103,9 @@ ${result.sources.map((s) => `• ${s.title} (${s.author || ''} ${s.year || ''})`
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="Istalgan mavzu, atama, qonun yoki formulani yozing..."
-            className="w-full pl-12 pr-28 py-4 rounded-2xl bg-slate-900 border border-slate-700/80 text-white placeholder-slate-500 text-base focus:outline-none focus:border-emerald-500 shadow-xl transition-all"
+            className="w-full pl-9 pr-24 py-2.5 rounded-xl bg-slate-900 border border-slate-700/80 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-500 shadow-lg transition-all"
           />
-          <Search size={22} className="absolute left-4 top-4 text-slate-500" />
+          <Search size={16} className="absolute left-3 top-3 text-slate-500" />
           <button
             disabled={isLoading || !query.trim()}
             onClick={() => handleSearch()}

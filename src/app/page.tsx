@@ -437,29 +437,29 @@ export default function Home() {
         onLangChange={handleLangChange}
       />
 
-      {/* Desktop Top Header (2-rasmdagi uslubda faqat katta ekranda) */}
+      {/* Desktop Top Header (Ixcham, toza va ekranga to'liq moslashuvchan) */}
       {user.isLoggedIn ? (
-        <div className="relative z-50 hidden lg:block lg:pl-28 pr-6 pt-3.5 pb-2">
-          <div className="relative z-50 flex items-center justify-between gap-4 p-4 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800/80 shadow-xl">
-            {/* Chap: Salomlashuv va ta'rif (2-rasm uslubida) */}
+        <div className="relative z-50 hidden lg:block lg:pl-24 pr-4 pt-2.5 pb-1.5">
+          <div className="relative z-50 flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 shadow-lg">
+            {/* Chap: Salomlashuv va ta'rif */}
             <div>
-              <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-1.5">
                 {t.header.greeting}, {user.name.split(' ')[0]} 👋
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] text-slate-400 mt-0.5">
                 {t.header.greetingSub}
               </p>
             </div>
 
             {/* O'ng: Qidiruv, Tungi/Kunduzgi rejim, Til, Tokenlar va Profil */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Tezkor qidiruv */}
-              <div className="relative w-64 xl:w-80">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <div className="relative w-48 xl:w-64">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
                   placeholder={t.header.searchPlaceholder}
-                  className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/80 transition-all shadow-inner"
                 />
               </div>
 
@@ -473,31 +473,31 @@ export default function Home() {
 
               {/* Tokenlar ko'rsatkichi */}
               {user.plan === 'ultra' ? (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-md shadow-purple-500/10">
-                  <Crown size={15} className="text-amber-300 fill-amber-300" />
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-purple-500/15 border border-purple-500/35 text-purple-200 text-xs font-bold shadow-sm">
+                  <Crown size={13} className="text-amber-300 fill-amber-300" />
                   <span>{t.header.ultraVIP}</span>
                 </div>
               ) : user.plan === 'premium' ? (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10">
-                  <Star size={15} className="text-amber-400 fill-amber-400" />
-                  <span>{t.header.premium} ({user.tokens ?? 100} token)</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-sm">
+                  <Star size={13} className="text-amber-400 fill-amber-400" />
+                  <span>{t.header.premium} ({user.tokens ?? 100})</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
-                  <Zap size={15} className="text-indigo-400 fill-indigo-400/30" />
-                  <span>{user.tokens ?? 10} {t.header.freeTokens}</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300 text-xs font-medium">
+                  <Zap size={13} className="text-indigo-400 fill-indigo-400/30" />
+                  <span>{user.tokens ?? 10}</span>
                 </div>
               )}
 
               {/* Profil */}
               <button
                 onClick={() => setActiveTab('settings')}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm"
               >
-                <div className="w-6 h-6 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[11px]">
+                <div className="w-5 h-5 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[10px]">
                   {user.name.slice(0, 2).toUpperCase()}
                 </div>
-                <span className="truncate max-w-[120px]">{user.name}</span>
+                <span className="truncate max-w-[100px]">{user.name}</span>
               </button>
             </div>
           </div>
@@ -553,7 +553,7 @@ export default function Home() {
       )}
 
       {/* Main Content Area */}
-      <main className={`flex-1 relative z-10 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-16 lg:pb-8' : 'w-full px-2 sm:px-4 pb-12'}`}>
+      <main className={`flex-1 relative z-10 ${user.isLoggedIn ? 'lg:pl-24 lg:pr-4 pb-12 lg:pb-6' : 'w-full px-2 sm:px-4 pb-12'}`}>
         {/* Agar foydalanuvchi tizimga kirmagan bo'lsa va darslar, darsxona, guruhlar yoki kontaktlar bo'limida bo'lsa -> Reklama va ro'yxatdan o'tish qo'llanmasi */}
         {!user.isLoggedIn && ['darslar', 'darsxona', 'groups', 'messenger', 'contacts'].includes(activeTab) ? (
           <GuestPromoBanner
@@ -659,7 +659,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500 ${user.isLoggedIn ? 'lg:pl-28 lg:pr-6 pb-24 lg:pb-8' : 'w-full px-4 pb-8'}`}>
+      <footer className={`border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 ${user.isLoggedIn ? 'lg:pl-24 lg:pr-4 pb-20 lg:pb-6' : 'w-full px-4 pb-8'}`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-slate-400">
             <GraduationCap size={16} className="text-indigo-400" />

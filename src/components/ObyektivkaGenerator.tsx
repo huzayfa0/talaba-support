@@ -95,14 +95,14 @@ interface Props {
 export default function ObyektivkaGenerator({ user, lang = 'uz', theme = 'dark' }: Props) {
   const isLight = theme === 'light';
 
-  // Yordamchi CSS klasslar (kunduzgi va tungi rejim uchun moslashuvchan)
-  const inputClass = `w-full px-3.5 py-2.5 rounded-xl text-xs transition-colors focus:outline-none focus:border-indigo-500 ${
+  // Yordamchi CSS klasslar (kunduzgi va tungi rejim uchun moslashuvchan va ixcham)
+  const inputClass = `w-full px-3 py-1.5 rounded-xl text-xs transition-colors focus:outline-none focus:border-indigo-500 ${
     isLight
       ? 'bg-slate-50 border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-indigo-500'
       : 'bg-slate-950/60 border border-slate-800 text-white placeholder:text-slate-600 focus:ring-1 focus:ring-indigo-500'
   }`;
 
-  const smallInputClass = `w-full px-3 py-1.5 rounded-xl text-xs transition-colors focus:outline-none focus:border-indigo-500 ${
+  const smallInputClass = `w-full px-2.5 py-1 rounded-lg text-xs transition-colors focus:outline-none focus:border-indigo-500 ${
     isLight
       ? 'bg-white border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:ring-1 focus:ring-indigo-500'
       : 'bg-slate-900 border border-slate-800 text-white placeholder:text-slate-600 focus:ring-1 focus:ring-indigo-500'
@@ -328,100 +328,100 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-4 space-y-6 animate-in fade-in duration-200">
+    <div className="w-full max-w-7xl mx-auto px-1 sm:px-3 py-2 sm:py-3 space-y-4 animate-in fade-in duration-200">
       {/* 1. ASOSIY SARLAVHA & HARAKATLAR BANNERI */}
       <div
-        className={`rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-all ${
+        className={`rounded-2xl p-3 sm:p-4 shadow-md relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all ${
           isLight
             ? 'bg-white border border-slate-200 shadow-slate-200/50'
             : 'bg-slate-900/90 border border-slate-800'
         }`}
       >
-        <div className="flex items-center gap-3.5 sm:gap-4">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 p-0.5 shadow-lg shadow-indigo-500/25 shrink-0 flex items-center justify-center">
-            <div className={`w-full h-full rounded-[14px] flex items-center justify-center ${isLight ? 'bg-white' : 'bg-slate-950'}`}>
-              <UserCheck size={26} className="text-indigo-500" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 p-0.5 shadow-md shadow-indigo-500/20 shrink-0 flex items-center justify-center">
+            <div className={`w-full h-full rounded-[10px] flex items-center justify-center ${isLight ? 'bg-white' : 'bg-slate-950'}`}>
+              <UserCheck size={20} className="text-indigo-500" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className={`text-lg sm:text-2xl font-black tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+              <h1 className={`text-sm sm:text-base font-bold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
                 Obyektivka (Ma’lumotnoma) Generatori
               </h1>
-              <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-indigo-500/15 text-indigo-400 rounded-full border border-indigo-500/30 shrink-0">
-                ⭐ 100% Rasmiy Shablon
+              <span className="px-2 py-0.5 text-[9px] font-extrabold bg-indigo-500/15 text-indigo-400 rounded-full border border-indigo-500/30 shrink-0">
+                ⭐ Rasmiy Shablon
               </span>
             </div>
-            <p className={`text-xs mt-1 leading-relaxed ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
-              OTM talabalari, dekanat, stipendiya va ishga kirish uchun davlat standarti bo‘yicha rasmiy Obyektivka yaratish
+            <p className={`text-[11px] mt-0.5 leading-tight ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              OTM, dekanat, stipendiya va ishga kirish uchun davlat standarti bo‘yicha rasmiy Obyektivka
             </p>
           </div>
         </div>
 
         {/* Tugmalar */}
-        <div className="flex items-center gap-2 flex-wrap shrink-0">
+        <div className="flex items-center gap-1.5 flex-wrap shrink-0">
           <button
             onClick={handleDownloadDocx}
             disabled={isExportingDocx}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/20 active:scale-95 transition-all flex items-center gap-2 cursor-pointer shrink-0"
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
           >
             {isExportingDocx ? (
-              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
-              <Download size={15} />
+              <Download size={13} />
             )}
-            <span>Word (.docx) yuklab olish</span>
+            <span>Word (.docx)</span>
           </button>
 
           <button
             onClick={handlePrint}
-            className={`px-3.5 py-2.5 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-1 transition-all cursor-pointer ${
               isLight
                 ? 'bg-slate-50 hover:bg-slate-100 border-slate-300 text-slate-800'
                 : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
             }`}
             title="A4 qog‘ozda chop etish yoki PDF sifatida saqlash"
           >
-            <Printer size={15} />
+            <Printer size={13} />
             <span className="hidden sm:inline">Chop etish / PDF</span>
           </button>
 
           <button
             onClick={handleLoadSample}
-            className={`px-3 py-2.5 rounded-xl text-xs font-medium border flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-2.5 py-1.5 rounded-xl text-xs font-medium border flex items-center gap-1 transition-all cursor-pointer ${
               isLight
                 ? 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
                 : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300'
             }`}
             title="Namunaviy ma’lumotlarni ko‘rish"
           >
-            <Sparkles size={14} className="text-amber-400" />
+            <Sparkles size={13} className="text-amber-400" />
             <span className="hidden md:inline">Namuna</span>
           </button>
 
           <button
             onClick={handleReset}
-            className={`p-2.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
+            className={`p-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
               isLight
                 ? 'bg-slate-50 hover:bg-rose-50 border-slate-200 text-slate-500 hover:text-rose-600'
                 : 'bg-slate-900 hover:bg-rose-950/30 border-slate-800 text-slate-400 hover:text-rose-400'
             }`}
             title="Barchasini tozalash"
           >
-            <RotateCcw size={15} />
+            <RotateCcw size={14} />
           </button>
         </div>
       </div>
 
       {/* 2. ISHCHI MAYDON (2 USTUNLI GRID: CHAPDA FORMA, O'NGDA JONLI A4 NATIJA) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* CHAP USTUN: MA'LUMOTLARNI KIRITISH (7 USTUN) */}
-        <div className="lg:col-span-6 xl:col-span-6 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        {/* CHAP USTUN: MA'LUMOTLARNI KIRITISH (6 USTUN) */}
+        <div className="lg:col-span-6 xl:col-span-6 space-y-3">
           {/* Bosqichlar (Tabs) */}
-          <div className={`flex items-center gap-1.5 p-1 rounded-2xl overflow-x-auto no-scrollbar transition-all ${isLight ? 'bg-slate-100 border border-slate-200' : 'bg-slate-950/60 border border-slate-800/80'}`}>
+          <div className={`flex items-center gap-1 p-1 rounded-xl overflow-x-auto no-scrollbar transition-all ${isLight ? 'bg-slate-100 border border-slate-200' : 'bg-slate-950/60 border border-slate-800/80'}`}>
             <button
               onClick={() => setActiveStep('shaxsiy')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeStep === 'shaxsiy'
                   ? 'bg-indigo-600 text-white shadow-md'
                   : isLight
@@ -429,13 +429,13 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <User size={14} />
+              <User size={13} />
               <span>1. Shaxsiy & Rasm</span>
             </button>
 
             <button
               onClick={() => setActiveStep('talim')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeStep === 'talim'
                   ? 'bg-indigo-600 text-white shadow-md'
                   : isLight
@@ -443,13 +443,13 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <GraduationCap size={14} />
+              <GraduationCap size={13} />
               <span>2. Ta’lim & Tillar</span>
             </button>
 
             <button
               onClick={() => setActiveStep('mehnat')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeStep === 'mehnat'
                   ? 'bg-indigo-600 text-white shadow-md'
                   : isLight
@@ -457,13 +457,13 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <Briefcase size={14} />
+              <Briefcase size={13} />
               <span>3. Faoliyat</span>
             </button>
 
             <button
               onClick={() => setActiveStep('qarindosh')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeStep === 'qarindosh'
                   ? 'bg-indigo-600 text-white shadow-md'
                   : isLight
@@ -471,17 +471,17 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <Users size={14} />
+              <Users size={13} />
               <span>4. Qarindoshlar</span>
             </button>
           </div>
 
           {/* FORMA KARTASI */}
           <div
-            className={`rounded-3xl p-5 sm:p-6 border transition-all ${
+            className={`rounded-2xl p-3.5 sm:p-4 border transition-all ${
               isLight
                 ? 'bg-white border-slate-200 shadow-sm'
-                : 'bg-slate-900/90 border-slate-800 shadow-xl'
+                : 'bg-slate-900/90 border-slate-800 shadow-lg'
             }`}
           >
             {/* 1. SHAXSIY MA'LUMOTLAR VA 3x4 RASM */}
@@ -1061,11 +1061,11 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
         </div>
 
         {/* O'NG USTUN: JONLI RASMIY A4 OBYEKTIVKA KO'RINISHI (6 USTUN) */}
-        <div className="lg:col-span-6 xl:col-span-6 space-y-3">
+        <div className="lg:col-span-6 xl:col-span-6 space-y-2 lg:sticky lg:top-3">
           {/* Tepa paneli: format haqida ma'lumot va tezkor nusxa olish */}
-          <div className="flex items-center justify-between px-2">
+          <div className="flex items-center justify-between px-1">
             <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
-              <Eye size={14} className="text-indigo-400" />
+              <Eye size={13} className="text-indigo-400" />
               <span>Jonli A4 Rasmiy Hujjat Natijasi</span>
             </span>
 
@@ -1076,7 +1076,7 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
                 className="text-xs font-medium text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
                 title="Matndan nusxa olish"
               >
-                {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
                 <span>{copied ? 'Nusxalandi!' : 'Nusxa olish'}</span>
               </button>
             </div>
@@ -1085,7 +1085,7 @@ ${data.qarindoshlar.map((q) => `${q.qarindoshligi}: ${q.fish} | ${q.tugilganYili
           {/* RASMIY A4 OQ QOG'OZ KO'RINISHI */}
           <div
             id="obyektivka-print-area"
-            className="w-full bg-white text-slate-900 border border-slate-300 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-5 text-left font-serif leading-relaxed text-[11px] sm:text-xs min-h-[850px] relative transition-all"
+            className="w-full bg-white text-slate-900 border border-slate-300 rounded-2xl p-4 sm:p-6 shadow-xl space-y-3.5 text-left font-serif leading-relaxed text-[11px] sm:text-xs relative transition-all"
             style={{
               fontFamily: "'Times New Roman', Times, serif",
             }}

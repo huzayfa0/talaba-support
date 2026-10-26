@@ -357,35 +357,35 @@ export default function VideoCoursesManager({
   return (
     <div className="w-full max-w-none px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-200">
       {/* Sarlavha & Admin tugmasi */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 p-0.5 shadow-lg shadow-emerald-500/20 shrink-0">
-            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-              <GraduationCap size={28} className="text-emerald-400" />
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-md relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 p-0.5 shadow-md shadow-emerald-500/20 shrink-0">
+            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <GraduationCap size={20} className="text-emerald-400" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-black text-white">Online Video Darsliklar</h1>
-              <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+              <h1 className="text-base sm:text-lg font-bold text-white">Online Video Darsliklar</h1>
+              <span className="px-2 py-0.5 text-[9px] font-extrabold bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
                 ⭐ 5 TA DARS BEPUL
               </span>
               {user.plan === 'ultra' ? (
-                <span className="px-2 py-0.5 text-[10px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/40 flex items-center gap-1">
-                  <Crown size={12} className="text-amber-400" /> Ultra VIP: Barcha darslar ochiq
+                <span className="px-2 py-0.5 text-[9px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/40 flex items-center gap-1">
+                  <Crown size={11} className="text-amber-400" /> Ultra VIP: Ochiq
                 </span>
               ) : user.plan === 'premium' ? (
-                <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/40 flex items-center gap-1">
-                  <Star size={12} className="text-amber-400" /> Premium: Barcha darslar ochiq
+                <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/40 flex items-center gap-1">
+                  <Star size={11} className="text-amber-400" /> Premium: Ochiq
                 </span>
               ) : (
-                <span className="px-2 py-0.5 text-[10px] font-medium bg-slate-800 text-slate-300 rounded-full border border-slate-700">
-                  Oddiy (Free): 1-5 darslar bepul
+                <span className="px-2 py-0.5 text-[9px] font-medium bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                  Free: 1-5 bepul
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-400 mt-1">
-              Oliy ta‘lim va kasbiy fanlar bo‘yicha sifatli video darslar. Har bir fanning 5 ta darsi mutlaqo bepul!
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Oliy ta‘lim va kasbiy fanlar bo‘yicha video darslar. Har bir fanning 5 ta darsi mutlaqo bepul!
             </p>
           </div>
         </div>
@@ -397,24 +397,24 @@ export default function VideoCoursesManager({
               setNewLessonCourseId(selectedSubjectId);
               setIsAdminModalOpen(true);
             }}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center gap-1.5 cursor-pointer"
             title="Faqat Administrator uchun dars yuklash"
           >
-            <Plus size={15} />
+            <Plus size={14} />
             <span>Dars Yuklash (Admin)</span>
           </button>
         </div>
       </div>
 
       {/* Fanlar tanlovi (Cards) */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between gap-2.5 flex-wrap">
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   selectedCategory === cat
                     ? 'course-cat-active bg-emerald-600 text-white shadow'
                     : 'course-cat-btn bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
@@ -426,20 +426,20 @@ export default function VideoCoursesManager({
           </div>
 
           {/* Qidiruv */}
-          <div className="relative w-full sm:w-64">
-            <Search size={14} className="absolute left-3.5 top-3 text-slate-500" />
+          <div className="relative w-full sm:w-56">
+            <Search size={13} className="absolute left-3 top-2.5 text-slate-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Fan yoki mavzuni qidirish..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+              placeholder="Fan yoki mavzu qidirish..."
+              className="w-full pl-8 pr-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
             />
           </div>
         </div>
 
         {/* Fanlar kartalari */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {filteredSubjects.map((sub) => {
             const isSelected = sub.id === selectedSubjectId;
             const subLessons = lessons.filter((l) => l.courseId === sub.id);
@@ -451,27 +451,27 @@ export default function VideoCoursesManager({
                   const firstLesson = subLessons[0];
                   if (firstLesson) setActiveLessonId(firstLesson.id);
                 }}
-                className={`course-card ${isSelected ? 'course-card-selected' : ''} p-4 rounded-2xl text-left transition-all border cursor-pointer relative overflow-hidden ${
+                className={`course-card ${isSelected ? 'course-card-selected' : ''} p-3 rounded-xl text-left transition-all border cursor-pointer relative overflow-hidden ${
                   isSelected
-                    ? 'bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
+                    ? 'bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border-emerald-500/50 shadow-md shadow-emerald-500/10'
                     : 'bg-slate-900/70 border-slate-800/80 hover:bg-slate-800/50 hover:border-slate-700'
                 }`}
               >
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="course-card-icon w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-xl shrink-0">
+                <div className="flex items-start justify-between gap-1.5 mb-1.5">
+                  <div className="course-card-icon w-8 h-8 rounded-lg bg-slate-800 border border-slate-700/60 flex items-center justify-center text-base shrink-0">
                     {sub.icon || '🎓'}
                   </div>
-                  <span className="course-card-badge px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="course-card-badge px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                     {subLessons.length} ta dars
                   </span>
                 </div>
 
-                <h3 className="course-card-title text-xs font-bold text-white line-clamp-1 mb-1">{sub.title}</h3>
-                <p className="course-card-desc text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
+                <h3 className="course-card-title text-xs font-bold text-white line-clamp-1 mb-0.5">{sub.title}</h3>
+                <p className="course-card-desc text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-2">
                   {sub.description}
                 </p>
 
-                <div className="course-card-footer flex items-center justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/60">
+                <div className="course-card-footer flex items-center justify-between text-[10px] text-slate-500 pt-1.5 border-t border-slate-800/60">
                   <span className="truncate">O‘qituvchi: {sub.instructorName}</span>
                   <span className="course-free-text text-emerald-400 font-bold shrink-0">5 ta bepul</span>
                 </div>

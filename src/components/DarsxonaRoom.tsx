@@ -350,40 +350,40 @@ export default function DarsxonaRoom({
   return (
     <div className="w-full max-w-none px-0 py-2 sm:py-2.5 space-y-4 animate-in fade-in duration-200">
       {/* Yuqori xabar va Xonalar boshqaruvi */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl relative overflow-hidden">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-600/10 via-purple-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-red-500 via-pink-500 to-indigo-600 p-0.5 shadow-lg shadow-red-500/20 shrink-0">
-              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                <Radio size={24} className="text-red-400 animate-pulse" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-500 via-pink-500 to-indigo-600 p-0.5 shadow-md shadow-red-500/20 shrink-0">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <Radio size={20} className="text-red-400 animate-pulse" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-black text-white">
+                <h1 className="text-base sm:text-lg font-bold text-white">
                   Jonli Darsxona
                 </h1>
-                <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-red-500/20 text-red-400 rounded-full border border-red-500/30 animate-pulse flex items-center gap-1">
+                <span className="px-2 py-0.5 text-[9px] font-extrabold bg-red-500/20 text-red-400 rounded-full border border-red-500/30 animate-pulse flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> INTERAKTIV EFIR
                 </span>
                 {user.plan === 'ultra' ? (
-                  <span className="px-2 py-0.5 text-[10px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/40 flex items-center gap-1">
-                    <Crown size={12} className="text-amber-400" /> Ultra VIP Spiker
+                  <span className="px-2 py-0.5 text-[9px] font-extrabold bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/40 flex items-center gap-1">
+                    <Crown size={11} className="text-amber-400" /> Ultra VIP Spiker
                   </span>
                 ) : user.plan === 'premium' ? (
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/40 flex items-center gap-1">
-                    <Star size={12} className="text-amber-400" /> Premium Talaba
+                  <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/40 flex items-center gap-1">
+                    <Star size={11} className="text-amber-400" /> Premium Talaba
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 text-[10px] font-medium bg-slate-800 text-slate-300 rounded-full border border-slate-700">
-                    Oddiy (Free) Ishtirokchi
+                  <span className="px-2 py-0.5 text-[9px] font-medium bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                    Free Ishtirokchi
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-1">
-                Webkamera orqali yuzma-yuz dars o‘ting, interaktiv doskada chizing yoki ekranni ulashing.
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Webkamera orqali dars o‘ting, interaktiv doskada chizing yoki ekranni ulashing.
               </p>
             </div>
           </div>

@@ -164,23 +164,23 @@ ${project.adabiyotlar.join('\n')}
           <BookMarked size={14} />
           <span>O‘zbekiston OTMlari standarti (GOST / Talaba andozasi)</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">
           Professional <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">"Mustaqil ish"</span> generatori
         </h1>
-        <p className="text-xs sm:text-sm md:text-base text-slate-400 max-w-2xl mx-auto">
+        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
           Titul varaqasi, mundarija, kirish, boblar, xulosa va adabiyotlar ro‘yxati bilan to‘liq Word (.docx) hujjat yarating.
         </p>
       </div>
 
       {!project ? (
         /* FORMA QISMI */
-        <div className="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto space-y-6">
+        <div className="w-full max-w-5xl xl:max-w-6xl mx-auto space-y-4">
           {/* Tayyor shablonlar */}
-          <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
-            <span className="text-xs font-semibold text-slate-400 block mb-2.5 flex items-center gap-1.5">
-              <Sparkles size={14} className="text-amber-400" /> Tezkor talabgir mavzular:
+          <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
+            <span className="text-xs font-semibold text-slate-400 block mb-2 flex items-center gap-1.5">
+              <Sparkles size={13} className="text-amber-400" /> Tezkor talabgir mavzular:
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {PRESETS.map((p, idx) => (
                 <button
                   key={idx}
@@ -191,25 +191,25 @@ ${project.adabiyotlar.join('\n')}
                       topic: p.topic,
                     }))
                   }
-                  className="text-xs px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 transition-colors"
+                  className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 transition-colors"
                 >
-                  {p.topic.length > 45 ? `${p.topic.substring(0, 45)}...` : p.topic}
+                  {p.topic.length > 40 ? `${p.topic.substring(0, 40)}...` : p.topic}
                 </button>
               ))}
             </div>
           </div>
 
           {/* Asosiy Forma */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-              <GraduationCap className="text-indigo-400" size={20} />
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 shadow-xl space-y-4">
+            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2.5">
+              <GraduationCap className="text-indigo-400" size={18} />
               Titul va Hujjat Ma'lumotlari
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
               {/* OTM Nomi */}
               <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Universitet / Institut nomi (OTM)
                 </label>
                 <input
@@ -217,7 +217,7 @@ ${project.adabiyotlar.join('\n')}
                   value={meta.university}
                   onChange={(e) => setMeta({ ...meta, university: e.target.value })}
                   placeholder="Masalan: Toshkent Davlat Iqtisodiyot Universiteti"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
